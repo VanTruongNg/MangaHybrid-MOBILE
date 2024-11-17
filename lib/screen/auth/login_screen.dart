@@ -44,16 +44,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           }
         },
         error: (error, stack) {
-          String message = 'Đã có lỗi xảy ra';
+          if (error.toString().contains('network_error')) {
+            return;
+          }
 
+          String message = 'Đã có lỗi xảy ra';
           if (error.toString().contains('401')) {
             message = 'Email hoặc mật khẩu không chính xác';
           } else if (error.toString().contains('400')) {
             message = 'Thông tin đăng nhập không hợp lệ';
-          } else if (error.toString().contains('Network')) {
-            message = 'Lỗi kết nối, vui lòng kiểm tra lại internet';
+          } else if (error
+              .toString()
+              .contains('Lỗi khi xử lý thông tin người dùng')) {
+            message = 'Không thể lấy thông tin người dùng';
           }
-
           _showMessage(message, isError: true);
         },
         loading: () {},

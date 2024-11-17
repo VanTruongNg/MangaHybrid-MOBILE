@@ -28,11 +28,14 @@ mixin _$User {
   Role get role => throw _privateConstructorUsedError;
   bool get isVerified => throw _privateConstructorUsedError;
   String? get avatarUrl => throw _privateConstructorUsedError;
-  List<Manga> get dislikedManga => throw _privateConstructorUsedError;
-  List<Manga> get followingManga => throw _privateConstructorUsedError;
-  List<Manga> get uploadedManga => throw _privateConstructorUsedError;
-  List<User> get following => throw _privateConstructorUsedError;
-  List<User> get followers => throw _privateConstructorUsedError;
+  List<String> get dislikedManga => throw _privateConstructorUsedError;
+  List<String> get followingManga => throw _privateConstructorUsedError;
+  List<String> get uploadedManga => throw _privateConstructorUsedError;
+  List<String> get following => throw _privateConstructorUsedError;
+  List<String> get followers => throw _privateConstructorUsedError;
+  List<String> get comments => throw _privateConstructorUsedError;
+  List<String> get favoritesManga => throw _privateConstructorUsedError;
+  List<String> get ratings => throw _privateConstructorUsedError;
   List<ReadingHistoryItem> get readingHistory =>
       throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
@@ -62,11 +65,14 @@ abstract class $UserCopyWith<$Res> {
       Role role,
       bool isVerified,
       String? avatarUrl,
-      List<Manga> dislikedManga,
-      List<Manga> followingManga,
-      List<Manga> uploadedManga,
-      List<User> following,
-      List<User> followers,
+      List<String> dislikedManga,
+      List<String> followingManga,
+      List<String> uploadedManga,
+      List<String> following,
+      List<String> followers,
+      List<String> comments,
+      List<String> favoritesManga,
+      List<String> ratings,
       List<ReadingHistoryItem> readingHistory,
       String? createdAt,
       String? updatedAt,
@@ -100,6 +106,9 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? uploadedManga = null,
     Object? following = null,
     Object? followers = null,
+    Object? comments = null,
+    Object? favoritesManga = null,
+    Object? ratings = null,
     Object? readingHistory = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
@@ -137,23 +146,35 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       dislikedManga: null == dislikedManga
           ? _value.dislikedManga
           : dislikedManga // ignore: cast_nullable_to_non_nullable
-              as List<Manga>,
+              as List<String>,
       followingManga: null == followingManga
           ? _value.followingManga
           : followingManga // ignore: cast_nullable_to_non_nullable
-              as List<Manga>,
+              as List<String>,
       uploadedManga: null == uploadedManga
           ? _value.uploadedManga
           : uploadedManga // ignore: cast_nullable_to_non_nullable
-              as List<Manga>,
+              as List<String>,
       following: null == following
           ? _value.following
           : following // ignore: cast_nullable_to_non_nullable
-              as List<User>,
+              as List<String>,
       followers: null == followers
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
-              as List<User>,
+              as List<String>,
+      comments: null == comments
+          ? _value.comments
+          : comments // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      favoritesManga: null == favoritesManga
+          ? _value.favoritesManga
+          : favoritesManga // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      ratings: null == ratings
+          ? _value.ratings
+          : ratings // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       readingHistory: null == readingHistory
           ? _value.readingHistory
           : readingHistory // ignore: cast_nullable_to_non_nullable
@@ -189,11 +210,14 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       Role role,
       bool isVerified,
       String? avatarUrl,
-      List<Manga> dislikedManga,
-      List<Manga> followingManga,
-      List<Manga> uploadedManga,
-      List<User> following,
-      List<User> followers,
+      List<String> dislikedManga,
+      List<String> followingManga,
+      List<String> uploadedManga,
+      List<String> following,
+      List<String> followers,
+      List<String> comments,
+      List<String> favoritesManga,
+      List<String> ratings,
       List<ReadingHistoryItem> readingHistory,
       String? createdAt,
       String? updatedAt,
@@ -224,6 +248,9 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? uploadedManga = null,
     Object? following = null,
     Object? followers = null,
+    Object? comments = null,
+    Object? favoritesManga = null,
+    Object? ratings = null,
     Object? readingHistory = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
@@ -261,23 +288,35 @@ class __$$UserImplCopyWithImpl<$Res>
       dislikedManga: null == dislikedManga
           ? _value._dislikedManga
           : dislikedManga // ignore: cast_nullable_to_non_nullable
-              as List<Manga>,
+              as List<String>,
       followingManga: null == followingManga
           ? _value._followingManga
           : followingManga // ignore: cast_nullable_to_non_nullable
-              as List<Manga>,
+              as List<String>,
       uploadedManga: null == uploadedManga
           ? _value._uploadedManga
           : uploadedManga // ignore: cast_nullable_to_non_nullable
-              as List<Manga>,
+              as List<String>,
       following: null == following
           ? _value._following
           : following // ignore: cast_nullable_to_non_nullable
-              as List<User>,
+              as List<String>,
       followers: null == followers
           ? _value._followers
           : followers // ignore: cast_nullable_to_non_nullable
-              as List<User>,
+              as List<String>,
+      comments: null == comments
+          ? _value._comments
+          : comments // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      favoritesManga: null == favoritesManga
+          ? _value._favoritesManga
+          : favoritesManga // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      ratings: null == ratings
+          ? _value._ratings
+          : ratings // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       readingHistory: null == readingHistory
           ? _value._readingHistory
           : readingHistory // ignore: cast_nullable_to_non_nullable
@@ -309,11 +348,14 @@ class _$UserImpl implements _User {
       this.role = Role.reader,
       this.isVerified = false,
       this.avatarUrl,
-      final List<Manga> dislikedManga = const [],
-      final List<Manga> followingManga = const [],
-      final List<Manga> uploadedManga = const [],
-      final List<User> following = const [],
-      final List<User> followers = const [],
+      final List<String> dislikedManga = const [],
+      final List<String> followingManga = const [],
+      final List<String> uploadedManga = const [],
+      final List<String> following = const [],
+      final List<String> followers = const [],
+      final List<String> comments = const [],
+      final List<String> favoritesManga = const [],
+      final List<String> ratings = const [],
       final List<ReadingHistoryItem> readingHistory = const [],
       this.createdAt,
       this.updatedAt,
@@ -323,6 +365,9 @@ class _$UserImpl implements _User {
         _uploadedManga = uploadedManga,
         _following = following,
         _followers = followers,
+        _comments = comments,
+        _favoritesManga = favoritesManga,
+        _ratings = ratings,
         _readingHistory = readingHistory;
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
@@ -345,49 +390,76 @@ class _$UserImpl implements _User {
   final bool isVerified;
   @override
   final String? avatarUrl;
-  final List<Manga> _dislikedManga;
+  final List<String> _dislikedManga;
   @override
   @JsonKey()
-  List<Manga> get dislikedManga {
+  List<String> get dislikedManga {
     if (_dislikedManga is EqualUnmodifiableListView) return _dislikedManga;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_dislikedManga);
   }
 
-  final List<Manga> _followingManga;
+  final List<String> _followingManga;
   @override
   @JsonKey()
-  List<Manga> get followingManga {
+  List<String> get followingManga {
     if (_followingManga is EqualUnmodifiableListView) return _followingManga;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_followingManga);
   }
 
-  final List<Manga> _uploadedManga;
+  final List<String> _uploadedManga;
   @override
   @JsonKey()
-  List<Manga> get uploadedManga {
+  List<String> get uploadedManga {
     if (_uploadedManga is EqualUnmodifiableListView) return _uploadedManga;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_uploadedManga);
   }
 
-  final List<User> _following;
+  final List<String> _following;
   @override
   @JsonKey()
-  List<User> get following {
+  List<String> get following {
     if (_following is EqualUnmodifiableListView) return _following;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_following);
   }
 
-  final List<User> _followers;
+  final List<String> _followers;
   @override
   @JsonKey()
-  List<User> get followers {
+  List<String> get followers {
     if (_followers is EqualUnmodifiableListView) return _followers;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_followers);
+  }
+
+  final List<String> _comments;
+  @override
+  @JsonKey()
+  List<String> get comments {
+    if (_comments is EqualUnmodifiableListView) return _comments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_comments);
+  }
+
+  final List<String> _favoritesManga;
+  @override
+  @JsonKey()
+  List<String> get favoritesManga {
+    if (_favoritesManga is EqualUnmodifiableListView) return _favoritesManga;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_favoritesManga);
+  }
+
+  final List<String> _ratings;
+  @override
+  @JsonKey()
+  List<String> get ratings {
+    if (_ratings is EqualUnmodifiableListView) return _ratings;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_ratings);
   }
 
   final List<ReadingHistoryItem> _readingHistory;
@@ -409,7 +481,7 @@ class _$UserImpl implements _User {
 
   @override
   String toString() {
-    return 'User(id: $id, name: $name, email: $email, password: $password, role: $role, isVerified: $isVerified, avatarUrl: $avatarUrl, dislikedManga: $dislikedManga, followingManga: $followingManga, uploadedManga: $uploadedManga, following: $following, followers: $followers, readingHistory: $readingHistory, createdAt: $createdAt, updatedAt: $updatedAt, version: $version)';
+    return 'User(id: $id, name: $name, email: $email, password: $password, role: $role, isVerified: $isVerified, avatarUrl: $avatarUrl, dislikedManga: $dislikedManga, followingManga: $followingManga, uploadedManga: $uploadedManga, following: $following, followers: $followers, comments: $comments, favoritesManga: $favoritesManga, ratings: $ratings, readingHistory: $readingHistory, createdAt: $createdAt, updatedAt: $updatedAt, version: $version)';
   }
 
   @override
@@ -437,6 +509,10 @@ class _$UserImpl implements _User {
                 .equals(other._following, _following) &&
             const DeepCollectionEquality()
                 .equals(other._followers, _followers) &&
+            const DeepCollectionEquality().equals(other._comments, _comments) &&
+            const DeepCollectionEquality()
+                .equals(other._favoritesManga, _favoritesManga) &&
+            const DeepCollectionEquality().equals(other._ratings, _ratings) &&
             const DeepCollectionEquality()
                 .equals(other._readingHistory, _readingHistory) &&
             (identical(other.createdAt, createdAt) ||
@@ -448,24 +524,28 @@ class _$UserImpl implements _User {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      email,
-      password,
-      role,
-      isVerified,
-      avatarUrl,
-      const DeepCollectionEquality().hash(_dislikedManga),
-      const DeepCollectionEquality().hash(_followingManga),
-      const DeepCollectionEquality().hash(_uploadedManga),
-      const DeepCollectionEquality().hash(_following),
-      const DeepCollectionEquality().hash(_followers),
-      const DeepCollectionEquality().hash(_readingHistory),
-      createdAt,
-      updatedAt,
-      version);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        name,
+        email,
+        password,
+        role,
+        isVerified,
+        avatarUrl,
+        const DeepCollectionEquality().hash(_dislikedManga),
+        const DeepCollectionEquality().hash(_followingManga),
+        const DeepCollectionEquality().hash(_uploadedManga),
+        const DeepCollectionEquality().hash(_following),
+        const DeepCollectionEquality().hash(_followers),
+        const DeepCollectionEquality().hash(_comments),
+        const DeepCollectionEquality().hash(_favoritesManga),
+        const DeepCollectionEquality().hash(_ratings),
+        const DeepCollectionEquality().hash(_readingHistory),
+        createdAt,
+        updatedAt,
+        version
+      ]);
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -492,11 +572,14 @@ abstract class _User implements User {
       final Role role,
       final bool isVerified,
       final String? avatarUrl,
-      final List<Manga> dislikedManga,
-      final List<Manga> followingManga,
-      final List<Manga> uploadedManga,
-      final List<User> following,
-      final List<User> followers,
+      final List<String> dislikedManga,
+      final List<String> followingManga,
+      final List<String> uploadedManga,
+      final List<String> following,
+      final List<String> followers,
+      final List<String> comments,
+      final List<String> favoritesManga,
+      final List<String> ratings,
       final List<ReadingHistoryItem> readingHistory,
       final String? createdAt,
       final String? updatedAt,
@@ -520,15 +603,21 @@ abstract class _User implements User {
   @override
   String? get avatarUrl;
   @override
-  List<Manga> get dislikedManga;
+  List<String> get dislikedManga;
   @override
-  List<Manga> get followingManga;
+  List<String> get followingManga;
   @override
-  List<Manga> get uploadedManga;
+  List<String> get uploadedManga;
   @override
-  List<User> get following;
+  List<String> get following;
   @override
-  List<User> get followers;
+  List<String> get followers;
+  @override
+  List<String> get comments;
+  @override
+  List<String> get favoritesManga;
+  @override
+  List<String> get ratings;
   @override
   List<ReadingHistoryItem> get readingHistory;
   @override

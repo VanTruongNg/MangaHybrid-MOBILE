@@ -13,9 +13,10 @@ class AuthService {
         'password': password,
       });
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         final accessToken = response.data['accessToken'] as String;
         final refreshToken = response.data['refreshToken'] as String;
+        print('Access Token: $accessToken');
 
         dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
@@ -29,7 +30,7 @@ class AuthService {
               'accessToken': accessToken,
               'refreshToken': refreshToken,
             };
-          } catch (e, stack) {
+          } catch (e) {
             throw Exception('Lỗi khi xử lý thông tin người dùng: $e');
           }
         }
@@ -37,6 +38,10 @@ class AuthService {
       }
       throw Exception('Lỗi không xác định - Status: ${response.statusCode}');
     } on DioException catch (error) {
+      if (error.type == DioExceptionType.connectionError ||
+          error.type == DioExceptionType.connectionTimeout) {
+        throw Exception('network_error');
+      }
       rethrow;
     }
   }
@@ -63,7 +68,7 @@ class AuthService {
 
   Future<bool> verifyEmail(String email, String token) async {
     try {
-      final response = await dio.get('email/verify/$email/$token');
+      final response = await dio.get('auth/email/verify/$email/$token');
 
       if (response.statusCode == 200) {
         return true;

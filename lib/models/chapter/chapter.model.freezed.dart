@@ -21,15 +21,13 @@ Chapter _$ChapterFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Chapter {
   @JsonKey(name: '_id')
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   int get number => throw _privateConstructorUsedError;
-  List<String> get pagesUrl => throw _privateConstructorUsedError;
-  String get chapterTitle => throw _privateConstructorUsedError;
-  String? get chapterName => throw _privateConstructorUsedError;
+  String? get chapterTitle => throw _privateConstructorUsedError;
+  String get chapterName => throw _privateConstructorUsedError;
+  String get chapterType => throw _privateConstructorUsedError;
   int get views => throw _privateConstructorUsedError;
-  Manga? get manga => throw _privateConstructorUsedError;
-  String? get createdAt => throw _privateConstructorUsedError;
-  String? get updatedAt => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
 
   /// Serializes this Chapter to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,17 +44,13 @@ abstract class $ChapterCopyWith<$Res> {
       _$ChapterCopyWithImpl<$Res, Chapter>;
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String? id,
+      {@JsonKey(name: '_id') String id,
       int number,
-      List<String> pagesUrl,
-      String chapterTitle,
-      String? chapterName,
+      String? chapterTitle,
+      String chapterName,
+      String chapterType,
       int views,
-      Manga? manga,
-      String? createdAt,
-      String? updatedAt});
-
-  $MangaCopyWith<$Res>? get manga;
+      String createdAt});
 }
 
 /// @nodoc
@@ -74,68 +68,44 @@ class _$ChapterCopyWithImpl<$Res, $Val extends Chapter>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? number = null,
-    Object? pagesUrl = null,
-    Object? chapterTitle = null,
-    Object? chapterName = freezed,
+    Object? chapterTitle = freezed,
+    Object? chapterName = null,
+    Object? chapterType = null,
     Object? views = null,
-    Object? manga = freezed,
-    Object? createdAt = freezed,
-    Object? updatedAt = freezed,
+    Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       number: null == number
           ? _value.number
           : number // ignore: cast_nullable_to_non_nullable
               as int,
-      pagesUrl: null == pagesUrl
-          ? _value.pagesUrl
-          : pagesUrl // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      chapterTitle: null == chapterTitle
+      chapterTitle: freezed == chapterTitle
           ? _value.chapterTitle
           : chapterTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      chapterName: freezed == chapterName
+              as String?,
+      chapterName: null == chapterName
           ? _value.chapterName
           : chapterName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      chapterType: null == chapterType
+          ? _value.chapterType
+          : chapterType // ignore: cast_nullable_to_non_nullable
+              as String,
       views: null == views
           ? _value.views
           : views // ignore: cast_nullable_to_non_nullable
               as int,
-      manga: freezed == manga
-          ? _value.manga
-          : manga // ignore: cast_nullable_to_non_nullable
-              as Manga?,
-      createdAt: freezed == createdAt
+      createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as String?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ) as $Val);
-  }
-
-  /// Create a copy of Chapter
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $MangaCopyWith<$Res>? get manga {
-    if (_value.manga == null) {
-      return null;
-    }
-
-    return $MangaCopyWith<$Res>(_value.manga!, (value) {
-      return _then(_value.copyWith(manga: value) as $Val);
-    });
   }
 }
 
@@ -147,18 +117,13 @@ abstract class _$$ChapterImplCopyWith<$Res> implements $ChapterCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: '_id') String? id,
+      {@JsonKey(name: '_id') String id,
       int number,
-      List<String> pagesUrl,
-      String chapterTitle,
-      String? chapterName,
+      String? chapterTitle,
+      String chapterName,
+      String chapterType,
       int views,
-      Manga? manga,
-      String? createdAt,
-      String? updatedAt});
-
-  @override
-  $MangaCopyWith<$Res>? get manga;
+      String createdAt});
 }
 
 /// @nodoc
@@ -174,53 +139,43 @@ class __$$ChapterImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? number = null,
-    Object? pagesUrl = null,
-    Object? chapterTitle = null,
-    Object? chapterName = freezed,
+    Object? chapterTitle = freezed,
+    Object? chapterName = null,
+    Object? chapterType = null,
     Object? views = null,
-    Object? manga = freezed,
-    Object? createdAt = freezed,
-    Object? updatedAt = freezed,
+    Object? createdAt = null,
   }) {
     return _then(_$ChapterImpl(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       number: null == number
           ? _value.number
           : number // ignore: cast_nullable_to_non_nullable
               as int,
-      pagesUrl: null == pagesUrl
-          ? _value._pagesUrl
-          : pagesUrl // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      chapterTitle: null == chapterTitle
+      chapterTitle: freezed == chapterTitle
           ? _value.chapterTitle
           : chapterTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      chapterName: freezed == chapterName
+              as String?,
+      chapterName: null == chapterName
           ? _value.chapterName
           : chapterName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      chapterType: null == chapterType
+          ? _value.chapterType
+          : chapterType // ignore: cast_nullable_to_non_nullable
+              as String,
       views: null == views
           ? _value.views
           : views // ignore: cast_nullable_to_non_nullable
               as int,
-      manga: freezed == manga
-          ? _value.manga
-          : manga // ignore: cast_nullable_to_non_nullable
-              as Manga?,
-      createdAt: freezed == createdAt
+      createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as String?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
     ));
   }
 }
@@ -229,50 +184,37 @@ class __$$ChapterImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ChapterImpl implements _Chapter {
   const _$ChapterImpl(
-      {@JsonKey(name: '_id') this.id,
+      {@JsonKey(name: '_id') required this.id,
       required this.number,
-      required final List<String> pagesUrl,
-      required this.chapterTitle,
-      this.chapterName,
+      this.chapterTitle,
+      required this.chapterName,
+      required this.chapterType,
       this.views = 0,
-      this.manga,
-      this.createdAt,
-      this.updatedAt})
-      : _pagesUrl = pagesUrl;
+      required this.createdAt});
 
   factory _$ChapterImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChapterImplFromJson(json);
 
   @override
   @JsonKey(name: '_id')
-  final String? id;
+  final String id;
   @override
   final int number;
-  final List<String> _pagesUrl;
   @override
-  List<String> get pagesUrl {
-    if (_pagesUrl is EqualUnmodifiableListView) return _pagesUrl;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_pagesUrl);
-  }
-
+  final String? chapterTitle;
   @override
-  final String chapterTitle;
+  final String chapterName;
   @override
-  final String? chapterName;
+  final String chapterType;
   @override
   @JsonKey()
   final int views;
   @override
-  final Manga? manga;
-  @override
-  final String? createdAt;
-  @override
-  final String? updatedAt;
+  final String createdAt;
 
   @override
   String toString() {
-    return 'Chapter(id: $id, number: $number, pagesUrl: $pagesUrl, chapterTitle: $chapterTitle, chapterName: $chapterName, views: $views, manga: $manga, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Chapter(id: $id, number: $number, chapterTitle: $chapterTitle, chapterName: $chapterName, chapterType: $chapterType, views: $views, createdAt: $createdAt)';
   }
 
   @override
@@ -282,32 +224,21 @@ class _$ChapterImpl implements _Chapter {
             other is _$ChapterImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.number, number) || other.number == number) &&
-            const DeepCollectionEquality().equals(other._pagesUrl, _pagesUrl) &&
             (identical(other.chapterTitle, chapterTitle) ||
                 other.chapterTitle == chapterTitle) &&
             (identical(other.chapterName, chapterName) ||
                 other.chapterName == chapterName) &&
+            (identical(other.chapterType, chapterType) ||
+                other.chapterType == chapterType) &&
             (identical(other.views, views) || other.views == views) &&
-            (identical(other.manga, manga) || other.manga == manga) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.createdAt == createdAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      number,
-      const DeepCollectionEquality().hash(_pagesUrl),
-      chapterTitle,
-      chapterName,
-      views,
-      manga,
-      createdAt,
-      updatedAt);
+  int get hashCode => Object.hash(runtimeType, id, number, chapterTitle,
+      chapterName, chapterType, views, createdAt);
 
   /// Create a copy of Chapter
   /// with the given fields replaced by the non-null parameter values.
@@ -327,37 +258,31 @@ class _$ChapterImpl implements _Chapter {
 
 abstract class _Chapter implements Chapter {
   const factory _Chapter(
-      {@JsonKey(name: '_id') final String? id,
+      {@JsonKey(name: '_id') required final String id,
       required final int number,
-      required final List<String> pagesUrl,
-      required final String chapterTitle,
-      final String? chapterName,
+      final String? chapterTitle,
+      required final String chapterName,
+      required final String chapterType,
       final int views,
-      final Manga? manga,
-      final String? createdAt,
-      final String? updatedAt}) = _$ChapterImpl;
+      required final String createdAt}) = _$ChapterImpl;
 
   factory _Chapter.fromJson(Map<String, dynamic> json) = _$ChapterImpl.fromJson;
 
   @override
   @JsonKey(name: '_id')
-  String? get id;
+  String get id;
   @override
   int get number;
   @override
-  List<String> get pagesUrl;
+  String? get chapterTitle;
   @override
-  String get chapterTitle;
+  String get chapterName;
   @override
-  String? get chapterName;
+  String get chapterType;
   @override
   int get views;
   @override
-  Manga? get manga;
-  @override
-  String? get createdAt;
-  @override
-  String? get updatedAt;
+  String get createdAt;
 
   /// Create a copy of Chapter
   /// with the given fields replaced by the non-null parameter values.

@@ -3,13 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:webtoon_mobile/providers/auth/auth_provider.dart';
 import 'package:webtoon_mobile/providers/theme_provider.dart';
+import 'package:webtoon_mobile/providers/connectivity_provider.dart';
 import 'package:webtoon_mobile/widgets/ProfileScreen/user_profile_view.dart';
+import 'package:webtoon_mobile/screen/offline_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isOnline = ref.watch(isOnlineProvider);
+
+    if (!isOnline) {
+      return const OfflineScreen();
+    }
+
     final authState = ref.watch(authProvider);
 
     return Scaffold(
@@ -32,7 +40,12 @@ class ProfileScreen extends ConsumerWidget {
       ),
       body: authState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Lỗi: $error')),
+        error: (error, stack) {
+          if (error.toString().contains('network_error')) {
+            return const SizedBox.shrink();
+          }
+          return Center(child: Text('Lỗi: $error'));
+        },
         data: (user) {
           if (user == null) {
             return Center(
@@ -58,7 +71,6 @@ class ProfileScreen extends ConsumerWidget {
             children: [
               const UserProfileView(),
               const SizedBox(height: 16),
-              // Xóa đoạn Consumer và ListTile ở đây
               ElevatedButton(
                 onPressed: () {
                   ref.read(authProvider.notifier).logout();
