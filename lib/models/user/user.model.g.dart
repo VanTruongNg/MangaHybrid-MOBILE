@@ -15,23 +15,35 @@ _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
       isVerified: json['isVerified'] as bool? ?? false,
       avatarUrl: json['avatarUrl'] as String?,
       dislikedManga: (json['dislikedManga'] as List<dynamic>?)
-              ?.map((e) => Manga.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => e as String)
               .toList() ??
           const [],
       followingManga: (json['followingManga'] as List<dynamic>?)
-              ?.map((e) => Manga.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => e as String)
               .toList() ??
           const [],
       uploadedManga: (json['uploadedManga'] as List<dynamic>?)
-              ?.map((e) => Manga.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => e as String)
               .toList() ??
           const [],
       following: (json['following'] as List<dynamic>?)
-              ?.map((e) => User.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => e as String)
               .toList() ??
           const [],
       followers: (json['followers'] as List<dynamic>?)
-              ?.map((e) => User.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      comments: (json['comments'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      favoritesManga: (json['favoritesManga'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      ratings: (json['ratings'] as List<dynamic>?)
+              ?.map((e) => e as String)
               .toList() ??
           const [],
       readingHistory: (json['readingHistory'] as List<dynamic>?)
@@ -58,6 +70,9 @@ Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
       'uploadedManga': instance.uploadedManga,
       'following': instance.following,
       'followers': instance.followers,
+      'comments': instance.comments,
+      'favoritesManga': instance.favoritesManga,
+      'ratings': instance.ratings,
       'readingHistory': instance.readingHistory,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,

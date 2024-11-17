@@ -1,19 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:webtoon_mobile/providers/connectivity_provider.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   final Widget child;
 
-  const HomeScreen ({
+  const HomeScreen({
     super.key,
     required this.child,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  bool _hasShownDialog = false;
+
+  void _showOfflineDialog() {
+    if (!_hasShownDialog) {
+      _hasShownDialog = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          title: const Text('Mất kết nối'),
+          content: const Text(
+            'Bạn đã mất kết nối internet. Chuyển sang chế độ offline?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _hasShownDialog = false;
+              },
+              child: const Text('Ở lại'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                context.go('/offline');
+              },
+              child: const Text('Chuyển'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(connectivityProvider, (previous, next) {
+      next.whenData((statusList) {
+        if (statusList.isEmpty ||
+            statusList.every((status) => status == ConnectivityResult.none)) {
+          _showOfflineDialog();
+        } else {
+          _hasShownDialog = false;
+        }
+      });
+    });
+
     return Scaffold(
-      body: child,
+      body: widget.child, // Sử dụng widget.child thay vì child
       bottomNavigationBar: NavigationBar(
         selectedIndex: _calculateSelectedIndex(context),
         onDestinationSelected: (index) => _onItemTapped(index, context),
@@ -48,7 +100,7 @@ class HomeScreen extends ConsumerWidget {
     if (location == '/') return 0;
     if (location == '/search') return 1;
     if (location == '/chat') return 2;
-    if (location == '/profile') return 3;
+    if (location == '/profile' || location == '/offline') return 3;
     return 0;
   }
 

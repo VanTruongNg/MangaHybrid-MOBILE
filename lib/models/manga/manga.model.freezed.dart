@@ -26,21 +26,18 @@ mixin _$Manga {
   String get description => throw _privateConstructorUsedError;
   String get author => throw _privateConstructorUsedError;
   double get rating => throw _privateConstructorUsedError;
-  int get like => throw _privateConstructorUsedError;
-  int get disLike => throw _privateConstructorUsedError;
-  @JsonKey(name: 'view')
-  int get views => throw _privateConstructorUsedError;
-  List<String> get followers => throw _privateConstructorUsedError;
-  List<String> get chapters => throw _privateConstructorUsedError;
-  List<String> get genre => throw _privateConstructorUsedError;
-  String get uploader => throw _privateConstructorUsedError;
-  String get createdAt => throw _privateConstructorUsedError;
-  String get updatedAt => throw _privateConstructorUsedError;
-  @JsonKey(name: '__v')
-  int? get version => throw _privateConstructorUsedError;
+  int get view => throw _privateConstructorUsedError;
+  List<Chapter> get chapters => throw _privateConstructorUsedError;
+  List<Genre> get genre => throw _privateConstructorUsedError;
+  Uploader get uploader => throw _privateConstructorUsedError;
   String? get coverImg => throw _privateConstructorUsedError;
-  StatusEnum get status => throw _privateConstructorUsedError;
-  ApprovalStatus get approvalStatus => throw _privateConstructorUsedError;
+  String? get bannerImg => throw _privateConstructorUsedError;
+  String get status => throw _privateConstructorUsedError;
+  int get ratingCount => throw _privateConstructorUsedError;
+  int get followers => throw _privateConstructorUsedError;
+  int get like => throw _privateConstructorUsedError;
+  int get dislike => throw _privateConstructorUsedError;
+  String get approvalStatus => throw _privateConstructorUsedError;
 
   /// Serializes this Manga to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -62,19 +59,20 @@ abstract class $MangaCopyWith<$Res> {
       String description,
       String author,
       double rating,
-      int like,
-      int disLike,
-      @JsonKey(name: 'view') int views,
-      List<String> followers,
-      List<String> chapters,
-      List<String> genre,
-      String uploader,
-      String createdAt,
-      String updatedAt,
-      @JsonKey(name: '__v') int? version,
+      int view,
+      List<Chapter> chapters,
+      List<Genre> genre,
+      Uploader uploader,
       String? coverImg,
-      StatusEnum status,
-      ApprovalStatus approvalStatus});
+      String? bannerImg,
+      String status,
+      int ratingCount,
+      int followers,
+      int like,
+      int dislike,
+      String approvalStatus});
+
+  $UploaderCopyWith<$Res> get uploader;
 }
 
 /// @nodoc
@@ -97,18 +95,17 @@ class _$MangaCopyWithImpl<$Res, $Val extends Manga>
     Object? description = null,
     Object? author = null,
     Object? rating = null,
-    Object? like = null,
-    Object? disLike = null,
-    Object? views = null,
-    Object? followers = null,
+    Object? view = null,
     Object? chapters = null,
     Object? genre = null,
     Object? uploader = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
-    Object? version = freezed,
     Object? coverImg = freezed,
+    Object? bannerImg = freezed,
     Object? status = null,
+    Object? ratingCount = null,
+    Object? followers = null,
+    Object? like = null,
+    Object? dislike = null,
     Object? approvalStatus = null,
   }) {
     return _then(_value.copyWith(
@@ -132,59 +129,65 @@ class _$MangaCopyWithImpl<$Res, $Val extends Manga>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as double,
-      like: null == like
-          ? _value.like
-          : like // ignore: cast_nullable_to_non_nullable
+      view: null == view
+          ? _value.view
+          : view // ignore: cast_nullable_to_non_nullable
               as int,
-      disLike: null == disLike
-          ? _value.disLike
-          : disLike // ignore: cast_nullable_to_non_nullable
-              as int,
-      views: null == views
-          ? _value.views
-          : views // ignore: cast_nullable_to_non_nullable
-              as int,
-      followers: null == followers
-          ? _value.followers
-          : followers // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       chapters: null == chapters
           ? _value.chapters
           : chapters // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<Chapter>,
       genre: null == genre
           ? _value.genre
           : genre // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<Genre>,
       uploader: null == uploader
           ? _value.uploader
           : uploader // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as String,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as String,
-      version: freezed == version
-          ? _value.version
-          : version // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as Uploader,
       coverImg: freezed == coverImg
           ? _value.coverImg
           : coverImg // ignore: cast_nullable_to_non_nullable
               as String?,
+      bannerImg: freezed == bannerImg
+          ? _value.bannerImg
+          : bannerImg // ignore: cast_nullable_to_non_nullable
+              as String?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as StatusEnum,
+              as String,
+      ratingCount: null == ratingCount
+          ? _value.ratingCount
+          : ratingCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      followers: null == followers
+          ? _value.followers
+          : followers // ignore: cast_nullable_to_non_nullable
+              as int,
+      like: null == like
+          ? _value.like
+          : like // ignore: cast_nullable_to_non_nullable
+              as int,
+      dislike: null == dislike
+          ? _value.dislike
+          : dislike // ignore: cast_nullable_to_non_nullable
+              as int,
       approvalStatus: null == approvalStatus
           ? _value.approvalStatus
           : approvalStatus // ignore: cast_nullable_to_non_nullable
-              as ApprovalStatus,
+              as String,
     ) as $Val);
+  }
+
+  /// Create a copy of Manga
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UploaderCopyWith<$Res> get uploader {
+    return $UploaderCopyWith<$Res>(_value.uploader, (value) {
+      return _then(_value.copyWith(uploader: value) as $Val);
+    });
   }
 }
 
@@ -201,19 +204,21 @@ abstract class _$$MangaImplCopyWith<$Res> implements $MangaCopyWith<$Res> {
       String description,
       String author,
       double rating,
-      int like,
-      int disLike,
-      @JsonKey(name: 'view') int views,
-      List<String> followers,
-      List<String> chapters,
-      List<String> genre,
-      String uploader,
-      String createdAt,
-      String updatedAt,
-      @JsonKey(name: '__v') int? version,
+      int view,
+      List<Chapter> chapters,
+      List<Genre> genre,
+      Uploader uploader,
       String? coverImg,
-      StatusEnum status,
-      ApprovalStatus approvalStatus});
+      String? bannerImg,
+      String status,
+      int ratingCount,
+      int followers,
+      int like,
+      int dislike,
+      String approvalStatus});
+
+  @override
+  $UploaderCopyWith<$Res> get uploader;
 }
 
 /// @nodoc
@@ -234,18 +239,17 @@ class __$$MangaImplCopyWithImpl<$Res>
     Object? description = null,
     Object? author = null,
     Object? rating = null,
-    Object? like = null,
-    Object? disLike = null,
-    Object? views = null,
-    Object? followers = null,
+    Object? view = null,
     Object? chapters = null,
     Object? genre = null,
     Object? uploader = null,
-    Object? createdAt = null,
-    Object? updatedAt = null,
-    Object? version = freezed,
     Object? coverImg = freezed,
+    Object? bannerImg = freezed,
     Object? status = null,
+    Object? ratingCount = null,
+    Object? followers = null,
+    Object? like = null,
+    Object? dislike = null,
     Object? approvalStatus = null,
   }) {
     return _then(_$MangaImpl(
@@ -269,58 +273,54 @@ class __$$MangaImplCopyWithImpl<$Res>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as double,
-      like: null == like
-          ? _value.like
-          : like // ignore: cast_nullable_to_non_nullable
+      view: null == view
+          ? _value.view
+          : view // ignore: cast_nullable_to_non_nullable
               as int,
-      disLike: null == disLike
-          ? _value.disLike
-          : disLike // ignore: cast_nullable_to_non_nullable
-              as int,
-      views: null == views
-          ? _value.views
-          : views // ignore: cast_nullable_to_non_nullable
-              as int,
-      followers: null == followers
-          ? _value._followers
-          : followers // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       chapters: null == chapters
           ? _value._chapters
           : chapters // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<Chapter>,
       genre: null == genre
           ? _value._genre
           : genre // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<Genre>,
       uploader: null == uploader
           ? _value.uploader
           : uploader // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as String,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as String,
-      version: freezed == version
-          ? _value.version
-          : version // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as Uploader,
       coverImg: freezed == coverImg
           ? _value.coverImg
           : coverImg // ignore: cast_nullable_to_non_nullable
               as String?,
+      bannerImg: freezed == bannerImg
+          ? _value.bannerImg
+          : bannerImg // ignore: cast_nullable_to_non_nullable
+              as String?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as StatusEnum,
+              as String,
+      ratingCount: null == ratingCount
+          ? _value.ratingCount
+          : ratingCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      followers: null == followers
+          ? _value.followers
+          : followers // ignore: cast_nullable_to_non_nullable
+              as int,
+      like: null == like
+          ? _value.like
+          : like // ignore: cast_nullable_to_non_nullable
+              as int,
+      dislike: null == dislike
+          ? _value.dislike
+          : dislike // ignore: cast_nullable_to_non_nullable
+              as int,
       approvalStatus: null == approvalStatus
           ? _value.approvalStatus
           : approvalStatus // ignore: cast_nullable_to_non_nullable
-              as ApprovalStatus,
+              as String,
     ));
   }
 }
@@ -334,21 +334,19 @@ class _$MangaImpl implements _Manga {
       required this.description,
       required this.author,
       this.rating = 0,
-      this.like = 0,
-      this.disLike = 0,
-      @JsonKey(name: 'view') this.views = 0,
-      final List<String> followers = const [],
-      final List<String> chapters = const [],
-      final List<String> genre = const [],
+      this.view = 0,
+      final List<Chapter> chapters = const [],
+      final List<Genre> genre = const [],
       required this.uploader,
-      required this.createdAt,
-      required this.updatedAt,
-      @JsonKey(name: '__v') this.version,
       this.coverImg,
-      this.status = StatusEnum.inProgress,
-      this.approvalStatus = ApprovalStatus.pending})
-      : _followers = followers,
-        _chapters = chapters,
+      this.bannerImg,
+      this.status = 'In Progress',
+      this.ratingCount = 0,
+      this.followers = 0,
+      this.like = 0,
+      this.dislike = 0,
+      this.approvalStatus = 'PENDING'})
+      : _chapters = chapters,
         _genre = genre;
 
   factory _$MangaImpl.fromJson(Map<String, dynamic> json) =>
@@ -368,61 +366,53 @@ class _$MangaImpl implements _Manga {
   final double rating;
   @override
   @JsonKey()
-  final int like;
+  final int view;
+  final List<Chapter> _chapters;
   @override
   @JsonKey()
-  final int disLike;
-  @override
-  @JsonKey(name: 'view')
-  final int views;
-  final List<String> _followers;
-  @override
-  @JsonKey()
-  List<String> get followers {
-    if (_followers is EqualUnmodifiableListView) return _followers;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_followers);
-  }
-
-  final List<String> _chapters;
-  @override
-  @JsonKey()
-  List<String> get chapters {
+  List<Chapter> get chapters {
     if (_chapters is EqualUnmodifiableListView) return _chapters;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_chapters);
   }
 
-  final List<String> _genre;
+  final List<Genre> _genre;
   @override
   @JsonKey()
-  List<String> get genre {
+  List<Genre> get genre {
     if (_genre is EqualUnmodifiableListView) return _genre;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_genre);
   }
 
   @override
-  final String uploader;
-  @override
-  final String createdAt;
-  @override
-  final String updatedAt;
-  @override
-  @JsonKey(name: '__v')
-  final int? version;
+  final Uploader uploader;
   @override
   final String? coverImg;
   @override
-  @JsonKey()
-  final StatusEnum status;
+  final String? bannerImg;
   @override
   @JsonKey()
-  final ApprovalStatus approvalStatus;
+  final String status;
+  @override
+  @JsonKey()
+  final int ratingCount;
+  @override
+  @JsonKey()
+  final int followers;
+  @override
+  @JsonKey()
+  final int like;
+  @override
+  @JsonKey()
+  final int dislike;
+  @override
+  @JsonKey()
+  final String approvalStatus;
 
   @override
   String toString() {
-    return 'Manga(id: $id, title: $title, description: $description, author: $author, rating: $rating, like: $like, disLike: $disLike, views: $views, followers: $followers, chapters: $chapters, genre: $genre, uploader: $uploader, createdAt: $createdAt, updatedAt: $updatedAt, version: $version, coverImg: $coverImg, status: $status, approvalStatus: $approvalStatus)';
+    return 'Manga(id: $id, title: $title, description: $description, author: $author, rating: $rating, view: $view, chapters: $chapters, genre: $genre, uploader: $uploader, coverImg: $coverImg, bannerImg: $bannerImg, status: $status, ratingCount: $ratingCount, followers: $followers, like: $like, dislike: $dislike, approvalStatus: $approvalStatus)';
   }
 
   @override
@@ -436,23 +426,22 @@ class _$MangaImpl implements _Manga {
                 other.description == description) &&
             (identical(other.author, author) || other.author == author) &&
             (identical(other.rating, rating) || other.rating == rating) &&
-            (identical(other.like, like) || other.like == like) &&
-            (identical(other.disLike, disLike) || other.disLike == disLike) &&
-            (identical(other.views, views) || other.views == views) &&
-            const DeepCollectionEquality()
-                .equals(other._followers, _followers) &&
+            (identical(other.view, view) || other.view == view) &&
             const DeepCollectionEquality().equals(other._chapters, _chapters) &&
             const DeepCollectionEquality().equals(other._genre, _genre) &&
             (identical(other.uploader, uploader) ||
                 other.uploader == uploader) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt) &&
-            (identical(other.version, version) || other.version == version) &&
             (identical(other.coverImg, coverImg) ||
                 other.coverImg == coverImg) &&
+            (identical(other.bannerImg, bannerImg) ||
+                other.bannerImg == bannerImg) &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.ratingCount, ratingCount) ||
+                other.ratingCount == ratingCount) &&
+            (identical(other.followers, followers) ||
+                other.followers == followers) &&
+            (identical(other.like, like) || other.like == like) &&
+            (identical(other.dislike, dislike) || other.dislike == dislike) &&
             (identical(other.approvalStatus, approvalStatus) ||
                 other.approvalStatus == approvalStatus));
   }
@@ -466,18 +455,17 @@ class _$MangaImpl implements _Manga {
       description,
       author,
       rating,
-      like,
-      disLike,
-      views,
-      const DeepCollectionEquality().hash(_followers),
+      view,
       const DeepCollectionEquality().hash(_chapters),
       const DeepCollectionEquality().hash(_genre),
       uploader,
-      createdAt,
-      updatedAt,
-      version,
       coverImg,
+      bannerImg,
       status,
+      ratingCount,
+      followers,
+      like,
+      dislike,
       approvalStatus);
 
   /// Create a copy of Manga
@@ -503,19 +491,18 @@ abstract class _Manga implements Manga {
       required final String description,
       required final String author,
       final double rating,
-      final int like,
-      final int disLike,
-      @JsonKey(name: 'view') final int views,
-      final List<String> followers,
-      final List<String> chapters,
-      final List<String> genre,
-      required final String uploader,
-      required final String createdAt,
-      required final String updatedAt,
-      @JsonKey(name: '__v') final int? version,
+      final int view,
+      final List<Chapter> chapters,
+      final List<Genre> genre,
+      required final Uploader uploader,
       final String? coverImg,
-      final StatusEnum status,
-      final ApprovalStatus approvalStatus}) = _$MangaImpl;
+      final String? bannerImg,
+      final String status,
+      final int ratingCount,
+      final int followers,
+      final int like,
+      final int dislike,
+      final String approvalStatus}) = _$MangaImpl;
 
   factory _Manga.fromJson(Map<String, dynamic> json) = _$MangaImpl.fromJson;
 
@@ -531,33 +518,29 @@ abstract class _Manga implements Manga {
   @override
   double get rating;
   @override
-  int get like;
+  int get view;
   @override
-  int get disLike;
+  List<Chapter> get chapters;
   @override
-  @JsonKey(name: 'view')
-  int get views;
+  List<Genre> get genre;
   @override
-  List<String> get followers;
-  @override
-  List<String> get chapters;
-  @override
-  List<String> get genre;
-  @override
-  String get uploader;
-  @override
-  String get createdAt;
-  @override
-  String get updatedAt;
-  @override
-  @JsonKey(name: '__v')
-  int? get version;
+  Uploader get uploader;
   @override
   String? get coverImg;
   @override
-  StatusEnum get status;
+  String? get bannerImg;
   @override
-  ApprovalStatus get approvalStatus;
+  String get status;
+  @override
+  int get ratingCount;
+  @override
+  int get followers;
+  @override
+  int get like;
+  @override
+  int get dislike;
+  @override
+  String get approvalStatus;
 
   /// Create a copy of Manga
   /// with the given fields replaced by the non-null parameter values.

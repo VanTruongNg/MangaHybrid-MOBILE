@@ -7,11 +7,8 @@ part 'genre.model.g.dart';
 @freezed
 class Genre with _$Genre {
   const factory Genre({
-    @JsonKey(name: '_id') String? id,
+    @JsonKey(name: '_id') required String id,
     required String name,
-    @Default([]) List<Manga> manga,
-    String? createdAt,
-    String? updatedAt,
   }) = _Genre;
 
   factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);

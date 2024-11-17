@@ -12,30 +12,24 @@ _$MangaImpl _$$MangaImplFromJson(Map<String, dynamic> json) => _$MangaImpl(
       description: json['description'] as String,
       author: json['author'] as String,
       rating: (json['rating'] as num?)?.toDouble() ?? 0,
-      like: (json['like'] as num?)?.toInt() ?? 0,
-      disLike: (json['disLike'] as num?)?.toInt() ?? 0,
-      views: (json['view'] as num?)?.toInt() ?? 0,
-      followers: (json['followers'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
+      view: (json['view'] as num?)?.toInt() ?? 0,
       chapters: (json['chapters'] as List<dynamic>?)
-              ?.map((e) => e as String)
+              ?.map((e) => Chapter.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      genre:
-          (json['genre'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-              const [],
-      uploader: json['uploader'] as String,
-      createdAt: json['createdAt'] as String,
-      updatedAt: json['updatedAt'] as String,
-      version: (json['__v'] as num?)?.toInt(),
+      genre: (json['genre'] as List<dynamic>?)
+              ?.map((e) => Genre.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      uploader: Uploader.fromJson(json['uploader'] as Map<String, dynamic>),
       coverImg: json['coverImg'] as String?,
-      status: $enumDecodeNullable(_$StatusEnumEnumMap, json['status']) ??
-          StatusEnum.inProgress,
-      approvalStatus: $enumDecodeNullable(
-              _$ApprovalStatusEnumMap, json['approvalStatus']) ??
-          ApprovalStatus.pending,
+      bannerImg: json['bannerImg'] as String?,
+      status: json['status'] as String? ?? 'In Progress',
+      ratingCount: (json['ratingCount'] as num?)?.toInt() ?? 0,
+      followers: (json['followers'] as num?)?.toInt() ?? 0,
+      like: (json['like'] as num?)?.toInt() ?? 0,
+      dislike: (json['dislike'] as num?)?.toInt() ?? 0,
+      approvalStatus: json['approvalStatus'] as String? ?? 'PENDING',
     );
 
 Map<String, dynamic> _$$MangaImplToJson(_$MangaImpl instance) =>
@@ -45,29 +39,16 @@ Map<String, dynamic> _$$MangaImplToJson(_$MangaImpl instance) =>
       'description': instance.description,
       'author': instance.author,
       'rating': instance.rating,
-      'like': instance.like,
-      'disLike': instance.disLike,
-      'view': instance.views,
-      'followers': instance.followers,
+      'view': instance.view,
       'chapters': instance.chapters,
       'genre': instance.genre,
       'uploader': instance.uploader,
-      'createdAt': instance.createdAt,
-      'updatedAt': instance.updatedAt,
-      '__v': instance.version,
       'coverImg': instance.coverImg,
-      'status': _$StatusEnumEnumMap[instance.status]!,
-      'approvalStatus': _$ApprovalStatusEnumMap[instance.approvalStatus]!,
+      'bannerImg': instance.bannerImg,
+      'status': instance.status,
+      'ratingCount': instance.ratingCount,
+      'followers': instance.followers,
+      'like': instance.like,
+      'dislike': instance.dislike,
+      'approvalStatus': instance.approvalStatus,
     };
-
-const _$StatusEnumEnumMap = {
-  StatusEnum.inProgress: 'In Progress',
-  StatusEnum.completed: 'Completed',
-  StatusEnum.dropped: 'Dropped',
-};
-
-const _$ApprovalStatusEnumMap = {
-  ApprovalStatus.pending: 'Pending',
-  ApprovalStatus.approved: 'Approved',
-  ApprovalStatus.rejected: 'Rejected',
-};

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webtoon_mobile/providers/theme_provider.dart';
 import 'package:webtoon_mobile/routes/router.dart';
-import 'package:webtoon_mobile/screen/home_screen.dart';
 
 void main() {
   runApp(

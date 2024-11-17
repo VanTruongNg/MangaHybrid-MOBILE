@@ -40,28 +40,44 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
       authState.when(
         data: (_) {
-          _showMessage(
-            'Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.',
-            isError: false,
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              title: const Text('Đăng ký thành công'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.mark_email_read_outlined,
+                    size: 64,
+                    color: Colors.green,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Vui lòng kiểm tra email ${_emailController.text} để lấy mã xác thực.',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    context.go('/login');
+                  },
+                  child: const Text('Để sau'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    context.go('/verify-email/${_emailController.text}');
+                  },
+                  child: const Text('Xác thực ngay'),
+                ),
+              ],
+            ),
           );
-          Future.delayed(const Duration(seconds: 2), () {
-            if (!mounted) return;
-            context.go('/login');
-          });
         },
-        error: (error, stack) {
-          String message = 'Đã có lỗi xảy ra';
-
-          if (error.toString().contains('Mật khẩu không trùng khớp')) {
-            message = 'Mật khẩu không trùng khớp!';
-          } else if (error.toString().contains('Email đã tồn tại')) {
-            message = 'Email đã được sử dụng';
-          } else if (error.toString().contains('Network')) {
-            message = 'Lỗi kết nối, vui lòng kiểm tra lại internet';
-          }
-
-          _showMessage(message, isError: true);
-        },
+        error: (_, __) {},
         loading: () {},
       );
     } finally {
@@ -69,20 +85,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         setState(() => isLoading = false);
       }
     }
-  }
-
-  void _showMessage(String message, {bool isError = false}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: isError ? Colors.red : Colors.green,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
   }
 
   @override
@@ -198,7 +200,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           ),
                           onPressed: () {
                             setState(() {
-                              isConfirmPasswordVisible = !isConfirmPasswordVisible;
+                              isConfirmPasswordVisible =
+                                  !isConfirmPasswordVisible;
                             });
                           },
                         ),
