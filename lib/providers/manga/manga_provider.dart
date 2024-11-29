@@ -13,12 +13,6 @@ final homeDataProvider = FutureProvider<HomeResponse>((ref) async {
   return mangaService.getHomeData();
 });
 
-final mangaDetailProvider =
-    FutureProvider.family<Manga, String>((ref, id) async {
-  final mangaService = ref.read(mangaServiceProvider);
-  return mangaService.getMangaById(id);
-});
-
 final refreshHomeDataProvider = FutureProvider<void>((ref) async {
   await ref.refresh(homeDataProvider);
 });

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:webtoon_mobile/providers/auth/auth_provider.dart';
-import 'package:webtoon_mobile/providers/theme_provider.dart';
+import 'package:webtoon_mobile/providers/auth/auth_state_provider.dart';
 import 'package:webtoon_mobile/providers/connectivity_provider.dart';
 import 'package:webtoon_mobile/widgets/ProfileScreen/user_profile_view.dart';
-import 'package:webtoon_mobile/screen/offline_screen.dart';
+import 'package:webtoon_mobile/screen/offline/offline_screen.dart';
+import 'package:webtoon_mobile/widgets/CustomAppbar.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -18,25 +19,11 @@ class ProfileScreen extends ConsumerWidget {
       return const OfflineScreen();
     }
 
-    final authState = ref.watch(authProvider);
+    final authState = ref.watch(authStateProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hồ sơ'),
-        actions: [
-          Consumer(
-            builder: (context, ref, child) {
-              final isDarkMode = ref.watch(themeProvider);
-              return IconButton(
-                icon: Icon(
-                    isDarkMode ?? false ? Icons.dark_mode : Icons.light_mode),
-                onPressed: () {
-                  ref.read(themeProvider.notifier).toggleTheme();
-                },
-              );
-            },
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'Hồ sơ',
       ),
       body: authState.when(
         loading: () => const Center(child: CircularProgressIndicator()),

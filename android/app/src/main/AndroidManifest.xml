@@ -2,7 +2,9 @@
     <application
         android:label="webtoon_mobile"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -18,8 +20,13 @@
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+              android:resource="@style/NormalTheme" />
+            <meta-data
+              android:name="com.google.android.gms.version"
+              android:value="@integer/google_play_services_version" />
+            <meta-data
+              android:name="com.google.android.gms.auth.api.signin.REQUEST_ID_TOKEN"
+              android:value="true" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

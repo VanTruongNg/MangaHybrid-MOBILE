@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:webtoon_mobile/providers/manga/chapter_provider.dart';
 import 'package:webtoon_mobile/providers/connectivity_provider.dart';
-import 'package:webtoon_mobile/screen/offline_screen.dart';
+import 'package:webtoon_mobile/screen/offline/offline_screen.dart';
+import 'package:webtoon_mobile/widgets/ChapterNavigationBar.dart';
 
 class ChapterScreen extends ConsumerStatefulWidget {
   final String chapterId;
@@ -18,38 +21,90 @@ class ChapterScreen extends ConsumerStatefulWidget {
 }
 
 class _ChapterScreenState extends ConsumerState<ChapterScreen> {
+  Timer? _readTimer;
   final ScrollController _scrollController = ScrollController();
   bool _isAppBarVisible = true;
+  int _currentPage = 1;
+  double _lastScrollPosition = 0;
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateChapterView();
+    _scrollController.addListener(() {
+      _onScroll();
+      _handleScroll();
     });
+    _startReadTimer();
   }
 
   @override
   void dispose() {
+    _readTimer?.cancel();
     _scrollController.dispose();
     super.dispose();
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >
-            _scrollController.position.minScrollExtent &&
-        _isAppBarVisible) {
-      setState(() => _isAppBarVisible = false);
-    } else if (_scrollController.position.pixels <=
-            _scrollController.position.minScrollExtent &&
-        !_isAppBarVisible) {
-      setState(() => _isAppBarVisible = true);
+    final currentPosition = _scrollController.position.pixels;
+    if (currentPosition < _lastScrollPosition) {
+      if (!_isAppBarVisible) {
+        setState(() => _isAppBarVisible = true);
+      }
+    } else if (currentPosition > _lastScrollPosition) {
+      if (_isAppBarVisible) {
+        setState(() => _isAppBarVisible = false);
+      }
+    }
+    _lastScrollPosition = currentPosition;
+  }
+
+  void _handleScroll() {
+    if (mounted) {
+      final chapterAsync = ref.read(chapterProvider(widget.chapterId));
+
+      chapterAsync.whenData((chapter) {
+        final pixels = _scrollController.position.pixels;
+        final maxScrollExtent = _scrollController.position.maxScrollExtent;
+        final viewportDimension = _scrollController.position.viewportDimension;
+
+        setState(() {
+          _currentPage = ((pixels / (maxScrollExtent + viewportDimension)) *
+                  chapter.pagesUrl.length)
+              .ceil();
+        });
+      });
     }
   }
 
+  void _startReadTimer() {
+    _readTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      final currentDuration =
+          ref.read(chapterReadDurationProvider(widget.chapterId));
+      ref.read(chapterReadDurationProvider(widget.chapterId).notifier).state =
+          currentDuration + const Duration(seconds: 1);
+
+      final shouldUpdate = ref.read(shouldUpdateViewProvider(widget.chapterId));
+      final hasUpdated = ref.read(hasUpdatedViewProvider(widget.chapterId));
+
+      if (shouldUpdate && !hasUpdated) {
+        _updateChapterView();
+        ref.read(hasUpdatedViewProvider(widget.chapterId).notifier).state =
+            true;
+        timer.cancel();
+      }
+    });
+  }
+
   Future<void> _updateChapterView() async {
-    await ref.read(chapterViewProvider(widget.chapterId).future);
+    final hasUpdated = ref.read(hasUpdatedViewProvider(widget.chapterId));
+    if (!hasUpdated) {
+      await ref.read(chapterViewProvider(widget.chapterId).future);
+    }
+  }
+
+  void _navigateToChapter(String chapterId) {
+    ref.invalidate(chapterProvider(chapterId));
+    context.go('/chapter/$chapterId');
   }
 
   @override
@@ -73,8 +128,17 @@ class _ChapterScreenState extends ConsumerState<ChapterScreen> {
               slivers: [
                 if (_isAppBarVisible)
                   SliverAppBar(
-                    title: Text(chapter.chapterInfo.chapterName),
                     floating: true,
+                    leading: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        final chapterAsync =
+                            ref.read(chapterProvider(widget.chapterId));
+                        chapterAsync.whenData((chapter) {
+                          context.go('/manga/${chapter.manga.id}');
+                        });
+                      },
+                    ),
                   ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -104,59 +168,25 @@ class _ChapterScreenState extends ConsumerState<ChapterScreen> {
             ),
             if (chapter.navigation != null)
               Positioned(
+                bottom: 0,
                 left: 0,
                 right: 0,
-                bottom: 0,
-                child: AnimatedOpacity(
-                  opacity: _isAppBarVisible ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 200),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, -2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        if (chapter.navigation?.prevChapter != null)
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                ref.invalidate(
-                                    chapterProvider(widget.chapterId));
-                                context.push(
-                                    '/chapter/${chapter.navigation!.prevChapter!.id}');
-                              },
-                              icon: const Icon(Icons.arrow_back),
-                              label: const Text('Chapter trước'),
-                            ),
-                          ),
-                        if (chapter.navigation?.prevChapter != null &&
-                            chapter.navigation?.nextChapter != null)
-                          const SizedBox(width: 16),
-                        if (chapter.navigation?.nextChapter != null)
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                ref.invalidate(
-                                    chapterProvider(widget.chapterId));
-                                context.push(
-                                    '/chapter/${chapter.navigation!.nextChapter!.id}');
-                              },
-                              icon: const Icon(Icons.arrow_forward),
-                              label: const Text('Chapter sau'),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                child: ChapterNavigationBar(
+                  scrollController: _scrollController,
+                  chapterNumber: chapter.number?.toString() ?? '',
+                  hasNextChapter: chapter.navigation?.nextChapter != null,
+                  hasPreviousChapter: chapter.navigation?.prevChapter != null,
+                  onNextChapter: chapter.navigation?.nextChapter != null
+                      ? () => _navigateToChapter(
+                          chapter.navigation!.nextChapter!.id)
+                      : null,
+                  onPreviousChapter: chapter.navigation?.prevChapter != null
+                      ? () => _navigateToChapter(
+                          chapter.navigation!.prevChapter!.id)
+                      : null,
+                  currentPage: _currentPage,
+                  totalPages: chapter.pagesUrl.length,
+                  isOffline: false,
                 ),
               ),
           ],

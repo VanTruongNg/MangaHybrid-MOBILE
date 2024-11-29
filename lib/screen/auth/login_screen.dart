@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:webtoon_mobile/providers/auth/auth_provider.dart';
+import 'package:webtoon_mobile/providers/auth/auth_state_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -31,7 +32,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       if (!mounted) return;
 
-      final authState = ref.read(authProvider);
+      final authState = ref.read(authStateProvider);
 
       authState.when(
         data: (user) {
@@ -210,8 +211,49 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     const SizedBox(height: 24),
                     Center(
                       child: IconButton(
-                        onPressed: () {
-                          // Xử lý đăng nhập Google
+                        onPressed: () async {
+                          setState(() => isLoading = true);
+                          try {
+                            await ref
+                                .read(authProvider.notifier)
+                                .loginWithGoogle();
+
+                            if (!mounted) return;
+
+                            final authState = ref.read(authStateProvider);
+
+                            authState.when(
+                              data: (user) {
+                                if (user != null) {
+                                  _showMessage('Đăng nhập thành công',
+                                      isError: false);
+                                  Future.delayed(const Duration(seconds: 2),
+                                      () {
+                                    if (!mounted) return;
+                                    context.go('/profile');
+                                  });
+                                }
+                              },
+                              error: (error, stack) {
+                                String message = 'Đã có lỗi xảy ra';
+                                if (error
+                                    .toString()
+                                    .contains('network_error')) {
+                                  message = 'Lỗi kết nối mạng';
+                                } else if (error
+                                    .toString()
+                                    .contains('Đăng nhập Google bị hủy')) {
+                                  message = 'Đăng nhập bị hủy';
+                                }
+                                _showMessage(message, isError: true);
+                              },
+                              loading: () {},
+                            );
+                          } finally {
+                            if (mounted) {
+                              setState(() => isLoading = false);
+                            }
+                          }
                         },
                         icon: Container(
                           width: 40,

@@ -12,8 +12,13 @@ final chapterProvider =
 final chapterViewProvider =
     FutureProvider.family<void, String>((ref, chapterId) async {
   final mangaService = ref.read(mangaServiceProvider);
-  await mangaService.updateChapterView(chapterId);
-  ref.invalidate(chapterProvider(chapterId));
+  try {
+    await mangaService.updateChapterView(chapterId);
+    // Invalidate cache sau khi update thành công
+    ref.invalidate(chapterProvider(chapterId));
+  } catch (e) {
+    rethrow;
+  }
 });
 
 final currentPageProvider =
@@ -37,6 +42,21 @@ final chapterNavigationProvider =
         break;
     }
   }
+});
+
+final chapterReadDurationProvider =
+    StateProvider.family<Duration, String>((ref, _) {
+  return Duration.zero;
+});
+
+final shouldUpdateViewProvider =
+    Provider.family<bool, String>((ref, chapterId) {
+  final duration = ref.watch(chapterReadDurationProvider(chapterId));
+  return duration.inSeconds >= 10;
+});
+
+final hasUpdatedViewProvider = StateProvider.family<bool, String>((ref, _) {
+  return false;
 });
 
 enum NavigationType { prev, next }

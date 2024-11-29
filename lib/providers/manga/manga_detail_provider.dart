@@ -3,7 +3,7 @@ import 'package:webtoon_mobile/models/manga/manga.model.dart';
 import 'package:webtoon_mobile/providers/manga/manga_provider.dart';
 import 'package:webtoon_mobile/services/manga_service.dart';
 
-class MangaDetailNotifier extends StateNotifier<AsyncValue<Manga>> {
+class MangaDetailNotifier extends StateNotifier<AsyncValue<MangaDetail>> {
   final MangaService _mangaService;
   final String mangaId;
 
@@ -19,9 +19,11 @@ class MangaDetailNotifier extends StateNotifier<AsyncValue<Manga>> {
 }
 
 final mangaDetailProvider = StateNotifierProvider.family<MangaDetailNotifier,
-    AsyncValue<Manga>, String>(
+    AsyncValue<MangaDetail>, String>(
   (ref, mangaId) {
     final mangaService = ref.watch(mangaServiceProvider);
     return MangaDetailNotifier(mangaService, mangaId);
   },
 );
+
+final mangaDescriptionExpandedProvider = StateProvider.family<bool, String>((ref, _) => false);
