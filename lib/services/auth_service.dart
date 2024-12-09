@@ -2,12 +2,22 @@ import 'package:dio/dio.dart';
 import 'package:webtoon_mobile/models/user/user.model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:webtoon_mobile/services/token_service.dart';
+import 'package:webtoon_mobile/providers/websocket_provider.dart';
+import 'package:webtoon_mobile/providers/chat/chat_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthService {
   final Dio dio;
   final TokenService tokenService;
+  final SocketController? socketController;
+  final Ref? ref;
 
-  AuthService({required this.dio, required this.tokenService});
+  AuthService({
+    required this.dio,
+    required this.tokenService,
+    this.socketController,
+    this.ref,
+  });
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
@@ -38,6 +48,11 @@ class AuthService {
     final userResponse = await dio.get('user/me');
     if (userResponse.data != null) {
       final user = UserModel.fromJson(userResponse.data);
+      
+      if (ref != null) {
+        ref!.read(chatProvider.notifier).clearMessages();
+      }
+      
       return {
         'user': user,
         'accessToken': accessToken,
@@ -138,8 +153,8 @@ class AuthService {
           return UserModel.fromJson(response.data);
         }
       } on DioException catch (e) {
-        if (e.response?.statusCode == 401) {
-          throw Exception('401');
+        if (e.response?.statusCode == 401 || e.error == 'token_expired') {
+          throw Exception('token_expired');
         }
         rethrow;
       }
@@ -158,6 +173,41 @@ class AuthService {
       throw Exception('Không thể lấy thông tin người dùng');
     } on DioException catch (error) {
       _handleDioError(error);
+      rethrow;
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      final accessToken = await tokenService.getAccessToken();
+      if (accessToken != null) {
+        await dio.post(
+          'auth/logout',
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $accessToken',
+            },
+          ),
+        );
+      }
+      
+      if (ref != null) {
+        ref!.read(chatProvider.notifier).clearMessages();
+      }
+      
+      if (socketController != null) {
+        socketController!.disconnect();
+      }
+      
+      await tokenService.clearTokens();
+    } catch (e) {
+      if (ref != null) {
+        ref!.read(chatProvider.notifier).clearMessages();
+      }
+      if (socketController != null) {
+        socketController!.disconnect();
+      }
+      await tokenService.clearTokens();
       rethrow;
     }
   }

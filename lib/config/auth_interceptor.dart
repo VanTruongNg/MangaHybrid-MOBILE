@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:webtoon_mobile/services/token_service.dart';
+import 'package:webtoon_mobile/config/env.dart';
 
 class AuthInterceptor extends Interceptor {
   final TokenService _tokenService;
@@ -9,12 +10,15 @@ class AuthInterceptor extends Interceptor {
   bool _isRefreshing = false;
   final VoidCallback? onRefreshFailed;
   final Queue<_RetryRequest> _queue = Queue();
+  static final String _deviceId = Env.deviceId;
 
   AuthInterceptor(this._tokenService, this._dio, {this.onRefreshFailed});
 
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
+    options.headers['device-id'] = _deviceId;
+
     final token = await _tokenService.getAccessToken();
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -25,6 +29,8 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
+      print('AuthInterceptor: Got 401 error');
+      
       final retryRequest = _RetryRequest(
         options: err.requestOptions,
         handler: handler,
@@ -32,10 +38,10 @@ class AuthInterceptor extends Interceptor {
       _queue.add(retryRequest);
 
       if (_isRefreshing) return;
-
       _isRefreshing = true;
 
       try {
+        print('AuthInterceptor: Attempting to refresh token');
         final newTokens = await _refreshToken();
         if (newTokens != null) {
           await _tokenService.saveTokens(
@@ -49,11 +55,15 @@ class AuthInterceptor extends Interceptor {
           }
         } else {
           _onRefreshFailed();
+          handler.reject(err);
         }
       } catch (e) {
+        print('AuthInterceptor: Refresh token failed: $e');
         _onRefreshFailed();
+        handler.reject(err);
       } finally {
         _isRefreshing = false;
+        _queue.clear();
       }
     } else {
       return handler.next(err);
@@ -74,7 +84,7 @@ class AuthInterceptor extends Interceptor {
 
   void _onRefreshFailed() {
     onRefreshFailed?.call();
-    
+
     while (_queue.isNotEmpty) {
       final request = _queue.removeFirst();
       request.handler.reject(
@@ -95,9 +105,18 @@ class AuthInterceptor extends Interceptor {
   Future<Map<String, String>?> _refreshToken() async {
     try {
       final refreshToken = await _tokenService.getRefreshToken();
-      if (refreshToken == null) return null;
+      if (refreshToken == null) throw Exception('No refresh token');
 
-      final response = await _dio.post(
+      final tokenDio = Dio(BaseOptions(
+        baseUrl: _dio.options.baseUrl,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'device-id': _deviceId,
+        },
+      ));
+
+      final response = await tokenDio.post(
         'auth/refresh-token',
         data: {'refreshToken': refreshToken},
       );
@@ -108,9 +127,10 @@ class AuthInterceptor extends Interceptor {
           'refreshToken': response.data['refreshToken'],
         };
       }
-      return null;
+      throw Exception('Refresh token failed');
     } catch (e) {
-      return null;
+      print('Refresh token error: $e');
+      throw e;
     }
   }
 }

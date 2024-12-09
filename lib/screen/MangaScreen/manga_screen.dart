@@ -1,6 +1,8 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webtoon_mobile/models/manga/home/home.model.dart';
+import 'package:webtoon_mobile/providers/connectivity_provider.dart';
 import 'package:webtoon_mobile/providers/manga/manga_provider.dart';
 import 'package:webtoon_mobile/widgets/CustomAppbar.dart';
 import 'package:webtoon_mobile/widgets/HomeScreen/MangaCard.dart';
@@ -19,6 +21,23 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(connectivityProvider, (previous, next) {
+      next.whenData((statusList) {
+        final wasOffline = previous?.value?.isEmpty ??
+            false ||
+                previous!.value!
+                    .every((status) => status == ConnectivityResult.none);
+
+        final isOnline = statusList.isNotEmpty &&
+            statusList.any((status) => status != ConnectivityResult.none);
+
+        if (wasOffline && isOnline) {
+          print('Internet restored, refreshing manga list...');
+          ref.refresh(homeDataProvider.future);
+        }
+      });
+    });
+
     final homeDataAsync = ref.watch(homeDataProvider);
 
     return Scaffold(
@@ -31,7 +50,36 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stack) {
             if (error.toString().contains('network_error')) {
-              return const SizedBox.shrink();
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.signal_wifi_off,
+                      size: 64,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Không có kết nối mạng',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Vui lòng kiểm tra kết nối và thử lại',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () => ref.refresh(homeDataProvider.future),
+                      child: const Text('Thử lại'),
+                    ),
+                  ],
+                ),
+              );
             }
             return Center(child: Text('Lỗi: $error'));
           },
@@ -134,7 +182,7 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
           _buildHorizontalMangaList(
             homeData.recentUpdated,
             (manga) => manga.latestUpdate != null
-                ? 'Cập nhật: ${_formatDate(manga.latestUpdate!)}'
+                ? _formatDate(manga.latestUpdate!)
                 : null,
           ),
         ],
@@ -150,7 +198,7 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
           _buildSectionTitle('Có thể bạn thích'),
           _buildHorizontalMangaList(
             homeData.randomManga,
-            (manga) => '${_formatNumber(manga.view)} lượt xem',
+            (manga) => null,
           ),
         ],
       ),
@@ -164,42 +212,45 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
     switch (_selectedFilter) {
       case TimeFilter.today:
         mangas = List.from(homeData.dailyTop)
-          ..sort((a, b) => (b.viewToday ?? 0).compareTo(a.viewToday ?? 0));
+          ..sort((a, b) => (b.dailyView ?? 0).compareTo(a.dailyView ?? 0));
         extraInfoBuilder = (manga) =>
-            'Hôm nay: ${_formatNumber(manga.viewToday ?? 0)} lượt xem';
+            '${Icons.visibility} ${_formatNumber(manga.dailyView ?? 0)}';
         break;
       case TimeFilter.week:
         mangas = List.from(homeData.weeklyTop)
-          ..sort(
-              (a, b) => (b.viewThisWeek ?? 0).compareTo(a.viewThisWeek ?? 0));
+          ..sort((a, b) => (b.weeklyView ?? 0).compareTo(a.weeklyView ?? 0));
         extraInfoBuilder = (manga) =>
-            'Tuần này: ${_formatNumber(manga.viewThisWeek ?? 0)} lượt xem';
+            '${Icons.visibility} ${_formatNumber(manga.weeklyView ?? 0)}';
         break;
       case TimeFilter.allTime:
-        mangas = List.from(homeData.randomManga)
+        mangas = List.from(homeData.topAllTime)
           ..sort((a, b) => b.view.compareTo(a.view));
-        extraInfoBuilder = (manga) => '${_formatNumber(manga.view)} lượt xem';
+        extraInfoBuilder =
+            (manga) => '${Icons.visibility} ${_formatNumber(manga.view)}';
         break;
     }
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.7,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+    return SizedBox(
+      height: 320,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        physics: const BouncingScrollPhysics(),
+        itemCount: mangas.length,
+        itemBuilder: (context, index) {
+          final manga = mangas[index];
+          return Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: SizedBox(
+              width: 200,
+              child: PopularMangaCard(
+                manga: manga,
+                extraInfo: extraInfoBuilder(manga),
+              ),
+            ),
+          );
+        },
       ),
-      itemCount: mangas.length,
-      itemBuilder: (context, index) {
-        final manga = mangas[index];
-        return PopularMangaCard(
-          manga: manga,
-          extraInfo: extraInfoBuilder(manga),
-        );
-      },
     );
   }
 
@@ -216,11 +267,13 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
         itemCount: mangas.length,
         itemBuilder: (context, index) {
           final manga = mangas[index];
+          String? extraInfo = extraInfoBuilder(manga);
+
           return Padding(
             padding: const EdgeInsets.only(right: 16),
             child: MangaCard(
               manga: manga,
-              extraInfo: extraInfoBuilder(manga),
+              extraInfo: extraInfo,
             ),
           );
         },

@@ -9,9 +9,9 @@ class MangaService {
 
   MangaService({required this.dio});
 
-  Future<HomeResponse> getHomeData() async {
+  Future<HomeResponse> getMobileHomeData() async {
     try {
-      final response = await dio.get('manga/home');
+      final response = await dio.get('manga/home/mobile');
       return HomeResponse.fromJson(response.data);
     } on DioException catch (error) {
       if (error.type == DioExceptionType.connectionError ||

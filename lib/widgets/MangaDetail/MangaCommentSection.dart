@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:webtoon_mobile/models/manga/manga.model.dart';
 import 'package:webtoon_mobile/models/comment/comment_reply.model.dart';
 import 'package:webtoon_mobile/providers/manga/comment_replies_provider.dart';
+import 'package:webtoon_mobile/providers/auth/auth_state_provider.dart';
 import 'package:webtoon_mobile/utils/FormatDate.dart';
 import 'package:flutter/gestures.dart';
 
@@ -76,6 +77,9 @@ class MangaCommentSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     if (comments.isEmpty) return const SizedBox.shrink();
 
+    final authState = ref.watch(authStateProvider);
+    final isAuthenticated = authState.value != null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -86,6 +90,56 @@ class MangaCommentSection extends ConsumerWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        const SizedBox(height: 8),
+        if (isAuthenticated)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Viết bình luận...',
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: null,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: () {
+                    // TODO: Implement send comment
+                  },
+                ),
+              ],
+            ),
+          )
+        else
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.info_outline),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Vui lòng đăng nhập để bình luận',
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => context.push('/login'),
+                  child: const Text('Đăng nhập'),
+                ),
+              ],
+            ),
+          ),
         const SizedBox(height: 8),
         ListView.builder(
           shrinkWrap: true,
@@ -129,11 +183,12 @@ class MangaCommentSection extends ConsumerWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        TextButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.reply),
-                          label: const Text('Trả lời'),
-                        ),
+                        if (isAuthenticated)
+                          TextButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.reply),
+                            label: const Text('Trả lời'),
+                          ),
                         if (comment.replies.isNotEmpty)
                           TextButton(
                             onPressed: () => _showReplies(context, comment),
@@ -158,7 +213,7 @@ class MangaCommentSection extends ConsumerWidget {
   }
 }
 
-class _RepliesBottomSheet extends ConsumerWidget {
+class _RepliesBottomSheet extends ConsumerStatefulWidget {
   final CommentInfo comment;
   final Widget Function(BuildContext, CommentReply) onBuildReplyContent;
 
@@ -168,7 +223,38 @@ class _RepliesBottomSheet extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _RepliesBottomSheetState createState() => _RepliesBottomSheetState();
+}
+
+class _RepliesBottomSheetState extends ConsumerState<_RepliesBottomSheet> {
+  CommentReply? replyingTo;
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _setReplyingTo(CommentReply reply) {
+    setState(() {
+      replyingTo = reply;
+      _controller.text = '@${reply.user.name} ';
+    });
+  }
+
+  void _clearReplyingTo() {
+    setState(() {
+      replyingTo = null;
+      _controller.clear();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+    final isAuthenticated = authState.value != null;
+
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -187,12 +273,113 @@ class _RepliesBottomSheet extends ConsumerWidget {
               ),
             ],
           ),
+          if (isAuthenticated) ...[
+            if (replyingTo != null)
+              Container(
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          style: DefaultTextStyle.of(context).style,
+                          children: [
+                            const TextSpan(
+                              text: 'Đang trả lời ',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            TextSpan(
+                              text: replyingTo!.user.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 20),
+                      onPressed: _clearReplyingTo,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ],
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                        hintText: 'Viết phản hồi...',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: null,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: () {
+                      // TODO: Implement send reply
+                      final content = _controller.text.trim();
+                      if (content.isEmpty) return;
+
+                      // TODO: Call API to send reply
+                      print('Sending reply: $content');
+                      if (replyingTo != null) {
+                        print('Replying to: ${replyingTo!.user.name}');
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ] else
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.info_outline),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Vui lòng đăng nhập để phản hồi',
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      context.push('/login');
+                    },
+                    child: const Text('Đăng nhập'),
+                  ),
+                ],
+              ),
+            ),
           const SizedBox(height: 16),
           Expanded(
             child: Consumer(
               builder: (context, ref, child) {
                 final repliesAsync =
-                    ref.watch(commentRepliesProvider(comment.id));
+                    ref.watch(commentRepliesProvider(widget.comment.id));
                 return repliesAsync.when(
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
@@ -240,22 +427,22 @@ class _RepliesBottomSheet extends ConsumerWidget {
                                   ],
                                 ),
                                 const SizedBox(height: 8),
-                                onBuildReplyContent(context, reply),
-                                const SizedBox(height: 8),
-                                InkWell(
-                                  onTap: () {
-                                    // TODO: Implement reply to reply
-                                    print('Reply to: ${reply.user.name}');
-                                  },
-                                  child: Text(
-                                    'Trả lời',
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontWeight: FontWeight.bold,
+                                widget.onBuildReplyContent(context, reply),
+                                if (isAuthenticated) ...[
+                                  const SizedBox(height: 8),
+                                  InkWell(
+                                    onTap: () => _setReplyingTo(reply),
+                                    child: Text(
+                                      'Trả lời',
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ],
                             ),
                           ),

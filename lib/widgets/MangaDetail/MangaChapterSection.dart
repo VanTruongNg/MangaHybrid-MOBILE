@@ -74,15 +74,46 @@ class MangaChapterSection extends ConsumerWidget {
             )),
           );
 
+          final downloadProgress = ref.watch(
+            downloadProgressProvider((
+              mangaId: mangaId,
+              chapterId: chapter.id,
+            )),
+          );
+
           return isDownloaded.when(
             loading: () => const SizedBox.shrink(),
             error: (_, __) => const Icon(Icons.error, color: Colors.red),
-            data: (isDownloaded) => isDownloaded
-                ? const Icon(Icons.check_circle, color: Colors.green)
-                : IconButton(
-                    icon: const Icon(Icons.download),
-                    onPressed: () => _handleDownload(context, ref, chapter),
-                  ),
+            data: (isDownloaded) {
+              if (isDownloaded) {
+                return const Icon(Icons.check_circle, color: Colors.green);
+              }
+
+              if (downloadProgress != null) {
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      value: downloadProgress,
+                      strokeWidth: 2,
+                      backgroundColor: Colors.grey[300],
+                    ),
+                    Text(
+                      '${(downloadProgress * 100).toInt()}%',
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return IconButton(
+                icon: const Icon(Icons.download),
+                onPressed: () => _handleDownload(context, ref, chapter),
+              );
+            },
           );
         },
       ),
@@ -182,11 +213,6 @@ class MangaChapterSection extends ConsumerWidget {
           chapterId: chapter.id,
         )).future,
       );
-
-      ref.invalidate(isChapterDownloadedProvider((
-        mangaId: mangaId,
-        chapterId: chapter.id,
-      )));
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

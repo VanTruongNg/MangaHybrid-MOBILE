@@ -70,7 +70,7 @@ class PopularMangaCard extends StatelessWidget {
                 children: [
                   Text(
                     manga.title,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       color: Colors.white,
@@ -80,13 +80,30 @@ class PopularMangaCard extends StatelessWidget {
                   ),
                   if (extraInfo != null) ...[
                     const SizedBox(height: 4),
-                    Text(
-                      extraInfo!,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
+                    extraInfo!.contains('${Icons.visibility}')
+                      ? Row(
+                          children: [
+                            const Icon(Icons.visibility, 
+                              size: 16,
+                              color: Colors.white70,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              extraInfo!.replaceAll('${Icons.visibility} ', ''),
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Text(
+                          extraInfo!,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                          ),
+                        ),
                   ],
                 ],
               ),

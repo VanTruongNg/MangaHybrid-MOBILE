@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dio/dio.dart';
 import 'package:webtoon_mobile/providers/auth/auth_state_provider.dart';
-import 'package:webtoon_mobile/providers/dio_provider.dart';
 import 'package:webtoon_mobile/providers/manga/manga_provider.dart';
 import 'package:webtoon_mobile/services/manga_service.dart';
 import 'package:webtoon_mobile/widgets/login_required_dialog.dart';

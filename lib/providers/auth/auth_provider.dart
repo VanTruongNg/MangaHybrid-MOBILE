@@ -8,9 +8,12 @@ import 'package:webtoon_mobile/services/auth_service.dart';
 final authServiceProvider = Provider<AuthService>((ref) {
   final dio = ref.watch(dioProvider);
   final tokenService = ref.watch(tokenServiceProvider);
+  final socketController = ref.watch(socketControllerProvider.notifier);
   return AuthService(
     dio: dio,
     tokenService: tokenService,
+    socketController: socketController,
+    ref: ref,
   );
 });
 
@@ -85,6 +88,7 @@ class AuthNotifier extends StateNotifier<void> {
       _authStateController.state = AsyncValue.data(user);
     } catch (error, stack) {
       _authStateController.state = AsyncValue.error(error, stack);
+      rethrow;
     }
   }
 
@@ -100,10 +104,18 @@ class AuthNotifier extends StateNotifier<void> {
     }
   }
 
-  void logout() {
-    ref.read(socketControllerProvider.notifier).disconnect();
-    _authService.tokenService.clearTokens();
-    _authStateController.state = const AsyncValue.data(null);
+  Future<void> logout({bool force = false}) async {
+    try {
+      if (!force) {
+        await _authService.logout();
+      }
+    } catch (error) {
+      force = true;
+    } finally {
+      ref.read(socketControllerProvider.notifier).disconnect();
+      _authService.tokenService.clearTokens();
+      _authStateController.state = const AsyncValue.data(null);
+    }
   }
 }
 

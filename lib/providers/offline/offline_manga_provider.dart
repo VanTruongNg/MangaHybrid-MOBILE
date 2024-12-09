@@ -45,6 +45,7 @@ final downloadChapterProvider =
 
     ref.invalidate(offlineMangaProvider(params.mangaId));
     ref.invalidate(offlineChapterProvider(params));
+    ref.invalidate(isChapterDownloadedProvider(params));
   } catch (e) {
     ref.read(downloadProgressProvider(params).notifier).state = null;
     rethrow;
@@ -63,7 +64,8 @@ final isChapterDownloadedProvider =
 
 final downloadProgressProvider =
     StateProvider.family<double?, ({String mangaId, String chapterId})>(
-        (ref, params) => null);
+  (ref, params) => null,
+);
 
 final offlineChapterImagePathsProvider =
     FutureProvider.family<List<String>, ({String mangaId, String chapterId})>(

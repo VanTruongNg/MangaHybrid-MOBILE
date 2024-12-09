@@ -6,7 +6,7 @@ import 'package:webtoon_mobile/providers/theme_provider.dart';
 import 'package:webtoon_mobile/routes/router.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Thêm dòng này
+  WidgetsFlutterBinding.ensureInitialized();
   await Env.init();
   runApp(
     const ProviderScope(
@@ -15,13 +15,11 @@ void main() async {
   );
 }
 
-// Tách riêng để handle connectivity
 class MainApp extends ConsumerWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Kích hoạt connectivity controller
     ref.watch(connectivityControllerProvider);
 
     return const MyApp();

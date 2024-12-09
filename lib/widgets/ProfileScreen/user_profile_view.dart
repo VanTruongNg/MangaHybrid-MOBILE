@@ -22,12 +22,12 @@ class UserProfileView extends ConsumerWidget {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: user.avatarUrl != null 
-                    ? NetworkImage(user.avatarUrl!) 
-                    : null,
+                  backgroundImage: user.avatarUrl != null
+                      ? NetworkImage(user.avatarUrl!)
+                      : null,
                   child: user.avatarUrl == null
-                    ? const Icon(Icons.person, size: 50)
-                    : null,
+                      ? const Icon(Icons.person, size: 50)
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -87,13 +87,13 @@ class UserProfileView extends ConsumerWidget {
                 final history = user.readingHistory[index];
                 return ListTile(
                   leading: history.manga.coverImg != null
-                    ? Image.network(
-                        history.manga.coverImg!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      )
-                    : const Icon(Icons.book),
+                      ? Image.network(
+                          history.manga.coverImg!,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        )
+                      : const Icon(Icons.book),
                   title: Text(history.manga.title),
                   subtitle: Text(
                     'Chapter ${history.chapter.number}${history.chapter.chapterTitle != null ? " - ${history.chapter.chapterTitle}" : ""}\n${_formatDate(history.updatedAt)}',
@@ -138,19 +138,19 @@ class UserProfileView extends ConsumerWidget {
             _buildSectionTitle('Đánh giá gần đây'),
             ListView.builder(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(), 
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: user.ratings.length,
               itemBuilder: (context, index) {
                 final rating = user.ratings[index];
                 return ListTile(
                   leading: rating.manga.coverImg != null
-                    ? Image.network(
-                        rating.manga.coverImg!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      )
-                    : const Icon(Icons.book),
+                      ? Image.network(
+                          rating.manga.coverImg!,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        )
+                      : const Icon(Icons.book),
                   title: Text(rating.manga.title),
                   subtitle: Row(
                     children: [
@@ -158,8 +158,8 @@ class UserProfileView extends ConsumerWidget {
                         5,
                         (index) => Icon(
                           index < rating.rating.floor()
-                            ? Icons.star
-                            : Icons.star_border,
+                              ? Icons.star
+                              : Icons.star_border,
                           size: 16,
                           color: Colors.amber,
                         ),

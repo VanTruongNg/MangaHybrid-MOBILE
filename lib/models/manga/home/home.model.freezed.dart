@@ -24,6 +24,7 @@ mixin _$HomeResponse {
   List<MangaItem> get weeklyTop => throw _privateConstructorUsedError;
   List<MangaItem> get recentUpdated => throw _privateConstructorUsedError;
   List<MangaItem> get randomManga => throw _privateConstructorUsedError;
+  List<MangaItem> get topAllTime => throw _privateConstructorUsedError;
 
   /// Serializes this HomeResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,7 +46,8 @@ abstract class $HomeResponseCopyWith<$Res> {
       {List<MangaItem> dailyTop,
       List<MangaItem> weeklyTop,
       List<MangaItem> recentUpdated,
-      List<MangaItem> randomManga});
+      List<MangaItem> randomManga,
+      List<MangaItem> topAllTime});
 }
 
 /// @nodoc
@@ -67,6 +69,7 @@ class _$HomeResponseCopyWithImpl<$Res, $Val extends HomeResponse>
     Object? weeklyTop = null,
     Object? recentUpdated = null,
     Object? randomManga = null,
+    Object? topAllTime = null,
   }) {
     return _then(_value.copyWith(
       dailyTop: null == dailyTop
@@ -85,6 +88,10 @@ class _$HomeResponseCopyWithImpl<$Res, $Val extends HomeResponse>
           ? _value.randomManga
           : randomManga // ignore: cast_nullable_to_non_nullable
               as List<MangaItem>,
+      topAllTime: null == topAllTime
+          ? _value.topAllTime
+          : topAllTime // ignore: cast_nullable_to_non_nullable
+              as List<MangaItem>,
     ) as $Val);
   }
 }
@@ -101,7 +108,8 @@ abstract class _$$HomeResponseImplCopyWith<$Res>
       {List<MangaItem> dailyTop,
       List<MangaItem> weeklyTop,
       List<MangaItem> recentUpdated,
-      List<MangaItem> randomManga});
+      List<MangaItem> randomManga,
+      List<MangaItem> topAllTime});
 }
 
 /// @nodoc
@@ -121,6 +129,7 @@ class __$$HomeResponseImplCopyWithImpl<$Res>
     Object? weeklyTop = null,
     Object? recentUpdated = null,
     Object? randomManga = null,
+    Object? topAllTime = null,
   }) {
     return _then(_$HomeResponseImpl(
       dailyTop: null == dailyTop
@@ -139,6 +148,10 @@ class __$$HomeResponseImplCopyWithImpl<$Res>
           ? _value._randomManga
           : randomManga // ignore: cast_nullable_to_non_nullable
               as List<MangaItem>,
+      topAllTime: null == topAllTime
+          ? _value._topAllTime
+          : topAllTime // ignore: cast_nullable_to_non_nullable
+              as List<MangaItem>,
     ));
   }
 }
@@ -150,11 +163,13 @@ class _$HomeResponseImpl implements _HomeResponse {
       {required final List<MangaItem> dailyTop,
       required final List<MangaItem> weeklyTop,
       required final List<MangaItem> recentUpdated,
-      required final List<MangaItem> randomManga})
+      required final List<MangaItem> randomManga,
+      required final List<MangaItem> topAllTime})
       : _dailyTop = dailyTop,
         _weeklyTop = weeklyTop,
         _recentUpdated = recentUpdated,
-        _randomManga = randomManga;
+        _randomManga = randomManga,
+        _topAllTime = topAllTime;
 
   factory _$HomeResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$HomeResponseImplFromJson(json);
@@ -191,9 +206,17 @@ class _$HomeResponseImpl implements _HomeResponse {
     return EqualUnmodifiableListView(_randomManga);
   }
 
+  final List<MangaItem> _topAllTime;
+  @override
+  List<MangaItem> get topAllTime {
+    if (_topAllTime is EqualUnmodifiableListView) return _topAllTime;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_topAllTime);
+  }
+
   @override
   String toString() {
-    return 'HomeResponse(dailyTop: $dailyTop, weeklyTop: $weeklyTop, recentUpdated: $recentUpdated, randomManga: $randomManga)';
+    return 'HomeResponse(dailyTop: $dailyTop, weeklyTop: $weeklyTop, recentUpdated: $recentUpdated, randomManga: $randomManga, topAllTime: $topAllTime)';
   }
 
   @override
@@ -207,7 +230,9 @@ class _$HomeResponseImpl implements _HomeResponse {
             const DeepCollectionEquality()
                 .equals(other._recentUpdated, _recentUpdated) &&
             const DeepCollectionEquality()
-                .equals(other._randomManga, _randomManga));
+                .equals(other._randomManga, _randomManga) &&
+            const DeepCollectionEquality()
+                .equals(other._topAllTime, _topAllTime));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -217,7 +242,8 @@ class _$HomeResponseImpl implements _HomeResponse {
       const DeepCollectionEquality().hash(_dailyTop),
       const DeepCollectionEquality().hash(_weeklyTop),
       const DeepCollectionEquality().hash(_recentUpdated),
-      const DeepCollectionEquality().hash(_randomManga));
+      const DeepCollectionEquality().hash(_randomManga),
+      const DeepCollectionEquality().hash(_topAllTime));
 
   /// Create a copy of HomeResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -240,7 +266,8 @@ abstract class _HomeResponse implements HomeResponse {
       {required final List<MangaItem> dailyTop,
       required final List<MangaItem> weeklyTop,
       required final List<MangaItem> recentUpdated,
-      required final List<MangaItem> randomManga}) = _$HomeResponseImpl;
+      required final List<MangaItem> randomManga,
+      required final List<MangaItem> topAllTime}) = _$HomeResponseImpl;
 
   factory _HomeResponse.fromJson(Map<String, dynamic> json) =
       _$HomeResponseImpl.fromJson;
@@ -253,6 +280,8 @@ abstract class _HomeResponse implements HomeResponse {
   List<MangaItem> get recentUpdated;
   @override
   List<MangaItem> get randomManga;
+  @override
+  List<MangaItem> get topAllTime;
 
   /// Create a copy of HomeResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -271,12 +300,14 @@ mixin _$MangaItem {
   @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
   String? get coverImg => throw _privateConstructorUsedError;
+  String? get bannerImg => throw _privateConstructorUsedError;
   String get author => throw _privateConstructorUsedError;
   double get rating => throw _privateConstructorUsedError;
   int get view => throw _privateConstructorUsedError;
-  int? get viewToday => throw _privateConstructorUsedError;
-  int? get viewThisWeek => throw _privateConstructorUsedError;
+  int? get dailyView => throw _privateConstructorUsedError;
+  int? get weeklyView => throw _privateConstructorUsedError;
   DateTime? get latestUpdate => throw _privateConstructorUsedError;
 
   /// Serializes this MangaItem to a JSON map.
@@ -297,12 +328,14 @@ abstract class $MangaItemCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: '_id') String id,
       String title,
+      String description,
       String? coverImg,
+      String? bannerImg,
       String author,
       double rating,
       int view,
-      int? viewToday,
-      int? viewThisWeek,
+      int? dailyView,
+      int? weeklyView,
       DateTime? latestUpdate});
 }
 
@@ -323,12 +356,14 @@ class _$MangaItemCopyWithImpl<$Res, $Val extends MangaItem>
   $Res call({
     Object? id = null,
     Object? title = null,
+    Object? description = null,
     Object? coverImg = freezed,
+    Object? bannerImg = freezed,
     Object? author = null,
     Object? rating = null,
     Object? view = null,
-    Object? viewToday = freezed,
-    Object? viewThisWeek = freezed,
+    Object? dailyView = freezed,
+    Object? weeklyView = freezed,
     Object? latestUpdate = freezed,
   }) {
     return _then(_value.copyWith(
@@ -340,9 +375,17 @@ class _$MangaItemCopyWithImpl<$Res, $Val extends MangaItem>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
       coverImg: freezed == coverImg
           ? _value.coverImg
           : coverImg // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bannerImg: freezed == bannerImg
+          ? _value.bannerImg
+          : bannerImg // ignore: cast_nullable_to_non_nullable
               as String?,
       author: null == author
           ? _value.author
@@ -356,13 +399,13 @@ class _$MangaItemCopyWithImpl<$Res, $Val extends MangaItem>
           ? _value.view
           : view // ignore: cast_nullable_to_non_nullable
               as int,
-      viewToday: freezed == viewToday
-          ? _value.viewToday
-          : viewToday // ignore: cast_nullable_to_non_nullable
+      dailyView: freezed == dailyView
+          ? _value.dailyView
+          : dailyView // ignore: cast_nullable_to_non_nullable
               as int?,
-      viewThisWeek: freezed == viewThisWeek
-          ? _value.viewThisWeek
-          : viewThisWeek // ignore: cast_nullable_to_non_nullable
+      weeklyView: freezed == weeklyView
+          ? _value.weeklyView
+          : weeklyView // ignore: cast_nullable_to_non_nullable
               as int?,
       latestUpdate: freezed == latestUpdate
           ? _value.latestUpdate
@@ -383,12 +426,14 @@ abstract class _$$MangaItemImplCopyWith<$Res>
   $Res call(
       {@JsonKey(name: '_id') String id,
       String title,
+      String description,
       String? coverImg,
+      String? bannerImg,
       String author,
       double rating,
       int view,
-      int? viewToday,
-      int? viewThisWeek,
+      int? dailyView,
+      int? weeklyView,
       DateTime? latestUpdate});
 }
 
@@ -407,12 +452,14 @@ class __$$MangaItemImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? title = null,
+    Object? description = null,
     Object? coverImg = freezed,
+    Object? bannerImg = freezed,
     Object? author = null,
     Object? rating = null,
     Object? view = null,
-    Object? viewToday = freezed,
-    Object? viewThisWeek = freezed,
+    Object? dailyView = freezed,
+    Object? weeklyView = freezed,
     Object? latestUpdate = freezed,
   }) {
     return _then(_$MangaItemImpl(
@@ -424,9 +471,17 @@ class __$$MangaItemImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
       coverImg: freezed == coverImg
           ? _value.coverImg
           : coverImg // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bannerImg: freezed == bannerImg
+          ? _value.bannerImg
+          : bannerImg // ignore: cast_nullable_to_non_nullable
               as String?,
       author: null == author
           ? _value.author
@@ -440,13 +495,13 @@ class __$$MangaItemImplCopyWithImpl<$Res>
           ? _value.view
           : view // ignore: cast_nullable_to_non_nullable
               as int,
-      viewToday: freezed == viewToday
-          ? _value.viewToday
-          : viewToday // ignore: cast_nullable_to_non_nullable
+      dailyView: freezed == dailyView
+          ? _value.dailyView
+          : dailyView // ignore: cast_nullable_to_non_nullable
               as int?,
-      viewThisWeek: freezed == viewThisWeek
-          ? _value.viewThisWeek
-          : viewThisWeek // ignore: cast_nullable_to_non_nullable
+      weeklyView: freezed == weeklyView
+          ? _value.weeklyView
+          : weeklyView // ignore: cast_nullable_to_non_nullable
               as int?,
       latestUpdate: freezed == latestUpdate
           ? _value.latestUpdate
@@ -462,12 +517,14 @@ class _$MangaItemImpl implements _MangaItem {
   const _$MangaItemImpl(
       {@JsonKey(name: '_id') required this.id,
       required this.title,
+      required this.description,
       this.coverImg,
+      this.bannerImg,
       required this.author,
       this.rating = 0,
       this.view = 0,
-      this.viewToday,
-      this.viewThisWeek,
+      this.dailyView,
+      this.weeklyView,
       this.latestUpdate});
 
   factory _$MangaItemImpl.fromJson(Map<String, dynamic> json) =>
@@ -479,7 +536,11 @@ class _$MangaItemImpl implements _MangaItem {
   @override
   final String title;
   @override
+  final String description;
+  @override
   final String? coverImg;
+  @override
+  final String? bannerImg;
   @override
   final String author;
   @override
@@ -489,15 +550,15 @@ class _$MangaItemImpl implements _MangaItem {
   @JsonKey()
   final int view;
   @override
-  final int? viewToday;
+  final int? dailyView;
   @override
-  final int? viewThisWeek;
+  final int? weeklyView;
   @override
   final DateTime? latestUpdate;
 
   @override
   String toString() {
-    return 'MangaItem(id: $id, title: $title, coverImg: $coverImg, author: $author, rating: $rating, view: $view, viewToday: $viewToday, viewThisWeek: $viewThisWeek, latestUpdate: $latestUpdate)';
+    return 'MangaItem(id: $id, title: $title, description: $description, coverImg: $coverImg, bannerImg: $bannerImg, author: $author, rating: $rating, view: $view, dailyView: $dailyView, weeklyView: $weeklyView, latestUpdate: $latestUpdate)';
   }
 
   @override
@@ -507,23 +568,27 @@ class _$MangaItemImpl implements _MangaItem {
             other is _$MangaItemImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.coverImg, coverImg) ||
                 other.coverImg == coverImg) &&
+            (identical(other.bannerImg, bannerImg) ||
+                other.bannerImg == bannerImg) &&
             (identical(other.author, author) || other.author == author) &&
             (identical(other.rating, rating) || other.rating == rating) &&
             (identical(other.view, view) || other.view == view) &&
-            (identical(other.viewToday, viewToday) ||
-                other.viewToday == viewToday) &&
-            (identical(other.viewThisWeek, viewThisWeek) ||
-                other.viewThisWeek == viewThisWeek) &&
+            (identical(other.dailyView, dailyView) ||
+                other.dailyView == dailyView) &&
+            (identical(other.weeklyView, weeklyView) ||
+                other.weeklyView == weeklyView) &&
             (identical(other.latestUpdate, latestUpdate) ||
                 other.latestUpdate == latestUpdate));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, coverImg, author,
-      rating, view, viewToday, viewThisWeek, latestUpdate);
+  int get hashCode => Object.hash(runtimeType, id, title, description, coverImg,
+      bannerImg, author, rating, view, dailyView, weeklyView, latestUpdate);
 
   /// Create a copy of MangaItem
   /// with the given fields replaced by the non-null parameter values.
@@ -545,12 +610,14 @@ abstract class _MangaItem implements MangaItem {
   const factory _MangaItem(
       {@JsonKey(name: '_id') required final String id,
       required final String title,
+      required final String description,
       final String? coverImg,
+      final String? bannerImg,
       required final String author,
       final double rating,
       final int view,
-      final int? viewToday,
-      final int? viewThisWeek,
+      final int? dailyView,
+      final int? weeklyView,
       final DateTime? latestUpdate}) = _$MangaItemImpl;
 
   factory _MangaItem.fromJson(Map<String, dynamic> json) =
@@ -562,7 +629,11 @@ abstract class _MangaItem implements MangaItem {
   @override
   String get title;
   @override
+  String get description;
+  @override
   String? get coverImg;
+  @override
+  String? get bannerImg;
   @override
   String get author;
   @override
@@ -570,9 +641,9 @@ abstract class _MangaItem implements MangaItem {
   @override
   int get view;
   @override
-  int? get viewToday;
+  int? get dailyView;
   @override
-  int? get viewThisWeek;
+  int? get weeklyView;
   @override
   DateTime? get latestUpdate;
 

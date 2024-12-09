@@ -20,7 +20,6 @@ final dioProvider = Provider<Dio>((ref) {
     BaseOptions(
       baseUrl: Env.apiUrl,
       headers: {
-        'x-platform': 'mobile',
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
@@ -45,8 +44,12 @@ final dioProvider = Provider<Dio>((ref) {
 
 final authCallbackProvider = Provider<void Function()>((ref) {
   return () {
+    ref.read(authStateProvider.notifier).state = const AsyncValue.error(
+      'session_expired',
+      StackTrace.empty,
+    );
+
     final tokenService = ref.read(tokenServiceProvider);
     tokenService.clearTokens();
-    ref.read(authStateProvider.notifier).state = const AsyncValue.data(null);
   };
 });

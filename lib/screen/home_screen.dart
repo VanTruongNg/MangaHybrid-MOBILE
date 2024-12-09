@@ -5,8 +5,6 @@ import 'package:webtoon_mobile/providers/auth/auth_provider.dart';
 import 'package:webtoon_mobile/providers/auth/auth_state_provider.dart';
 import 'package:webtoon_mobile/providers/connectivity_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:webtoon_mobile/providers/manga/manga_detail_provider.dart';
-import 'package:webtoon_mobile/providers/manga/manga_provider.dart';
 import 'package:webtoon_mobile/providers/websocket_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -28,12 +26,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(connectivityControllerProvider);
+      
       final isOnline = ref.read(isOnlineProvider);
       if (isOnline) {
         try {
           await ref.read(authProvider.notifier).checkAuth();
         } catch (error) {
-          if (error.toString().contains('401') && mounted) {
+          if (mounted) {
             _showLoginExpiredDialog();
           }
         }
@@ -46,9 +46,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       _hasShownDialog = true;
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) => AlertDialog(
           title: const Text('Phiên đăng nhập hết hạn'),
-          content: const Text('Vui lòng đăng nhập lại để tiếp tục'),
+          content: const Text('Vui lòng đăng nhập lại để tiếp tục sử dụng'),
           actions: [
             TextButton(
               onPressed: () {
@@ -117,6 +118,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           }
         } else {
           ref.read(socketControllerProvider.notifier).disconnect();
+          _showOfflineDialog();
         }
       });
     });
