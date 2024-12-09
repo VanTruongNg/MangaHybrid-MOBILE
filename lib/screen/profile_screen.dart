@@ -31,11 +31,11 @@ class ProfileScreen extends ConsumerWidget {
             child: CircularProgressIndicator(),
           ),
           error: (error, stack) {
-            if (error.toString().contains('token_expired') || 
+            if (error.toString().contains('token_expired') ||
                 error.toString().contains('401')) {
               return _buildLoginPrompt(context);
             }
-            
+
             return Center(
               child: Text('Lỗi: $error'),
             );

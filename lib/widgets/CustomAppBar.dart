@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:webtoon_mobile/providers/dio_provider.dart';
 import 'package:webtoon_mobile/providers/notification/notification_provider.dart';
 import 'package:webtoon_mobile/providers/theme_provider.dart';
 import 'package:webtoon_mobile/utils/FormatDate.dart';
 
 class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
-  final List<Widget>? additionalActions;
+  final List<Widget>? actions;
 
   const CustomAppBar({
     super.key,
     required this.title,
-    this.additionalActions,
+    this.actions,
   });
 
   @override
@@ -401,7 +402,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
             ),
           ],
         ),
-        if (additionalActions != null) ...additionalActions!,
+        if (actions != null) ...actions!,
       ],
     );
   }

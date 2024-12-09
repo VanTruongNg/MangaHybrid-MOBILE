@@ -2,22 +2,53 @@ import 'dart:collection';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:webtoon_mobile/services/token_service.dart';
-import 'package:webtoon_mobile/config/env.dart';
+import 'package:webtoon_mobile/services/device_id_service.dart';
 
 class AuthInterceptor extends Interceptor {
   final TokenService _tokenService;
+  final DeviceIdService _deviceIdService;
   final Dio _dio;
   bool _isRefreshing = false;
   final VoidCallback? onRefreshFailed;
   final Queue<_RetryRequest> _queue = Queue();
-  static final String _deviceId = Env.deviceId;
+  String? _cachedDeviceId;
 
-  AuthInterceptor(this._tokenService, this._dio, {this.onRefreshFailed});
+  AuthInterceptor(this._tokenService, this._dio, this._deviceIdService,
+      {this.onRefreshFailed}) {
+    _initDeviceId();
+  }
+
+  Future<void> _initDeviceId() async {
+    _cachedDeviceId = await _deviceIdService.getOrCreateDeviceId();
+  }
+
+  void resetCachedDeviceId() {
+    _cachedDeviceId = null;
+  }
+
+  static const _authEndpoints = [
+    'auth/login',
+    'auth/google',
+    'auth/logout',
+    'auth/refresh-token',
+  ];
 
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    options.headers['device-id'] = _deviceId;
+    final isAuthEndpoint = _authEndpoints.any(
+      (endpoint) => options.path.contains(endpoint)
+    );
+
+    if (isAuthEndpoint) {
+      if (options.path.contains('auth/login') || options.path.contains('auth/google')) {
+        _cachedDeviceId = await _deviceIdService.getOrCreateDeviceId();
+        options.headers['device-id'] = _cachedDeviceId;
+      } 
+      else if (_cachedDeviceId != null) {
+        options.headers['device-id'] = _cachedDeviceId;
+      }
+    }
 
     final token = await _tokenService.getAccessToken();
     if (token != null) {
@@ -29,8 +60,6 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      print('AuthInterceptor: Got 401 error');
-      
       final retryRequest = _RetryRequest(
         options: err.requestOptions,
         handler: handler,
@@ -41,7 +70,6 @@ class AuthInterceptor extends Interceptor {
       _isRefreshing = true;
 
       try {
-        print('AuthInterceptor: Attempting to refresh token');
         final newTokens = await _refreshToken();
         if (newTokens != null) {
           await _tokenService.saveTokens(
@@ -55,18 +83,15 @@ class AuthInterceptor extends Interceptor {
           }
         } else {
           _onRefreshFailed();
-          handler.reject(err);
         }
       } catch (e) {
-        print('AuthInterceptor: Refresh token failed: $e');
         _onRefreshFailed();
-        handler.reject(err);
       } finally {
         _isRefreshing = false;
         _queue.clear();
       }
     } else {
-      return handler.next(err);
+      handler.next(err);
     }
   }
 
@@ -105,32 +130,43 @@ class AuthInterceptor extends Interceptor {
   Future<Map<String, String>?> _refreshToken() async {
     try {
       final refreshToken = await _tokenService.getRefreshToken();
-      if (refreshToken == null) throw Exception('No refresh token');
+      if (refreshToken == null) {
+        _onRefreshFailed();
+        return null;
+      }
 
       final tokenDio = Dio(BaseOptions(
         baseUrl: _dio.options.baseUrl,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'device-id': _deviceId,
+          'device-id': _cachedDeviceId,
         },
       ));
 
-      final response = await tokenDio.post(
-        'auth/refresh-token',
-        data: {'refreshToken': refreshToken},
-      );
+      try {
+        final response = await tokenDio.post(
+          'auth/refresh-token',
+          data: {
+            'refreshToken': refreshToken,
+          },
+        );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return {
-          'accessToken': response.data['accessToken'],
-          'refreshToken': response.data['refreshToken'],
-        };
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          return {
+            'accessToken': response.data['accessToken'],
+            'refreshToken': response.data['refreshToken'],
+          };
+        }
+        return null;
+      } on DioException catch (e) {
+        if (e.response?.statusCode == 401) {
+          _onRefreshFailed();
+        }
+        return null;
       }
-      throw Exception('Refresh token failed');
     } catch (e) {
-      print('Refresh token error: $e');
-      throw e;
+      return null;
     }
   }
 }

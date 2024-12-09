@@ -8,10 +8,13 @@ import 'package:webtoon_mobile/services/auth_service.dart';
 final authServiceProvider = Provider<AuthService>((ref) {
   final dio = ref.watch(dioProvider);
   final tokenService = ref.watch(tokenServiceProvider);
+  final deviceIdService = ref.watch(deviceIdServiceProvider);
   final socketController = ref.watch(socketControllerProvider.notifier);
+  
   return AuthService(
     dio: dio,
     tokenService: tokenService,
+    deviceIdService: deviceIdService,
     socketController: socketController,
     ref: ref,
   );

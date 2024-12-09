@@ -5,29 +5,40 @@ import 'package:webtoon_mobile/services/token_service.dart';
 import 'package:webtoon_mobile/providers/websocket_provider.dart';
 import 'package:webtoon_mobile/providers/chat/chat_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:webtoon_mobile/services/device_id_service.dart';
+import 'package:webtoon_mobile/config/auth_interceptor.dart';
 
 class AuthService {
   final Dio dio;
   final TokenService tokenService;
-  final SocketController? socketController;
-  final Ref? ref;
+  final DeviceIdService deviceIdService;
+  final SocketController socketController;
+  final Ref ref;
 
   AuthService({
     required this.dio,
     required this.tokenService,
-    this.socketController,
-    this.ref,
+    required this.deviceIdService,
+    required this.socketController,
+    required this.ref,
   });
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
-      final response = await dio.post('auth/login', data: {
-        'email': email,
-        'password': password,
-      });
+      socketController.disconnect();
+      
+      final response = await dio.post(
+        'auth/login', 
+        data: {
+          'email': email,
+          'password': password,
+        },
+      );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        return await _handleAuthResponse(response);
+        final result = await _handleAuthResponse(response);
+        socketController.connect();
+        return result;
       }
       throw Exception('Đăng nhập không thành công');
     } on DioException catch (error) {
@@ -78,17 +89,19 @@ class AuthService {
         throw Exception('Đăng nhập Google bị hủy');
       }
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final String accessToken = googleAuth.accessToken ?? '';
 
       if (accessToken.isEmpty) {
         throw Exception('Không thể lấy token từ Google');
       }
 
-      final response = await dio.post('auth/google', data: {
-        'accessToken': accessToken,
-      });
+      final response = await dio.post(
+        'auth/google', 
+        data: {
+          'accessToken': accessToken,
+        },
+      );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         return await _handleAuthResponse(response);
@@ -153,10 +166,10 @@ class AuthService {
           return UserModel.fromJson(response.data);
         }
       } on DioException catch (e) {
-        if (e.response?.statusCode == 401 || e.error == 'token_expired') {
-          throw Exception('token_expired');
+        if (e.response?.statusCode != 401) {
+          rethrow;
         }
-        rethrow;
+        return null;
       }
       return null;
     } catch (e) {
@@ -179,36 +192,17 @@ class AuthService {
 
   Future<void> logout() async {
     try {
-      final accessToken = await tokenService.getAccessToken();
-      if (accessToken != null) {
-        await dio.post(
-          'auth/logout',
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $accessToken',
-            },
-          ),
-        );
-      }
-      
-      if (ref != null) {
-        ref!.read(chatProvider.notifier).clearMessages();
-      }
-      
-      if (socketController != null) {
-        socketController!.disconnect();
-      }
-      
+      await dio.post('auth/logout');
+    } finally {
+      socketController.disconnect();
+      ref.read(chatProvider.notifier).clearMessages();
+      await deviceIdService.clearDeviceId();
       await tokenService.clearTokens();
-    } catch (e) {
-      if (ref != null) {
-        ref!.read(chatProvider.notifier).clearMessages();
+      
+      if (dio.interceptors.any((i) => i is AuthInterceptor)) {
+        final authInterceptor = dio.interceptors.firstWhere((i) => i is AuthInterceptor) as AuthInterceptor;
+        authInterceptor.resetCachedDeviceId();
       }
-      if (socketController != null) {
-        socketController!.disconnect();
-      }
-      await tokenService.clearTokens();
-      rethrow;
     }
   }
 }

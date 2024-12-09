@@ -137,6 +137,7 @@ class SocketController extends StateNotifier<IO.Socket?> {
       state?.disconnect();
       state?.destroy();
       state = null;
+      ref.read(chatProvider.notifier).clearMessages();
     }
     _isConnecting = false;
   }

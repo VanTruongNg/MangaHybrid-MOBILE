@@ -19,19 +19,34 @@ class ChatNotifier extends StateNotifier<List<ChatMessageUI>> {
   }
 
   void addMessage(ChatMessageUI message) {
-    if (!state.any((msg) => msg.message.id == message.message.id)) {
+    final exists = state.any((msg) => 
+      msg.message.id == message.message.id ||
+      (msg.tempId != null && msg.tempId == message.tempId) ||
+      (msg.message.content == message.message.content &&
+       msg.message.sender.id == message.message.sender.id &&
+       msg.message.createdAt.difference(message.message.createdAt).inSeconds.abs() < 1)
+    );
+
+    if (!exists) {
       state = [...state, message];
     }
   }
 
   void handleMessageAck(MessageAckResponse response) {
-    state = [
-      for (final msg in state)
-        if (msg.tempId == response.tempId)
-          ChatMessageUI(message: response.message)
-        else
-          msg
-    ];
+    final index = state.indexWhere((msg) => msg.tempId == response.tempId);
+    if (index != -1) {
+      final existingMessageIndex = state.indexWhere(
+        (msg) => msg.message.id == response.message.id && msg.tempId == null
+      );
+      
+      if (existingMessageIndex == -1) {
+        final newState = [...state];
+        newState[index] = ChatMessageUI(message: response.message);
+        state = newState;
+      } else {
+        state = state.where((msg) => msg.tempId != response.tempId).toList();
+      }
+    }
   }
 
   void handleMessageError(MessageErrorResponse error) {

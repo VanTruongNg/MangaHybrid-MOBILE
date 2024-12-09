@@ -106,6 +106,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authStateProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, _) {
+          if (error.toString().contains('token_expired') && mounted) {
+            _showLoginExpiredDialog();
+          }
+        },
+      );
+    });
+
     ref.listen(connectivityProvider, (previous, next) {
       next.whenData((statusList) {
         final isOnline = statusList.isNotEmpty &&
