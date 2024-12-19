@@ -18,6 +18,7 @@ import 'package:webtoon_mobile/screen/Offline/offline_manga_detail_screen.dart';
 import 'package:webtoon_mobile/screen/Offline/offline_chapter_screen.dart';
 import 'package:webtoon_mobile/screen/user/public_profile_screen.dart';
 import 'package:webtoon_mobile/screen/chat/public_chat_screen.dart';
+import 'package:webtoon_mobile/screen/private_chat_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey =
@@ -56,6 +57,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/chat/public',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const PublicChatScreen(),
+      ),
+      GoRoute(
+        path: '/chat/:roomId',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => PrivateChatScreen(
+          roomId: state.pathParameters['roomId']!,
+        ),
       ),
       GoRoute(
         path: '/offline',

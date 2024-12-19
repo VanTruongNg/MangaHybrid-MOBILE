@@ -25,6 +25,7 @@ _$MessageErrorResponseImpl _$$MessageErrorResponseImplFromJson(
     _$MessageErrorResponseImpl(
       tempId: json['tempId'] as String,
       error: json['error'] as String,
+      roomType: json['roomType'] as String,
     );
 
 Map<String, dynamic> _$$MessageErrorResponseImplToJson(
@@ -32,4 +33,5 @@ Map<String, dynamic> _$$MessageErrorResponseImplToJson(
     <String, dynamic>{
       'tempId': instance.tempId,
       'error': instance.error,
+      'roomType': instance.roomType,
     };

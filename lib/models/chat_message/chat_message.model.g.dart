@@ -28,6 +28,33 @@ Map<String, dynamic> _$$ChatMessageImplToJson(_$ChatMessageImpl instance) =>
       'createdAt': instance.createdAt.toIso8601String(),
     };
 
+_$PrivateChatMessageImpl _$$PrivateChatMessageImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PrivateChatMessageImpl(
+      id: json['_id'] as String,
+      roomId: json['roomId'] as String,
+      sender: ChatUser.fromJson(json['sender'] as Map<String, dynamic>),
+      content: json['content'] as String,
+      readBy:
+          (json['readBy'] as List<dynamic>).map((e) => e as String).toList(),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      version: (json['__v'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$PrivateChatMessageImplToJson(
+        _$PrivateChatMessageImpl instance) =>
+    <String, dynamic>{
+      '_id': instance.id,
+      'roomId': instance.roomId,
+      'sender': instance.sender,
+      'content': instance.content,
+      'readBy': instance.readBy,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt.toIso8601String(),
+      '__v': instance.version,
+    };
+
 _$ChatUserImpl _$$ChatUserImplFromJson(Map<String, dynamic> json) =>
     _$ChatUserImpl(
       id: json['_id'] as String,

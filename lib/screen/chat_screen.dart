@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:webtoon_mobile/models/chat_room/chat_room.model.dart';
+import 'package:webtoon_mobile/providers/auth/auth_state_provider.dart';
+import 'package:webtoon_mobile/providers/chat/chat_room_provider.dart';
+import 'package:webtoon_mobile/providers/websocket_provider.dart';
 import 'package:webtoon_mobile/widgets/CustomAppbar.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
@@ -13,6 +18,9 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(authStateProvider).value;
+    final privateRooms = ref.watch(privateRoomsProvider);
+
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Chat',
@@ -47,77 +55,75 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             ),
           ),
 
-          // Private chat rooms (placeholder)
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage('https://example.com/avatar1.jpg'),
-              onBackgroundImageError: (_, __) => Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.person),
-              ),
-            ),
-            title: const Text('Người dùng 1'),
-            subtitle: const Text('Tin nhắn cuối cùng...'),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  '12:30',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
+          // Private chat rooms
+          ...privateRooms.map((room) {
+            final otherUser = room.participants.firstWhere(
+              (user) => user.id != currentUser?.id,
+              orElse: () => room.participants.first,
+            );
+
+            return ListTile(
+              leading: CircleAvatar(
+                backgroundImage: otherUser.avatarUrl != null
+                    ? NetworkImage(otherUser.avatarUrl!)
+                    : null,
+                onBackgroundImageError: (_, __) => Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
                     shape: BoxShape.circle,
                   ),
-                  child: const Text(
-                    '2',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
+                  child: const Icon(Icons.person),
                 ),
-              ],
-            ),
-            onTap: () {
-              // TODO: Navigate to private chat room
-            },
-          ),
-
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage('https://example.com/avatar2.jpg'),
-              onBackgroundImageError: (_, __) => Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.person),
+                child: otherUser.avatarUrl == null
+                    ? const Icon(Icons.person)
+                    : null,
               ),
-            ),
-            title: const Text('Người dùng 2'),
-            subtitle: const Text('Tin nhắn cuối cùng...'),
-            trailing: Text(
-              'Hôm qua',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
-            ),
-            onTap: () {
-              // TODO: Navigate to private chat room
-            },
-          ),
+              title: Text(otherUser.name),
+              subtitle: room.lastMessage != null
+                  ? RichText(
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: [
+                          if (room.lastSender != null) ...[
+                            TextSpan(
+                              text: room.lastSender!.id == currentUser?.id
+                                  ? 'Bạn: '
+                                  : '${room.lastSender!.name}: ',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                          TextSpan(text: room.lastMessage),
+                        ],
+                      ),
+                    )
+                  : null,
+              trailing: room.lastMessageAt != null
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          timeago.format(room.lastMessageAt!,
+                              locale: 'vi'),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        // TODO: Add unread message count
+                      ],
+                    )
+                  : null,
+              onTap: () {
+                ref.read(socketControllerProvider.notifier).openPrivateRoom(room.id);
+                context.push('/chat/${room.id}');
+              },
+            );
+          }).toList(),
         ],
       ),
     );

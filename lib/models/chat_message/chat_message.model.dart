@@ -19,6 +19,23 @@ class ChatMessage with _$ChatMessage {
 }
 
 @freezed
+class PrivateChatMessage with _$PrivateChatMessage {
+  const factory PrivateChatMessage({
+    @JsonKey(name: '_id') required String id,
+    @JsonKey(name: 'roomId') required String roomId,
+    required ChatUser sender,
+    required String content,
+    required List<String> readBy,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    @JsonKey(name: '__v') required int version,
+  }) = _PrivateChatMessage;
+
+  factory PrivateChatMessage.fromJson(Map<String, dynamic> json) =>
+      _$PrivateChatMessageFromJson(json);
+}
+
+@freezed
 class ChatMessageUI with _$ChatMessageUI {
   const factory ChatMessageUI({
     required ChatMessage message,
@@ -26,6 +43,16 @@ class ChatMessageUI with _$ChatMessageUI {
     @Default(false) bool isSending,
     String? error,
   }) = _ChatMessageUI;
+}
+
+@freezed
+class PrivateChatMessageUI with _$PrivateChatMessageUI {
+  const factory PrivateChatMessageUI({
+    required PrivateChatMessage message,
+    String? tempId,
+    @Default(false) bool isSending,
+    String? error,
+  }) = _PrivateChatMessageUI;
 }
 
 @freezed

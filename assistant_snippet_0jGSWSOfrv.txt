@@ -1,0 +1,5 @@
+1|state?.emit('sendPrivateMessage', {
+2|  'tempId': tempId,
+3|  'content': content,
+4|  'receiverId': roomId,
+5|}); 

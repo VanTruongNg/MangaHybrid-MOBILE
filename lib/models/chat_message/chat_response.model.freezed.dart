@@ -205,6 +205,7 @@ MessageErrorResponse _$MessageErrorResponseFromJson(Map<String, dynamic> json) {
 mixin _$MessageErrorResponse {
   String get tempId => throw _privateConstructorUsedError;
   String get error => throw _privateConstructorUsedError;
+  String get roomType => throw _privateConstructorUsedError;
 
   /// Serializes this MessageErrorResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -222,7 +223,7 @@ abstract class $MessageErrorResponseCopyWith<$Res> {
           $Res Function(MessageErrorResponse) then) =
       _$MessageErrorResponseCopyWithImpl<$Res, MessageErrorResponse>;
   @useResult
-  $Res call({String tempId, String error});
+  $Res call({String tempId, String error, String roomType});
 }
 
 /// @nodoc
@@ -243,6 +244,7 @@ class _$MessageErrorResponseCopyWithImpl<$Res,
   $Res call({
     Object? tempId = null,
     Object? error = null,
+    Object? roomType = null,
   }) {
     return _then(_value.copyWith(
       tempId: null == tempId
@@ -252,6 +254,10 @@ class _$MessageErrorResponseCopyWithImpl<$Res,
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
+              as String,
+      roomType: null == roomType
+          ? _value.roomType
+          : roomType // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -265,7 +271,7 @@ abstract class _$$MessageErrorResponseImplCopyWith<$Res>
       __$$MessageErrorResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String tempId, String error});
+  $Res call({String tempId, String error, String roomType});
 }
 
 /// @nodoc
@@ -283,6 +289,7 @@ class __$$MessageErrorResponseImplCopyWithImpl<$Res>
   $Res call({
     Object? tempId = null,
     Object? error = null,
+    Object? roomType = null,
   }) {
     return _then(_$MessageErrorResponseImpl(
       tempId: null == tempId
@@ -293,6 +300,10 @@ class __$$MessageErrorResponseImplCopyWithImpl<$Res>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String,
+      roomType: null == roomType
+          ? _value.roomType
+          : roomType // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -300,7 +311,8 @@ class __$$MessageErrorResponseImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$MessageErrorResponseImpl implements _MessageErrorResponse {
-  const _$MessageErrorResponseImpl({required this.tempId, required this.error});
+  const _$MessageErrorResponseImpl(
+      {required this.tempId, required this.error, required this.roomType});
 
   factory _$MessageErrorResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessageErrorResponseImplFromJson(json);
@@ -309,10 +321,12 @@ class _$MessageErrorResponseImpl implements _MessageErrorResponse {
   final String tempId;
   @override
   final String error;
+  @override
+  final String roomType;
 
   @override
   String toString() {
-    return 'MessageErrorResponse(tempId: $tempId, error: $error)';
+    return 'MessageErrorResponse(tempId: $tempId, error: $error, roomType: $roomType)';
   }
 
   @override
@@ -321,12 +335,14 @@ class _$MessageErrorResponseImpl implements _MessageErrorResponse {
         (other.runtimeType == runtimeType &&
             other is _$MessageErrorResponseImpl &&
             (identical(other.tempId, tempId) || other.tempId == tempId) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.roomType, roomType) ||
+                other.roomType == roomType));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, tempId, error);
+  int get hashCode => Object.hash(runtimeType, tempId, error, roomType);
 
   /// Create a copy of MessageErrorResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -349,7 +365,8 @@ class _$MessageErrorResponseImpl implements _MessageErrorResponse {
 abstract class _MessageErrorResponse implements MessageErrorResponse {
   const factory _MessageErrorResponse(
       {required final String tempId,
-      required final String error}) = _$MessageErrorResponseImpl;
+      required final String error,
+      required final String roomType}) = _$MessageErrorResponseImpl;
 
   factory _MessageErrorResponse.fromJson(Map<String, dynamic> json) =
       _$MessageErrorResponseImpl.fromJson;
@@ -358,6 +375,8 @@ abstract class _MessageErrorResponse implements MessageErrorResponse {
   String get tempId;
   @override
   String get error;
+  @override
+  String get roomType;
 
   /// Create a copy of MessageErrorResponse
   /// with the given fields replaced by the non-null parameter values.

@@ -307,6 +307,343 @@ abstract class _ChatMessage implements ChatMessage {
       throw _privateConstructorUsedError;
 }
 
+PrivateChatMessage _$PrivateChatMessageFromJson(Map<String, dynamic> json) {
+  return _PrivateChatMessage.fromJson(json);
+}
+
+/// @nodoc
+mixin _$PrivateChatMessage {
+  @JsonKey(name: '_id')
+  String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'roomId')
+  String get roomId => throw _privateConstructorUsedError;
+  ChatUser get sender => throw _privateConstructorUsedError;
+  String get content => throw _privateConstructorUsedError;
+  List<String> get readBy => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: '__v')
+  int get version => throw _privateConstructorUsedError;
+
+  /// Serializes this PrivateChatMessage to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of PrivateChatMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $PrivateChatMessageCopyWith<PrivateChatMessage> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PrivateChatMessageCopyWith<$Res> {
+  factory $PrivateChatMessageCopyWith(
+          PrivateChatMessage value, $Res Function(PrivateChatMessage) then) =
+      _$PrivateChatMessageCopyWithImpl<$Res, PrivateChatMessage>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String id,
+      @JsonKey(name: 'roomId') String roomId,
+      ChatUser sender,
+      String content,
+      List<String> readBy,
+      DateTime createdAt,
+      DateTime updatedAt,
+      @JsonKey(name: '__v') int version});
+
+  $ChatUserCopyWith<$Res> get sender;
+}
+
+/// @nodoc
+class _$PrivateChatMessageCopyWithImpl<$Res, $Val extends PrivateChatMessage>
+    implements $PrivateChatMessageCopyWith<$Res> {
+  _$PrivateChatMessageCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of PrivateChatMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? roomId = null,
+    Object? sender = null,
+    Object? content = null,
+    Object? readBy = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? version = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      roomId: null == roomId
+          ? _value.roomId
+          : roomId // ignore: cast_nullable_to_non_nullable
+              as String,
+      sender: null == sender
+          ? _value.sender
+          : sender // ignore: cast_nullable_to_non_nullable
+              as ChatUser,
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
+              as String,
+      readBy: null == readBy
+          ? _value.readBy
+          : readBy // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      version: null == version
+          ? _value.version
+          : version // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+
+  /// Create a copy of PrivateChatMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatUserCopyWith<$Res> get sender {
+    return $ChatUserCopyWith<$Res>(_value.sender, (value) {
+      return _then(_value.copyWith(sender: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$PrivateChatMessageImplCopyWith<$Res>
+    implements $PrivateChatMessageCopyWith<$Res> {
+  factory _$$PrivateChatMessageImplCopyWith(_$PrivateChatMessageImpl value,
+          $Res Function(_$PrivateChatMessageImpl) then) =
+      __$$PrivateChatMessageImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String id,
+      @JsonKey(name: 'roomId') String roomId,
+      ChatUser sender,
+      String content,
+      List<String> readBy,
+      DateTime createdAt,
+      DateTime updatedAt,
+      @JsonKey(name: '__v') int version});
+
+  @override
+  $ChatUserCopyWith<$Res> get sender;
+}
+
+/// @nodoc
+class __$$PrivateChatMessageImplCopyWithImpl<$Res>
+    extends _$PrivateChatMessageCopyWithImpl<$Res, _$PrivateChatMessageImpl>
+    implements _$$PrivateChatMessageImplCopyWith<$Res> {
+  __$$PrivateChatMessageImplCopyWithImpl(_$PrivateChatMessageImpl _value,
+      $Res Function(_$PrivateChatMessageImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PrivateChatMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? roomId = null,
+    Object? sender = null,
+    Object? content = null,
+    Object? readBy = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
+    Object? version = null,
+  }) {
+    return _then(_$PrivateChatMessageImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      roomId: null == roomId
+          ? _value.roomId
+          : roomId // ignore: cast_nullable_to_non_nullable
+              as String,
+      sender: null == sender
+          ? _value.sender
+          : sender // ignore: cast_nullable_to_non_nullable
+              as ChatUser,
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
+              as String,
+      readBy: null == readBy
+          ? _value._readBy
+          : readBy // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      version: null == version
+          ? _value.version
+          : version // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$PrivateChatMessageImpl implements _PrivateChatMessage {
+  const _$PrivateChatMessageImpl(
+      {@JsonKey(name: '_id') required this.id,
+      @JsonKey(name: 'roomId') required this.roomId,
+      required this.sender,
+      required this.content,
+      required final List<String> readBy,
+      required this.createdAt,
+      required this.updatedAt,
+      @JsonKey(name: '__v') required this.version})
+      : _readBy = readBy;
+
+  factory _$PrivateChatMessageImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PrivateChatMessageImplFromJson(json);
+
+  @override
+  @JsonKey(name: '_id')
+  final String id;
+  @override
+  @JsonKey(name: 'roomId')
+  final String roomId;
+  @override
+  final ChatUser sender;
+  @override
+  final String content;
+  final List<String> _readBy;
+  @override
+  List<String> get readBy {
+    if (_readBy is EqualUnmodifiableListView) return _readBy;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_readBy);
+  }
+
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
+  @override
+  @JsonKey(name: '__v')
+  final int version;
+
+  @override
+  String toString() {
+    return 'PrivateChatMessage(id: $id, roomId: $roomId, sender: $sender, content: $content, readBy: $readBy, createdAt: $createdAt, updatedAt: $updatedAt, version: $version)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PrivateChatMessageImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.roomId, roomId) || other.roomId == roomId) &&
+            (identical(other.sender, sender) || other.sender == sender) &&
+            (identical(other.content, content) || other.content == content) &&
+            const DeepCollectionEquality().equals(other._readBy, _readBy) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.version, version) || other.version == version));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      roomId,
+      sender,
+      content,
+      const DeepCollectionEquality().hash(_readBy),
+      createdAt,
+      updatedAt,
+      version);
+
+  /// Create a copy of PrivateChatMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PrivateChatMessageImplCopyWith<_$PrivateChatMessageImpl> get copyWith =>
+      __$$PrivateChatMessageImplCopyWithImpl<_$PrivateChatMessageImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PrivateChatMessageImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _PrivateChatMessage implements PrivateChatMessage {
+  const factory _PrivateChatMessage(
+          {@JsonKey(name: '_id') required final String id,
+          @JsonKey(name: 'roomId') required final String roomId,
+          required final ChatUser sender,
+          required final String content,
+          required final List<String> readBy,
+          required final DateTime createdAt,
+          required final DateTime updatedAt,
+          @JsonKey(name: '__v') required final int version}) =
+      _$PrivateChatMessageImpl;
+
+  factory _PrivateChatMessage.fromJson(Map<String, dynamic> json) =
+      _$PrivateChatMessageImpl.fromJson;
+
+  @override
+  @JsonKey(name: '_id')
+  String get id;
+  @override
+  @JsonKey(name: 'roomId')
+  String get roomId;
+  @override
+  ChatUser get sender;
+  @override
+  String get content;
+  @override
+  List<String> get readBy;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
+  @override
+  @JsonKey(name: '__v')
+  int get version;
+
+  /// Create a copy of PrivateChatMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PrivateChatMessageImplCopyWith<_$PrivateChatMessageImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 /// @nodoc
 mixin _$ChatMessageUI {
   ChatMessage get message => throw _privateConstructorUsedError;
@@ -506,6 +843,216 @@ abstract class _ChatMessageUI implements ChatMessageUI {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ChatMessageUIImplCopyWith<_$ChatMessageUIImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$PrivateChatMessageUI {
+  PrivateChatMessage get message => throw _privateConstructorUsedError;
+  String? get tempId => throw _privateConstructorUsedError;
+  bool get isSending => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
+
+  /// Create a copy of PrivateChatMessageUI
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $PrivateChatMessageUICopyWith<PrivateChatMessageUI> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PrivateChatMessageUICopyWith<$Res> {
+  factory $PrivateChatMessageUICopyWith(PrivateChatMessageUI value,
+          $Res Function(PrivateChatMessageUI) then) =
+      _$PrivateChatMessageUICopyWithImpl<$Res, PrivateChatMessageUI>;
+  @useResult
+  $Res call(
+      {PrivateChatMessage message,
+      String? tempId,
+      bool isSending,
+      String? error});
+
+  $PrivateChatMessageCopyWith<$Res> get message;
+}
+
+/// @nodoc
+class _$PrivateChatMessageUICopyWithImpl<$Res,
+        $Val extends PrivateChatMessageUI>
+    implements $PrivateChatMessageUICopyWith<$Res> {
+  _$PrivateChatMessageUICopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of PrivateChatMessageUI
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+    Object? tempId = freezed,
+    Object? isSending = null,
+    Object? error = freezed,
+  }) {
+    return _then(_value.copyWith(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as PrivateChatMessage,
+      tempId: freezed == tempId
+          ? _value.tempId
+          : tempId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isSending: null == isSending
+          ? _value.isSending
+          : isSending // ignore: cast_nullable_to_non_nullable
+              as bool,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+
+  /// Create a copy of PrivateChatMessageUI
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PrivateChatMessageCopyWith<$Res> get message {
+    return $PrivateChatMessageCopyWith<$Res>(_value.message, (value) {
+      return _then(_value.copyWith(message: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$PrivateChatMessageUIImplCopyWith<$Res>
+    implements $PrivateChatMessageUICopyWith<$Res> {
+  factory _$$PrivateChatMessageUIImplCopyWith(_$PrivateChatMessageUIImpl value,
+          $Res Function(_$PrivateChatMessageUIImpl) then) =
+      __$$PrivateChatMessageUIImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {PrivateChatMessage message,
+      String? tempId,
+      bool isSending,
+      String? error});
+
+  @override
+  $PrivateChatMessageCopyWith<$Res> get message;
+}
+
+/// @nodoc
+class __$$PrivateChatMessageUIImplCopyWithImpl<$Res>
+    extends _$PrivateChatMessageUICopyWithImpl<$Res, _$PrivateChatMessageUIImpl>
+    implements _$$PrivateChatMessageUIImplCopyWith<$Res> {
+  __$$PrivateChatMessageUIImplCopyWithImpl(_$PrivateChatMessageUIImpl _value,
+      $Res Function(_$PrivateChatMessageUIImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PrivateChatMessageUI
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+    Object? tempId = freezed,
+    Object? isSending = null,
+    Object? error = freezed,
+  }) {
+    return _then(_$PrivateChatMessageUIImpl(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as PrivateChatMessage,
+      tempId: freezed == tempId
+          ? _value.tempId
+          : tempId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isSending: null == isSending
+          ? _value.isSending
+          : isSending // ignore: cast_nullable_to_non_nullable
+              as bool,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PrivateChatMessageUIImpl implements _PrivateChatMessageUI {
+  const _$PrivateChatMessageUIImpl(
+      {required this.message, this.tempId, this.isSending = false, this.error});
+
+  @override
+  final PrivateChatMessage message;
+  @override
+  final String? tempId;
+  @override
+  @JsonKey()
+  final bool isSending;
+  @override
+  final String? error;
+
+  @override
+  String toString() {
+    return 'PrivateChatMessageUI(message: $message, tempId: $tempId, isSending: $isSending, error: $error)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PrivateChatMessageUIImpl &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.tempId, tempId) || other.tempId == tempId) &&
+            (identical(other.isSending, isSending) ||
+                other.isSending == isSending) &&
+            (identical(other.error, error) || other.error == error));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, message, tempId, isSending, error);
+
+  /// Create a copy of PrivateChatMessageUI
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PrivateChatMessageUIImplCopyWith<_$PrivateChatMessageUIImpl>
+      get copyWith =>
+          __$$PrivateChatMessageUIImplCopyWithImpl<_$PrivateChatMessageUIImpl>(
+              this, _$identity);
+}
+
+abstract class _PrivateChatMessageUI implements PrivateChatMessageUI {
+  const factory _PrivateChatMessageUI(
+      {required final PrivateChatMessage message,
+      final String? tempId,
+      final bool isSending,
+      final String? error}) = _$PrivateChatMessageUIImpl;
+
+  @override
+  PrivateChatMessage get message;
+  @override
+  String? get tempId;
+  @override
+  bool get isSending;
+  @override
+  String? get error;
+
+  /// Create a copy of PrivateChatMessageUI
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PrivateChatMessageUIImplCopyWith<_$PrivateChatMessageUIImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 ChatUser _$ChatUserFromJson(Map<String, dynamic> json) {

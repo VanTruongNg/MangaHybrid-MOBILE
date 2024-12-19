@@ -1,0 +1,20 @@
+1|final tempMessage = PrivateChatMessageUI(
+2|  message: PrivateChatMessage(
+3|    id: tempId,
+4|    roomId: roomId,
+5|    sender: ChatUser(
+6|      id: currentUser.id,
+7|      name: currentUser.name,
+8|      avatarUrl: currentUser.avatarUrl,
+9|    ),
+10|    content: content,
+11|    readBy: [currentUser.id],
+12|    createdAt: DateTime.now(),
+13|    updatedAt: DateTime.now(),
+14|    version: 0,
+15|  ),
+16|  tempId: tempId,
+17|  isSending: true,
+18|);
+19|
+20|ref.read(privateChatProvider.notifier).addMessage(tempMessage); 

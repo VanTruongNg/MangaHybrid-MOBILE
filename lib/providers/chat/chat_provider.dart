@@ -9,6 +9,12 @@ final chatProvider =
   return ChatNotifier(ref);
 });
 
+final privateChatProvider =
+    StateNotifierProvider<PrivateChatNotifier, List<PrivateChatMessageUI>>(
+        (ref) {
+  return PrivateChatNotifier(ref);
+});
+
 class ChatNotifier extends StateNotifier<List<ChatMessageUI>> {
   final Ref ref;
 
@@ -19,13 +25,16 @@ class ChatNotifier extends StateNotifier<List<ChatMessageUI>> {
   }
 
   void addMessage(ChatMessageUI message) {
-    final exists = state.any((msg) => 
-      msg.message.id == message.message.id ||
-      (msg.tempId != null && msg.tempId == message.tempId) ||
-      (msg.message.content == message.message.content &&
-       msg.message.sender.id == message.message.sender.id &&
-       msg.message.createdAt.difference(message.message.createdAt).inSeconds.abs() < 1)
-    );
+    final exists = state.any((msg) =>
+        msg.message.id == message.message.id ||
+        (msg.tempId != null && msg.tempId == message.tempId) ||
+        (msg.message.content == message.message.content &&
+            msg.message.sender.id == message.message.sender.id &&
+            msg.message.createdAt
+                    .difference(message.message.createdAt)
+                    .inSeconds
+                    .abs() <
+                1));
 
     if (!exists) {
       state = [...state, message];
@@ -33,30 +42,27 @@ class ChatNotifier extends StateNotifier<List<ChatMessageUI>> {
   }
 
   void handleMessageAck(MessageAckResponse response) {
-    final index = state.indexWhere((msg) => msg.tempId == response.tempId);
-    if (index != -1) {
-      final existingMessageIndex = state.indexWhere(
-        (msg) => msg.message.id == response.message.id && msg.tempId == null
-      );
-      
-      if (existingMessageIndex == -1) {
-        final newState = [...state];
-        newState[index] = ChatMessageUI(message: response.message);
-        state = newState;
-      } else {
-        state = state.where((msg) => msg.tempId != response.tempId).toList();
-      }
-    }
+    state = [
+      ...state.where((msg) => msg.tempId != response.tempId),
+      ChatMessageUI(
+        message: response.message,
+        isSending: false,
+      ),
+    ];
   }
 
   void handleMessageError(MessageErrorResponse error) {
     state = [
       for (final msg in state)
         if (msg.tempId == error.tempId)
-          msg.copyWith(error: error.error)
+          msg.copyWith(error: error.error, isSending: false)
         else
           msg
     ];
+  }
+
+  void removeMessage(String tempId) {
+    state = state.where((msg) => msg.tempId != tempId).toList();
   }
 
   void sendMessage(String content) {
@@ -98,10 +104,76 @@ class ChatNotifier extends StateNotifier<List<ChatMessageUI>> {
         createdAt: DateTime.now(),
       ),
       tempId: tempId,
-      isSending: true,
+      isSending: false,
     );
 
     state = [...state, tempMessage];
+  }
+
+  void clearMessages() {
+    state = [];
+  }
+
+  @override
+  void dispose() {
+    clearMessages();
+    super.dispose();
+  }
+}
+
+class PrivateChatNotifier extends StateNotifier<List<PrivateChatMessageUI>> {
+  final Ref ref;
+
+  PrivateChatNotifier(this.ref) : super([]);
+
+  void setPreviousMessages(List<PrivateChatMessage> messages) {
+    state = messages.map((msg) => PrivateChatMessageUI(message: msg)).toList();
+  }
+
+  void addMessage(PrivateChatMessageUI message) {
+    final exists = state.any((msg) =>
+        msg.message.id == message.message.id ||
+        (msg.tempId != null && msg.tempId == message.tempId) ||
+        (msg.message.content == message.message.content &&
+            msg.message.sender.id == message.message.sender.id &&
+            msg.message.createdAt
+                    .difference(message.message.createdAt)
+                    .inSeconds
+                    .abs() <
+                1));
+
+    if (!exists) {
+      state = [...state, message.copyWith(isSending: false)];
+    }
+  }
+
+  void setMessages(List<PrivateChatMessageUI> messages) {
+    state = messages.map((msg) => msg.copyWith(isSending: false)).toList();
+  }
+
+  void updateMessage(String tempId, PrivateChatMessage message) {
+    final existingMessageIndex = state.indexWhere(
+      (msg) => msg.message.id == message.id && msg.tempId == null,
+    );
+
+    if (existingMessageIndex != -1) {
+      // Nếu tin nhắn đã tồn tại, xóa tin nhắn tạm thời
+      state = state.where((msg) => msg.tempId != tempId).toList();
+    } else {
+      // Nếu tin nhắn chưa tồn tại, cập nhật tin nhắn tạm thời
+      state = [
+        ...state.where((msg) => msg.tempId != tempId),
+        PrivateChatMessageUI(
+          message: message,
+          tempId: null,
+          isSending: false,
+        ),
+      ];
+    }
+  }
+
+  void removeMessage(String tempId) {
+    state = state.where((msg) => msg.tempId != tempId).toList();
   }
 
   void clearMessages() {
