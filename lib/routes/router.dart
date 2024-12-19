@@ -16,6 +16,8 @@ import 'package:webtoon_mobile/screen/Auth/signup_screen.dart';
 import 'package:webtoon_mobile/screen/offline/offline_screen.dart';
 import 'package:webtoon_mobile/screen/Offline/offline_manga_detail_screen.dart';
 import 'package:webtoon_mobile/screen/Offline/offline_chapter_screen.dart';
+import 'package:webtoon_mobile/screen/user/public_profile_screen.dart';
+import 'package:webtoon_mobile/screen/chat/public_chat_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey =
@@ -48,29 +50,40 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/profile',
             builder: (context, state) => const ProfileScreen(),
           ),
+        ],
+      ),
+      GoRoute(
+        path: '/chat/public',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const PublicChatScreen(),
+      ),
+      GoRoute(
+        path: '/offline',
+        builder: (context, state) => const OfflineScreen(),
+        routes: [
           GoRoute(
-            path: '/offline',
-            builder: (context, state) => const OfflineScreen(),
-            routes: [
-              GoRoute(
-                path: 'library',
-                builder: (context, state) => const OfflineLibraryScreen(),
-              ),
-              GoRoute(
-                path: 'manga/:mangaId',
-                builder: (context, state) => OfflineMangaDetailScreen(
-                  mangaId: state.pathParameters['mangaId']!,
-                ),
-              ),
-            ],
+            path: 'library',
+            builder: (context, state) => const OfflineLibraryScreen(),
           ),
           GoRoute(
-            path: '/manga/:id',
-            builder: (context, state) => MangaDetailScreen(
-              mangaId: state.pathParameters['id']!,
+            path: 'manga/:mangaId',
+            builder: (context, state) => OfflineMangaDetailScreen(
+              mangaId: state.pathParameters['mangaId']!,
             ),
           ),
         ],
+      ),
+      GoRoute(
+        path: '/manga/:id',
+        builder: (context, state) => MangaDetailScreen(
+          mangaId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: '/user/:id',
+        builder: (context, state) => PublicProfileScreen(
+          userId: state.pathParameters['id']!,
+        ),
       ),
       GoRoute(
         path: '/chapter/:chapterId',
