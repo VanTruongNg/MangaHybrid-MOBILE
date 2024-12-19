@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:webtoon_mobile/providers/dio_provider.dart';
 import 'package:webtoon_mobile/providers/notification/notification_provider.dart';
 import 'package:webtoon_mobile/providers/theme_provider.dart';
 import 'package:webtoon_mobile/utils/FormatDate.dart';

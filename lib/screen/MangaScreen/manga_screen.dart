@@ -32,7 +32,6 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
             statusList.any((status) => status != ConnectivityResult.none);
 
         if (wasOffline && isOnline) {
-          print('Internet restored, refreshing manga list...');
           ref.refresh(homeDataProvider.future);
         }
       });
