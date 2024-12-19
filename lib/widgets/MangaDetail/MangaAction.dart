@@ -48,26 +48,16 @@ class MangaActions extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          FilledButton.icon(
-            onPressed: firstChapterId != null
-                ? () => context.push('/chapter/$firstChapterId', extra: mangaId)
-                : null,
-            style: FilledButton.styleFrom(
-              minimumSize: const Size.fromHeight(48),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            icon: const Icon(Icons.play_arrow),
-            label: const Text(
-              'Đọc ngay',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              ElevatedButton.icon(
+                onPressed: firstChapterId != null 
+                  ? () => context.push('/chapter/$firstChapterId')
+                  : null,
+                icon: const Icon(Icons.play_arrow),
+                label: const Text('Đọc ngay'),
+              ),
               _buildActionButton(
                 context,
                 icon: Icons.star_outline,

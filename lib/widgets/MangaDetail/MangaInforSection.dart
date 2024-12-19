@@ -10,6 +10,19 @@ class MangaInfoSection extends StatelessWidget {
     required this.manga,
   });
 
+  String _getMangaStatus(String status) {
+    switch (status.toLowerCase()) {
+      case 'ongoing':
+        return 'Đang tiến hành';
+      case 'completed':
+        return 'Hoàn thành';
+      case 'dropped':
+        return 'Đã drop';
+      default:
+        return 'Không xác định';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -118,10 +131,9 @@ class MangaInfoSection extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '${manga.status} • MangaHybrid',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.white70,
+                        _getMangaStatus(manga.status),
+                        style: TextStyle(
+                          color: Colors.grey[600],
                         ),
                       ),
                     ],

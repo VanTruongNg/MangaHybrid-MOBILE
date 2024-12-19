@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webtoon_mobile/providers/auth/auth_state_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:webtoon_mobile/models/user/user.model.dart';
+import 'package:go_router/go_router.dart';
 
 class UserProfileView extends ConsumerStatefulWidget {
   const UserProfileView({super.key});
@@ -166,32 +167,37 @@ class _UserProfileViewState extends ConsumerState<UserProfileView>
       padding: const EdgeInsets.all(1),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 1,
+        childAspectRatio: 0.7,
         crossAxisSpacing: 1,
         mainAxisSpacing: 1,
       ),
       itemCount: mangas.length,
       itemBuilder: (context, index) {
         final manga = mangas[index];
-        return Container(
-          decoration: BoxDecoration(
-            image: manga.coverImg != null
-                ? DecorationImage(
-                    image: NetworkImage(manga.coverImg!),
-                    fit: BoxFit.cover,
+        return GestureDetector(
+          onTap: () {
+            context.push('/manga/${manga.id}');
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              image: manga.coverImg != null
+                  ? DecorationImage(
+                      image: NetworkImage(manga.coverImg!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+              color: Colors.grey[300],
+            ),
+            child: manga.coverImg == null
+                ? Center(
+                    child: Text(
+                      manga.title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
+                    ),
                   )
                 : null,
-            color: Colors.grey[300],
           ),
-          child: manga.coverImg == null
-              ? Center(
-                  child: Text(
-                    manga.title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                )
-              : null,
         );
       },
     );
@@ -211,18 +217,24 @@ class _UserProfileViewState extends ConsumerState<UserProfileView>
         final lastChapter =
             item.chapters.isNotEmpty ? item.chapters.last : null;
         return ListTile(
-          leading: Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              image: item.manga.coverImg != null
-                  ? DecorationImage(
-                      image: NetworkImage(item.manga.coverImg!),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: SizedBox(
+              width: 50,
+              height: 140,
+              child: item.manga.coverImg != null
+                  ? Image.network(
+                      item.manga.coverImg!,
+                      width: 50,
+                      height: 140,
                       fit: BoxFit.cover,
                     )
-                  : null,
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(4),
+                  : Container(
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.book),
+                    ),
             ),
           ),
           title: Text(item.manga.title),
@@ -232,6 +244,9 @@ class _UserProfileViewState extends ConsumerState<UserProfileView>
                 : _formatDate(item.updatedAt),
           ),
           isThreeLine: true,
+          onTap: () {
+            context.push('/manga/${item.manga.id}');
+          },
         );
       },
     );

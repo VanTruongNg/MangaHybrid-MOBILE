@@ -63,7 +63,9 @@ class MangaDetailScreen extends ConsumerWidget {
                         const SizedBox(height: 16),
                         MangaActions(
                           mangaId: mangaId,
-                          firstChapterId: manga.chapters.first.id,
+                          firstChapterId: manga.chapters.isNotEmpty
+                              ? manga.chapters.first.id
+                              : null,
                           likes: manga.like,
                           dislikes: manga.disLike,
                           followers: manga.followers,
@@ -99,14 +101,15 @@ class MangaDetailScreen extends ConsumerWidget {
                                 description: manga.description ?? '',
                               ),
                               const SizedBox(height: 16),
-                              MangaChapterSection(
+                              if (manga.chapters.isNotEmpty)
+                                MangaChapterSection(
+                                  mangaId: mangaId,
+                                  chapters: manga.chapters,
+                                ),
+                              const SizedBox(height: 16),
+                              MangaCommentSection(
                                 mangaId: mangaId,
-                                chapters: manga.chapters,
                               ),
-                              if (manga.comments.isNotEmpty) ...[
-                                const SizedBox(height: 16),
-                                MangaCommentSection(comments: manga.comments),
-                              ],
                             ],
                           ),
                         ),

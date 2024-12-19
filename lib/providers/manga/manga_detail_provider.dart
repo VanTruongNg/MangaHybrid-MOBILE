@@ -16,6 +16,15 @@ class MangaDetailNotifier extends StateNotifier<AsyncValue<MangaDetail>> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => _mangaService.getMangaById(mangaId));
   }
+
+  void updateComments(CommentInfo newComment) {
+    if (state case AsyncData(:final value)) {
+      final updatedManga = value.copyWith(
+        comments: [newComment, ...value.comments],
+      );
+      state = AsyncData(updatedManga);
+    }
+  }
 }
 
 final mangaDetailProvider = StateNotifierProvider.family<MangaDetailNotifier,
