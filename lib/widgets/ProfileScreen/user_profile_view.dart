@@ -49,83 +49,104 @@ class _UserProfileViewState extends ConsumerState<UserProfileView>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Avatar bên trái
-                  Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.grey[300],
-                        backgroundImage: user.avatarUrl != null
-                            ? NetworkImage(user.avatarUrl!)
-                            : null,
-                        child: user.avatarUrl == null
-                            ? const Icon(Icons.person, size: 40)
-                            : null,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        user.name,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                  Flexible(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final size = constraints.maxWidth * 0.5;
+                            return CircleAvatar(
+                              radius: size > 40 ? 40 : size,
+                              backgroundColor: Colors.grey[300],
+                              backgroundImage: user.avatarUrl != null
+                                  ? NetworkImage(user.avatarUrl!)
+                                  : null,
+                              child: user.avatarUrl == null
+                                  ? const Icon(Icons.person, size: 40)
+                                  : null,
+                            );
+                          },
                         ),
-                      ),
-                      if (user.email != null)
-                        Text(
-                          user.email!,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
+                        const SizedBox(height: 8),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            user.name,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      if (user.isVerified)
-                        Container(
-                          margin: const EdgeInsets.only(top: 4),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.blue[100],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.verified,
-                                size: 16,
-                                color: Colors.blue[700],
+                        if (user.email != null)
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              user.email!,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
                               ),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Đã xác thực',
-                                style: TextStyle(
-                                  fontSize: 12,
+                            ),
+                          ),
+                        if (user.isVerified)
+                          Container(
+                            margin: const EdgeInsets.only(top: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.blue[100],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.verified,
+                                  size: 16,
                                   color: Colors.blue[700],
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Đã xác thực',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.blue[700],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
-                  const SizedBox(width: 32),
+                  const SizedBox(width: 16),
                   // Thống kê bên phải
-                  Expanded(
+                  Flexible(
+                    flex: 3,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildStatItem(
-                          user.uploadedManga.length.toString(),
-                          'Truyện',
+                        Expanded(
+                          child: _buildStatItem(
+                            user.uploadedManga.length.toString(),
+                            'Truyện',
+                          ),
                         ),
-                        _buildStatItem(
-                          user.followers.length.toString(),
-                          'Người theo dõi',
+                        Expanded(
+                          child: _buildStatItem(
+                            user.followers.length.toString(),
+                            'Người theo dõi',
+                          ),
                         ),
-                        _buildStatItem(
-                          user.following.length.toString(),
-                          'Đang theo dõi',
+                        Expanded(
+                          child: _buildStatItem(
+                            user.following.length.toString(),
+                            'Đang theo dõi',
+                          ),
                         ),
                       ],
                     ),
@@ -282,19 +303,28 @@ class _UserProfileViewState extends ConsumerState<UserProfileView>
 
   Widget _buildStatItem(String value, String label) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            value,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 14,
+        const SizedBox(height: 4),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 14,
+            ),
           ),
         ),
       ],

@@ -75,6 +75,13 @@ class SocketController extends StateNotifier<IO.Socket?> {
                         .toList(),
                   );
             }
+
+            if (data['rooms'] is List) {
+              // TODO: Implement room handling logic here
+              // Example: ref.read(roomProvider.notifier).setRooms(
+              //   (data['rooms'] as List).map((e) => Room.fromJson(e)).toList(),
+              // );
+            }
           }
         });
 
