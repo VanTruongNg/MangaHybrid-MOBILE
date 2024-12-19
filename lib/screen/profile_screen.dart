@@ -8,11 +8,16 @@ import 'package:webtoon_mobile/widgets/ProfileScreen/user_profile_view.dart';
 import 'package:webtoon_mobile/screen/offline/offline_screen.dart';
 import 'package:webtoon_mobile/widgets/CustomAppbar.dart';
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  @override
+  Widget build(BuildContext context) {
     final isOnline = ref.watch(isOnlineProvider);
 
     if (!isOnline) {
@@ -24,6 +29,12 @@ class ProfileScreen extends ConsumerWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Hồ sơ',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => ref.read(authProvider.notifier).logout(),
+          ),
+        ],
       ),
       body: SafeArea(
         child: authState.when(
@@ -44,7 +55,7 @@ class ProfileScreen extends ConsumerWidget {
             if (user == null) {
               return _buildLoginPrompt(context);
             }
-            return _buildUserProfile(ref);
+            return const UserProfileView();
           },
         ),
       ),
@@ -63,30 +74,10 @@ class ProfileScreen extends ConsumerWidget {
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () => context.push('/login'),
               child: const Text('Đăng nhập'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildUserProfile(WidgetRef ref) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const UserProfileView(),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => ref.read(authProvider.notifier).logout(),
-              child: const Text('Đăng xuất'),
             ),
           ],
         ),

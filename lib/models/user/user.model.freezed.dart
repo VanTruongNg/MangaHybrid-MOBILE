@@ -24,22 +24,33 @@ mixin _$UserModel {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  bool get isVerified => throw _privateConstructorUsedError;
   String? get avatarUrl => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: 'user')
+  String get role => throw _privateConstructorUsedError;
+  bool get isVerified => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<UserBasicModel> get followers => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<UserBasicModel> get following => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get uploadedManga => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get favoritesManga =>
       throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get dislikedManga => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get followingManga =>
       throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<ReadingHistoryModel> get readingHistory =>
       throw _privateConstructorUsedError;
-  List<CommentModel> get comments => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
+  List<String> get comments => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<RatingModel> get ratings => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
+  String get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this UserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -60,19 +71,20 @@ abstract class $UserModelCopyWith<$Res> {
       {@JsonKey(name: '_id') String id,
       String name,
       String email,
-      bool isVerified,
       String? avatarUrl,
-      List<UserBasicModel> followers,
-      List<UserBasicModel> following,
-      List<MangaBasicModel> uploadedManga,
-      List<MangaBasicModel> favoritesManga,
-      List<MangaBasicModel> dislikedManga,
-      List<MangaBasicModel> followingManga,
-      List<ReadingHistoryModel> readingHistory,
-      List<CommentModel> comments,
-      List<RatingModel> ratings,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @JsonKey(defaultValue: 'user') String role,
+      bool isVerified,
+      @JsonKey(defaultValue: []) List<UserBasicModel> followers,
+      @JsonKey(defaultValue: []) List<UserBasicModel> following,
+      @JsonKey(defaultValue: []) List<MangaBasicModel> uploadedManga,
+      @JsonKey(defaultValue: []) List<MangaBasicModel> favoritesManga,
+      @JsonKey(defaultValue: []) List<MangaBasicModel> dislikedManga,
+      @JsonKey(defaultValue: []) List<MangaBasicModel> followingManga,
+      @JsonKey(defaultValue: []) List<ReadingHistoryModel> readingHistory,
+      @JsonKey(defaultValue: []) List<String> comments,
+      @JsonKey(defaultValue: []) List<RatingModel> ratings,
+      String createdAt,
+      String updatedAt});
 }
 
 /// @nodoc
@@ -93,8 +105,9 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? id = null,
     Object? name = null,
     Object? email = null,
-    Object? isVerified = null,
     Object? avatarUrl = freezed,
+    Object? role = null,
+    Object? isVerified = null,
     Object? followers = null,
     Object? following = null,
     Object? uploadedManga = null,
@@ -120,14 +133,18 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
-      isVerified: null == isVerified
-          ? _value.isVerified
-          : isVerified // ignore: cast_nullable_to_non_nullable
-              as bool,
       avatarUrl: freezed == avatarUrl
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String,
+      isVerified: null == isVerified
+          ? _value.isVerified
+          : isVerified // ignore: cast_nullable_to_non_nullable
+              as bool,
       followers: null == followers
           ? _value.followers
           : followers // ignore: cast_nullable_to_non_nullable
@@ -159,7 +176,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       comments: null == comments
           ? _value.comments
           : comments // ignore: cast_nullable_to_non_nullable
-              as List<CommentModel>,
+              as List<String>,
       ratings: null == ratings
           ? _value.ratings
           : ratings // ignore: cast_nullable_to_non_nullable
@@ -167,11 +184,11 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
     ) as $Val);
   }
 }
@@ -188,19 +205,20 @@ abstract class _$$UserModelImplCopyWith<$Res>
       {@JsonKey(name: '_id') String id,
       String name,
       String email,
-      bool isVerified,
       String? avatarUrl,
-      List<UserBasicModel> followers,
-      List<UserBasicModel> following,
-      List<MangaBasicModel> uploadedManga,
-      List<MangaBasicModel> favoritesManga,
-      List<MangaBasicModel> dislikedManga,
-      List<MangaBasicModel> followingManga,
-      List<ReadingHistoryModel> readingHistory,
-      List<CommentModel> comments,
-      List<RatingModel> ratings,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @JsonKey(defaultValue: 'user') String role,
+      bool isVerified,
+      @JsonKey(defaultValue: []) List<UserBasicModel> followers,
+      @JsonKey(defaultValue: []) List<UserBasicModel> following,
+      @JsonKey(defaultValue: []) List<MangaBasicModel> uploadedManga,
+      @JsonKey(defaultValue: []) List<MangaBasicModel> favoritesManga,
+      @JsonKey(defaultValue: []) List<MangaBasicModel> dislikedManga,
+      @JsonKey(defaultValue: []) List<MangaBasicModel> followingManga,
+      @JsonKey(defaultValue: []) List<ReadingHistoryModel> readingHistory,
+      @JsonKey(defaultValue: []) List<String> comments,
+      @JsonKey(defaultValue: []) List<RatingModel> ratings,
+      String createdAt,
+      String updatedAt});
 }
 
 /// @nodoc
@@ -219,8 +237,9 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? email = null,
-    Object? isVerified = null,
     Object? avatarUrl = freezed,
+    Object? role = null,
+    Object? isVerified = null,
     Object? followers = null,
     Object? following = null,
     Object? uploadedManga = null,
@@ -246,14 +265,18 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String,
-      isVerified: null == isVerified
-          ? _value.isVerified
-          : isVerified // ignore: cast_nullable_to_non_nullable
-              as bool,
       avatarUrl: freezed == avatarUrl
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String,
+      isVerified: null == isVerified
+          ? _value.isVerified
+          : isVerified // ignore: cast_nullable_to_non_nullable
+              as bool,
       followers: null == followers
           ? _value._followers
           : followers // ignore: cast_nullable_to_non_nullable
@@ -285,7 +308,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
       comments: null == comments
           ? _value._comments
           : comments // ignore: cast_nullable_to_non_nullable
-              as List<CommentModel>,
+              as List<String>,
       ratings: null == ratings
           ? _value._ratings
           : ratings // ignore: cast_nullable_to_non_nullable
@@ -293,11 +316,11 @@ class __$$UserModelImplCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
     ));
   }
 }
@@ -309,17 +332,25 @@ class _$UserModelImpl implements _UserModel {
       {@JsonKey(name: '_id') required this.id,
       required this.name,
       required this.email,
-      this.isVerified = false,
       this.avatarUrl,
+      @JsonKey(defaultValue: 'user') required this.role,
+      required this.isVerified,
+      @JsonKey(defaultValue: [])
       final List<UserBasicModel> followers = const [],
+      @JsonKey(defaultValue: [])
       final List<UserBasicModel> following = const [],
+      @JsonKey(defaultValue: [])
       final List<MangaBasicModel> uploadedManga = const [],
+      @JsonKey(defaultValue: [])
       final List<MangaBasicModel> favoritesManga = const [],
+      @JsonKey(defaultValue: [])
       final List<MangaBasicModel> dislikedManga = const [],
+      @JsonKey(defaultValue: [])
       final List<MangaBasicModel> followingManga = const [],
+      @JsonKey(defaultValue: [])
       final List<ReadingHistoryModel> readingHistory = const [],
-      final List<CommentModel> comments = const [],
-      final List<RatingModel> ratings = const [],
+      @JsonKey(defaultValue: []) final List<String> comments = const [],
+      @JsonKey(defaultValue: []) final List<RatingModel> ratings = const [],
       required this.createdAt,
       required this.updatedAt})
       : _followers = followers,
@@ -343,13 +374,15 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String email;
   @override
-  @JsonKey()
-  final bool isVerified;
-  @override
   final String? avatarUrl;
+  @override
+  @JsonKey(defaultValue: 'user')
+  final String role;
+  @override
+  final bool isVerified;
   final List<UserBasicModel> _followers;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: [])
   List<UserBasicModel> get followers {
     if (_followers is EqualUnmodifiableListView) return _followers;
     // ignore: implicit_dynamic_type
@@ -358,7 +391,7 @@ class _$UserModelImpl implements _UserModel {
 
   final List<UserBasicModel> _following;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: [])
   List<UserBasicModel> get following {
     if (_following is EqualUnmodifiableListView) return _following;
     // ignore: implicit_dynamic_type
@@ -367,7 +400,7 @@ class _$UserModelImpl implements _UserModel {
 
   final List<MangaBasicModel> _uploadedManga;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get uploadedManga {
     if (_uploadedManga is EqualUnmodifiableListView) return _uploadedManga;
     // ignore: implicit_dynamic_type
@@ -376,7 +409,7 @@ class _$UserModelImpl implements _UserModel {
 
   final List<MangaBasicModel> _favoritesManga;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get favoritesManga {
     if (_favoritesManga is EqualUnmodifiableListView) return _favoritesManga;
     // ignore: implicit_dynamic_type
@@ -385,7 +418,7 @@ class _$UserModelImpl implements _UserModel {
 
   final List<MangaBasicModel> _dislikedManga;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get dislikedManga {
     if (_dislikedManga is EqualUnmodifiableListView) return _dislikedManga;
     // ignore: implicit_dynamic_type
@@ -394,7 +427,7 @@ class _$UserModelImpl implements _UserModel {
 
   final List<MangaBasicModel> _followingManga;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get followingManga {
     if (_followingManga is EqualUnmodifiableListView) return _followingManga;
     // ignore: implicit_dynamic_type
@@ -403,17 +436,17 @@ class _$UserModelImpl implements _UserModel {
 
   final List<ReadingHistoryModel> _readingHistory;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: [])
   List<ReadingHistoryModel> get readingHistory {
     if (_readingHistory is EqualUnmodifiableListView) return _readingHistory;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_readingHistory);
   }
 
-  final List<CommentModel> _comments;
+  final List<String> _comments;
   @override
-  @JsonKey()
-  List<CommentModel> get comments {
+  @JsonKey(defaultValue: [])
+  List<String> get comments {
     if (_comments is EqualUnmodifiableListView) return _comments;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_comments);
@@ -421,7 +454,7 @@ class _$UserModelImpl implements _UserModel {
 
   final List<RatingModel> _ratings;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: [])
   List<RatingModel> get ratings {
     if (_ratings is EqualUnmodifiableListView) return _ratings;
     // ignore: implicit_dynamic_type
@@ -429,13 +462,13 @@ class _$UserModelImpl implements _UserModel {
   }
 
   @override
-  final DateTime createdAt;
+  final String createdAt;
   @override
-  final DateTime updatedAt;
+  final String updatedAt;
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, email: $email, isVerified: $isVerified, avatarUrl: $avatarUrl, followers: $followers, following: $following, uploadedManga: $uploadedManga, favoritesManga: $favoritesManga, dislikedManga: $dislikedManga, followingManga: $followingManga, readingHistory: $readingHistory, comments: $comments, ratings: $ratings, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserModel(id: $id, name: $name, email: $email, avatarUrl: $avatarUrl, role: $role, isVerified: $isVerified, followers: $followers, following: $following, uploadedManga: $uploadedManga, favoritesManga: $favoritesManga, dislikedManga: $dislikedManga, followingManga: $followingManga, readingHistory: $readingHistory, comments: $comments, ratings: $ratings, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -446,10 +479,11 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.isVerified, isVerified) ||
-                other.isVerified == isVerified) &&
             (identical(other.avatarUrl, avatarUrl) ||
                 other.avatarUrl == avatarUrl) &&
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.isVerified, isVerified) ||
+                other.isVerified == isVerified) &&
             const DeepCollectionEquality()
                 .equals(other._followers, _followers) &&
             const DeepCollectionEquality()
@@ -479,8 +513,9 @@ class _$UserModelImpl implements _UserModel {
       id,
       name,
       email,
-      isVerified,
       avatarUrl,
+      role,
+      isVerified,
       const DeepCollectionEquality().hash(_followers),
       const DeepCollectionEquality().hash(_following),
       const DeepCollectionEquality().hash(_uploadedManga),
@@ -514,19 +549,20 @@ abstract class _UserModel implements UserModel {
       {@JsonKey(name: '_id') required final String id,
       required final String name,
       required final String email,
-      final bool isVerified,
       final String? avatarUrl,
-      final List<UserBasicModel> followers,
-      final List<UserBasicModel> following,
-      final List<MangaBasicModel> uploadedManga,
-      final List<MangaBasicModel> favoritesManga,
-      final List<MangaBasicModel> dislikedManga,
-      final List<MangaBasicModel> followingManga,
-      final List<ReadingHistoryModel> readingHistory,
-      final List<CommentModel> comments,
-      final List<RatingModel> ratings,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$UserModelImpl;
+      @JsonKey(defaultValue: 'user') required final String role,
+      required final bool isVerified,
+      @JsonKey(defaultValue: []) final List<UserBasicModel> followers,
+      @JsonKey(defaultValue: []) final List<UserBasicModel> following,
+      @JsonKey(defaultValue: []) final List<MangaBasicModel> uploadedManga,
+      @JsonKey(defaultValue: []) final List<MangaBasicModel> favoritesManga,
+      @JsonKey(defaultValue: []) final List<MangaBasicModel> dislikedManga,
+      @JsonKey(defaultValue: []) final List<MangaBasicModel> followingManga,
+      @JsonKey(defaultValue: []) final List<ReadingHistoryModel> readingHistory,
+      @JsonKey(defaultValue: []) final List<String> comments,
+      @JsonKey(defaultValue: []) final List<RatingModel> ratings,
+      required final String createdAt,
+      required final String updatedAt}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -539,31 +575,43 @@ abstract class _UserModel implements UserModel {
   @override
   String get email;
   @override
-  bool get isVerified;
-  @override
   String? get avatarUrl;
   @override
+  @JsonKey(defaultValue: 'user')
+  String get role;
+  @override
+  bool get isVerified;
+  @override
+  @JsonKey(defaultValue: [])
   List<UserBasicModel> get followers;
   @override
+  @JsonKey(defaultValue: [])
   List<UserBasicModel> get following;
   @override
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get uploadedManga;
   @override
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get favoritesManga;
   @override
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get dislikedManga;
   @override
+  @JsonKey(defaultValue: [])
   List<MangaBasicModel> get followingManga;
   @override
+  @JsonKey(defaultValue: [])
   List<ReadingHistoryModel> get readingHistory;
   @override
-  List<CommentModel> get comments;
+  @JsonKey(defaultValue: [])
+  List<String> get comments;
   @override
+  @JsonKey(defaultValue: [])
   List<RatingModel> get ratings;
   @override
-  DateTime get createdAt;
+  String get createdAt;
   @override
-  DateTime get updatedAt;
+  String get updatedAt;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -582,7 +630,7 @@ mixin _$UserBasicModel {
   @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
   String? get avatarUrl => throw _privateConstructorUsedError;
 
   /// Serializes this UserBasicModel to a JSON map.
@@ -604,7 +652,7 @@ abstract class $UserBasicModelCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: '_id') String id,
       String name,
-      String email,
+      String? email,
       String? avatarUrl});
 }
 
@@ -625,7 +673,7 @@ class _$UserBasicModelCopyWithImpl<$Res, $Val extends UserBasicModel>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? email = null,
+    Object? email = freezed,
     Object? avatarUrl = freezed,
   }) {
     return _then(_value.copyWith(
@@ -637,10 +685,10 @@ class _$UserBasicModelCopyWithImpl<$Res, $Val extends UserBasicModel>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       avatarUrl: freezed == avatarUrl
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
@@ -660,7 +708,7 @@ abstract class _$$UserBasicModelImplCopyWith<$Res>
   $Res call(
       {@JsonKey(name: '_id') String id,
       String name,
-      String email,
+      String? email,
       String? avatarUrl});
 }
 
@@ -679,7 +727,7 @@ class __$$UserBasicModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? email = null,
+    Object? email = freezed,
     Object? avatarUrl = freezed,
   }) {
     return _then(_$UserBasicModelImpl(
@@ -691,10 +739,10 @@ class __$$UserBasicModelImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       avatarUrl: freezed == avatarUrl
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
@@ -709,7 +757,7 @@ class _$UserBasicModelImpl implements _UserBasicModel {
   _$UserBasicModelImpl(
       {@JsonKey(name: '_id') required this.id,
       required this.name,
-      required this.email,
+      this.email,
       this.avatarUrl});
 
   factory _$UserBasicModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -721,7 +769,7 @@ class _$UserBasicModelImpl implements _UserBasicModel {
   @override
   final String name;
   @override
-  final String email;
+  final String? email;
   @override
   final String? avatarUrl;
 
@@ -767,7 +815,7 @@ abstract class _UserBasicModel implements UserBasicModel {
   factory _UserBasicModel(
       {@JsonKey(name: '_id') required final String id,
       required final String name,
-      required final String email,
+      final String? email,
       final String? avatarUrl}) = _$UserBasicModelImpl;
 
   factory _UserBasicModel.fromJson(Map<String, dynamic> json) =
@@ -779,7 +827,7 @@ abstract class _UserBasicModel implements UserBasicModel {
   @override
   String get name;
   @override
-  String get email;
+  String? get email;
   @override
   String? get avatarUrl;
 
@@ -1015,9 +1063,12 @@ ReadingHistoryModel _$ReadingHistoryModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ReadingHistoryModel {
+  @JsonKey(name: '_id')
+  String get id => throw _privateConstructorUsedError;
   MangaBasicModel get manga => throw _privateConstructorUsedError;
-  ChapterBasicModel get chapter => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
+  List<ChapterReadModel> get chapters => throw _privateConstructorUsedError;
+  String get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this ReadingHistoryModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1036,10 +1087,12 @@ abstract class $ReadingHistoryModelCopyWith<$Res> {
       _$ReadingHistoryModelCopyWithImpl<$Res, ReadingHistoryModel>;
   @useResult
   $Res call(
-      {MangaBasicModel manga, ChapterBasicModel chapter, DateTime updatedAt});
+      {@JsonKey(name: '_id') String id,
+      MangaBasicModel manga,
+      @JsonKey(defaultValue: []) List<ChapterReadModel> chapters,
+      String updatedAt});
 
   $MangaBasicModelCopyWith<$Res> get manga;
-  $ChapterBasicModelCopyWith<$Res> get chapter;
 }
 
 /// @nodoc
@@ -1057,23 +1110,28 @@ class _$ReadingHistoryModelCopyWithImpl<$Res, $Val extends ReadingHistoryModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? manga = null,
-    Object? chapter = null,
+    Object? chapters = null,
     Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       manga: null == manga
           ? _value.manga
           : manga // ignore: cast_nullable_to_non_nullable
               as MangaBasicModel,
-      chapter: null == chapter
-          ? _value.chapter
-          : chapter // ignore: cast_nullable_to_non_nullable
-              as ChapterBasicModel,
+      chapters: null == chapters
+          ? _value.chapters
+          : chapters // ignore: cast_nullable_to_non_nullable
+              as List<ChapterReadModel>,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
     ) as $Val);
   }
 
@@ -1084,16 +1142,6 @@ class _$ReadingHistoryModelCopyWithImpl<$Res, $Val extends ReadingHistoryModel>
   $MangaBasicModelCopyWith<$Res> get manga {
     return $MangaBasicModelCopyWith<$Res>(_value.manga, (value) {
       return _then(_value.copyWith(manga: value) as $Val);
-    });
-  }
-
-  /// Create a copy of ReadingHistoryModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $ChapterBasicModelCopyWith<$Res> get chapter {
-    return $ChapterBasicModelCopyWith<$Res>(_value.chapter, (value) {
-      return _then(_value.copyWith(chapter: value) as $Val);
     });
   }
 }
@@ -1107,12 +1155,13 @@ abstract class _$$ReadingHistoryModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {MangaBasicModel manga, ChapterBasicModel chapter, DateTime updatedAt});
+      {@JsonKey(name: '_id') String id,
+      MangaBasicModel manga,
+      @JsonKey(defaultValue: []) List<ChapterReadModel> chapters,
+      String updatedAt});
 
   @override
   $MangaBasicModelCopyWith<$Res> get manga;
-  @override
-  $ChapterBasicModelCopyWith<$Res> get chapter;
 }
 
 /// @nodoc
@@ -1128,23 +1177,28 @@ class __$$ReadingHistoryModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? manga = null,
-    Object? chapter = null,
+    Object? chapters = null,
     Object? updatedAt = null,
   }) {
     return _then(_$ReadingHistoryModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       manga: null == manga
           ? _value.manga
           : manga // ignore: cast_nullable_to_non_nullable
               as MangaBasicModel,
-      chapter: null == chapter
-          ? _value.chapter
-          : chapter // ignore: cast_nullable_to_non_nullable
-              as ChapterBasicModel,
+      chapters: null == chapters
+          ? _value._chapters
+          : chapters // ignore: cast_nullable_to_non_nullable
+              as List<ChapterReadModel>,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
     ));
   }
 }
@@ -1153,21 +1207,36 @@ class __$$ReadingHistoryModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ReadingHistoryModelImpl implements _ReadingHistoryModel {
   _$ReadingHistoryModelImpl(
-      {required this.manga, required this.chapter, required this.updatedAt});
+      {@JsonKey(name: '_id') required this.id,
+      required this.manga,
+      @JsonKey(defaultValue: [])
+      final List<ChapterReadModel> chapters = const [],
+      required this.updatedAt})
+      : _chapters = chapters;
 
   factory _$ReadingHistoryModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReadingHistoryModelImplFromJson(json);
 
   @override
+  @JsonKey(name: '_id')
+  final String id;
+  @override
   final MangaBasicModel manga;
+  final List<ChapterReadModel> _chapters;
   @override
-  final ChapterBasicModel chapter;
+  @JsonKey(defaultValue: [])
+  List<ChapterReadModel> get chapters {
+    if (_chapters is EqualUnmodifiableListView) return _chapters;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_chapters);
+  }
+
   @override
-  final DateTime updatedAt;
+  final String updatedAt;
 
   @override
   String toString() {
-    return 'ReadingHistoryModel(manga: $manga, chapter: $chapter, updatedAt: $updatedAt)';
+    return 'ReadingHistoryModel(id: $id, manga: $manga, chapters: $chapters, updatedAt: $updatedAt)';
   }
 
   @override
@@ -1175,15 +1244,17 @@ class _$ReadingHistoryModelImpl implements _ReadingHistoryModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ReadingHistoryModelImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.manga, manga) || other.manga == manga) &&
-            (identical(other.chapter, chapter) || other.chapter == chapter) &&
+            const DeepCollectionEquality().equals(other._chapters, _chapters) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, manga, chapter, updatedAt);
+  int get hashCode => Object.hash(runtimeType, id, manga,
+      const DeepCollectionEquality().hash(_chapters), updatedAt);
 
   /// Create a copy of ReadingHistoryModel
   /// with the given fields replaced by the non-null parameter values.
@@ -1204,25 +1275,437 @@ class _$ReadingHistoryModelImpl implements _ReadingHistoryModel {
 
 abstract class _ReadingHistoryModel implements ReadingHistoryModel {
   factory _ReadingHistoryModel(
-      {required final MangaBasicModel manga,
-      required final ChapterBasicModel chapter,
-      required final DateTime updatedAt}) = _$ReadingHistoryModelImpl;
+      {@JsonKey(name: '_id') required final String id,
+      required final MangaBasicModel manga,
+      @JsonKey(defaultValue: []) final List<ChapterReadModel> chapters,
+      required final String updatedAt}) = _$ReadingHistoryModelImpl;
 
   factory _ReadingHistoryModel.fromJson(Map<String, dynamic> json) =
       _$ReadingHistoryModelImpl.fromJson;
 
   @override
+  @JsonKey(name: '_id')
+  String get id;
+  @override
   MangaBasicModel get manga;
   @override
-  ChapterBasicModel get chapter;
+  @JsonKey(defaultValue: [])
+  List<ChapterReadModel> get chapters;
   @override
-  DateTime get updatedAt;
+  String get updatedAt;
 
   /// Create a copy of ReadingHistoryModel
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ReadingHistoryModelImplCopyWith<_$ReadingHistoryModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ChapterReadModel _$ChapterReadModelFromJson(Map<String, dynamic> json) {
+  return _ChapterReadModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ChapterReadModel {
+  @JsonKey(name: '_id')
+  String get id => throw _privateConstructorUsedError;
+  ChapterInfoModel get chapter => throw _privateConstructorUsedError;
+  String get readAt => throw _privateConstructorUsedError;
+
+  /// Serializes this ChapterReadModel to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ChapterReadModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ChapterReadModelCopyWith<ChapterReadModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ChapterReadModelCopyWith<$Res> {
+  factory $ChapterReadModelCopyWith(
+          ChapterReadModel value, $Res Function(ChapterReadModel) then) =
+      _$ChapterReadModelCopyWithImpl<$Res, ChapterReadModel>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String id,
+      ChapterInfoModel chapter,
+      String readAt});
+
+  $ChapterInfoModelCopyWith<$Res> get chapter;
+}
+
+/// @nodoc
+class _$ChapterReadModelCopyWithImpl<$Res, $Val extends ChapterReadModel>
+    implements $ChapterReadModelCopyWith<$Res> {
+  _$ChapterReadModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ChapterReadModel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? chapter = null,
+    Object? readAt = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      chapter: null == chapter
+          ? _value.chapter
+          : chapter // ignore: cast_nullable_to_non_nullable
+              as ChapterInfoModel,
+      readAt: null == readAt
+          ? _value.readAt
+          : readAt // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+
+  /// Create a copy of ChapterReadModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChapterInfoModelCopyWith<$Res> get chapter {
+    return $ChapterInfoModelCopyWith<$Res>(_value.chapter, (value) {
+      return _then(_value.copyWith(chapter: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$ChapterReadModelImplCopyWith<$Res>
+    implements $ChapterReadModelCopyWith<$Res> {
+  factory _$$ChapterReadModelImplCopyWith(_$ChapterReadModelImpl value,
+          $Res Function(_$ChapterReadModelImpl) then) =
+      __$$ChapterReadModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String id,
+      ChapterInfoModel chapter,
+      String readAt});
+
+  @override
+  $ChapterInfoModelCopyWith<$Res> get chapter;
+}
+
+/// @nodoc
+class __$$ChapterReadModelImplCopyWithImpl<$Res>
+    extends _$ChapterReadModelCopyWithImpl<$Res, _$ChapterReadModelImpl>
+    implements _$$ChapterReadModelImplCopyWith<$Res> {
+  __$$ChapterReadModelImplCopyWithImpl(_$ChapterReadModelImpl _value,
+      $Res Function(_$ChapterReadModelImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChapterReadModel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? chapter = null,
+    Object? readAt = null,
+  }) {
+    return _then(_$ChapterReadModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      chapter: null == chapter
+          ? _value.chapter
+          : chapter // ignore: cast_nullable_to_non_nullable
+              as ChapterInfoModel,
+      readAt: null == readAt
+          ? _value.readAt
+          : readAt // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ChapterReadModelImpl implements _ChapterReadModel {
+  _$ChapterReadModelImpl(
+      {@JsonKey(name: '_id') required this.id,
+      required this.chapter,
+      required this.readAt});
+
+  factory _$ChapterReadModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ChapterReadModelImplFromJson(json);
+
+  @override
+  @JsonKey(name: '_id')
+  final String id;
+  @override
+  final ChapterInfoModel chapter;
+  @override
+  final String readAt;
+
+  @override
+  String toString() {
+    return 'ChapterReadModel(id: $id, chapter: $chapter, readAt: $readAt)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChapterReadModelImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.chapter, chapter) || other.chapter == chapter) &&
+            (identical(other.readAt, readAt) || other.readAt == readAt));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, chapter, readAt);
+
+  /// Create a copy of ChapterReadModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ChapterReadModelImplCopyWith<_$ChapterReadModelImpl> get copyWith =>
+      __$$ChapterReadModelImplCopyWithImpl<_$ChapterReadModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ChapterReadModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ChapterReadModel implements ChapterReadModel {
+  factory _ChapterReadModel(
+      {@JsonKey(name: '_id') required final String id,
+      required final ChapterInfoModel chapter,
+      required final String readAt}) = _$ChapterReadModelImpl;
+
+  factory _ChapterReadModel.fromJson(Map<String, dynamic> json) =
+      _$ChapterReadModelImpl.fromJson;
+
+  @override
+  @JsonKey(name: '_id')
+  String get id;
+  @override
+  ChapterInfoModel get chapter;
+  @override
+  String get readAt;
+
+  /// Create a copy of ChapterReadModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ChapterReadModelImplCopyWith<_$ChapterReadModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ChapterInfoModel _$ChapterInfoModelFromJson(Map<String, dynamic> json) {
+  return _ChapterInfoModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ChapterInfoModel {
+  @JsonKey(name: '_id')
+  String get id => throw _privateConstructorUsedError;
+  String get chapterName => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
+
+  /// Serializes this ChapterInfoModel to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ChapterInfoModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ChapterInfoModelCopyWith<ChapterInfoModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ChapterInfoModelCopyWith<$Res> {
+  factory $ChapterInfoModelCopyWith(
+          ChapterInfoModel value, $Res Function(ChapterInfoModel) then) =
+      _$ChapterInfoModelCopyWithImpl<$Res, ChapterInfoModel>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String id, String chapterName, String createdAt});
+}
+
+/// @nodoc
+class _$ChapterInfoModelCopyWithImpl<$Res, $Val extends ChapterInfoModel>
+    implements $ChapterInfoModelCopyWith<$Res> {
+  _$ChapterInfoModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ChapterInfoModel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? chapterName = null,
+    Object? createdAt = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      chapterName: null == chapterName
+          ? _value.chapterName
+          : chapterName // ignore: cast_nullable_to_non_nullable
+              as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ChapterInfoModelImplCopyWith<$Res>
+    implements $ChapterInfoModelCopyWith<$Res> {
+  factory _$$ChapterInfoModelImplCopyWith(_$ChapterInfoModelImpl value,
+          $Res Function(_$ChapterInfoModelImpl) then) =
+      __$$ChapterInfoModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: '_id') String id, String chapterName, String createdAt});
+}
+
+/// @nodoc
+class __$$ChapterInfoModelImplCopyWithImpl<$Res>
+    extends _$ChapterInfoModelCopyWithImpl<$Res, _$ChapterInfoModelImpl>
+    implements _$$ChapterInfoModelImplCopyWith<$Res> {
+  __$$ChapterInfoModelImplCopyWithImpl(_$ChapterInfoModelImpl _value,
+      $Res Function(_$ChapterInfoModelImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChapterInfoModel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? chapterName = null,
+    Object? createdAt = null,
+  }) {
+    return _then(_$ChapterInfoModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      chapterName: null == chapterName
+          ? _value.chapterName
+          : chapterName // ignore: cast_nullable_to_non_nullable
+              as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ChapterInfoModelImpl implements _ChapterInfoModel {
+  _$ChapterInfoModelImpl(
+      {@JsonKey(name: '_id') required this.id,
+      required this.chapterName,
+      required this.createdAt});
+
+  factory _$ChapterInfoModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ChapterInfoModelImplFromJson(json);
+
+  @override
+  @JsonKey(name: '_id')
+  final String id;
+  @override
+  final String chapterName;
+  @override
+  final String createdAt;
+
+  @override
+  String toString() {
+    return 'ChapterInfoModel(id: $id, chapterName: $chapterName, createdAt: $createdAt)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChapterInfoModelImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.chapterName, chapterName) ||
+                other.chapterName == chapterName) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, chapterName, createdAt);
+
+  /// Create a copy of ChapterInfoModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ChapterInfoModelImplCopyWith<_$ChapterInfoModelImpl> get copyWith =>
+      __$$ChapterInfoModelImplCopyWithImpl<_$ChapterInfoModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ChapterInfoModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ChapterInfoModel implements ChapterInfoModel {
+  factory _ChapterInfoModel(
+      {@JsonKey(name: '_id') required final String id,
+      required final String chapterName,
+      required final String createdAt}) = _$ChapterInfoModelImpl;
+
+  factory _ChapterInfoModel.fromJson(Map<String, dynamic> json) =
+      _$ChapterInfoModelImpl.fromJson;
+
+  @override
+  @JsonKey(name: '_id')
+  String get id;
+  @override
+  String get chapterName;
+  @override
+  String get createdAt;
+
+  /// Create a copy of ChapterInfoModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ChapterInfoModelImplCopyWith<_$ChapterInfoModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1459,12 +1942,12 @@ mixin _$CommentModel {
   String? get manga => throw _privateConstructorUsedError;
   String? get parentComment => throw _privateConstructorUsedError;
   String? get replyToUser => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<String> get replies => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
   List<MentionModel> get mentions => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
+  String get updatedAt => throw _privateConstructorUsedError;
   @JsonKey(name: '__v')
   int? get version => throw _privateConstructorUsedError;
 
@@ -1491,12 +1974,10 @@ abstract class $CommentModelCopyWith<$Res> {
       String? manga,
       String? parentComment,
       String? replyToUser,
-      List<String> replies,
-      List<MentionModel> mentions,
-      @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-      DateTime createdAt,
-      @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-      DateTime updatedAt,
+      @JsonKey(defaultValue: []) List<String> replies,
+      @JsonKey(defaultValue: []) List<MentionModel> mentions,
+      String createdAt,
+      String updatedAt,
       @JsonKey(name: '__v') int? version});
 }
 
@@ -1563,11 +2044,11 @@ class _$CommentModelCopyWithImpl<$Res, $Val extends CommentModel>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
@@ -1591,12 +2072,10 @@ abstract class _$$CommentModelImplCopyWith<$Res>
       String? manga,
       String? parentComment,
       String? replyToUser,
-      List<String> replies,
-      List<MentionModel> mentions,
-      @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-      DateTime createdAt,
-      @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-      DateTime updatedAt,
+      @JsonKey(defaultValue: []) List<String> replies,
+      @JsonKey(defaultValue: []) List<MentionModel> mentions,
+      String createdAt,
+      String updatedAt,
       @JsonKey(name: '__v') int? version});
 }
 
@@ -1661,11 +2140,11 @@ class __$$CommentModelImplCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       version: freezed == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
@@ -1684,11 +2163,9 @@ class _$CommentModelImpl implements _CommentModel {
       this.manga,
       this.parentComment,
       this.replyToUser,
-      final List<String> replies = const [],
-      final List<MentionModel> mentions = const [],
-      @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
+      @JsonKey(defaultValue: []) final List<String> replies = const [],
+      @JsonKey(defaultValue: []) final List<MentionModel> mentions = const [],
       required this.createdAt,
-      @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
       required this.updatedAt,
       @JsonKey(name: '__v') this.version})
       : _replies = replies,
@@ -1712,7 +2189,7 @@ class _$CommentModelImpl implements _CommentModel {
   final String? replyToUser;
   final List<String> _replies;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: [])
   List<String> get replies {
     if (_replies is EqualUnmodifiableListView) return _replies;
     // ignore: implicit_dynamic_type
@@ -1721,7 +2198,7 @@ class _$CommentModelImpl implements _CommentModel {
 
   final List<MentionModel> _mentions;
   @override
-  @JsonKey()
+  @JsonKey(defaultValue: [])
   List<MentionModel> get mentions {
     if (_mentions is EqualUnmodifiableListView) return _mentions;
     // ignore: implicit_dynamic_type
@@ -1729,11 +2206,9 @@ class _$CommentModelImpl implements _CommentModel {
   }
 
   @override
-  @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-  final DateTime createdAt;
+  final String createdAt;
   @override
-  @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-  final DateTime updatedAt;
+  final String updatedAt;
   @override
   @JsonKey(name: '__v')
   final int? version;
@@ -1805,12 +2280,10 @@ abstract class _CommentModel implements CommentModel {
       final String? manga,
       final String? parentComment,
       final String? replyToUser,
-      final List<String> replies,
-      final List<MentionModel> mentions,
-      @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-      required final DateTime createdAt,
-      @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-      required final DateTime updatedAt,
+      @JsonKey(defaultValue: []) final List<String> replies,
+      @JsonKey(defaultValue: []) final List<MentionModel> mentions,
+      required final String createdAt,
+      required final String updatedAt,
       @JsonKey(name: '__v') final int? version}) = _$CommentModelImpl;
 
   factory _CommentModel.fromJson(Map<String, dynamic> json) =
@@ -1830,15 +2303,15 @@ abstract class _CommentModel implements CommentModel {
   @override
   String? get replyToUser;
   @override
+  @JsonKey(defaultValue: [])
   List<String> get replies;
   @override
+  @JsonKey(defaultValue: [])
   List<MentionModel> get mentions;
   @override
-  @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-  DateTime get createdAt;
+  String get createdAt;
   @override
-  @JsonKey(fromJson: dateTimeFromJson, toJson: dateTimeToJson)
-  DateTime get updatedAt;
+  String get updatedAt;
   @override
   @JsonKey(name: '__v')
   int? get version;
@@ -2102,8 +2575,8 @@ mixin _$RatingModel {
   UserBasicModel get user => throw _privateConstructorUsedError;
   MangaBasicModel get manga => throw _privateConstructorUsedError;
   double get rating => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
+  String get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this RatingModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2126,8 +2599,8 @@ abstract class $RatingModelCopyWith<$Res> {
       UserBasicModel user,
       MangaBasicModel manga,
       double rating,
-      DateTime createdAt,
-      DateTime updatedAt});
+      String createdAt,
+      String updatedAt});
 
   $UserBasicModelCopyWith<$Res> get user;
   $MangaBasicModelCopyWith<$Res> get manga;
@@ -2175,11 +2648,11 @@ class _$RatingModelCopyWithImpl<$Res, $Val extends RatingModel>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
     ) as $Val);
   }
 
@@ -2217,8 +2690,8 @@ abstract class _$$RatingModelImplCopyWith<$Res>
       UserBasicModel user,
       MangaBasicModel manga,
       double rating,
-      DateTime createdAt,
-      DateTime updatedAt});
+      String createdAt,
+      String updatedAt});
 
   @override
   $UserBasicModelCopyWith<$Res> get user;
@@ -2266,11 +2739,11 @@ class __$$RatingModelImplCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
     ));
   }
 }
@@ -2299,9 +2772,9 @@ class _$RatingModelImpl implements _RatingModel {
   @override
   final double rating;
   @override
-  final DateTime createdAt;
+  final String createdAt;
   @override
-  final DateTime updatedAt;
+  final String updatedAt;
 
   @override
   String toString() {
@@ -2350,8 +2823,8 @@ abstract class _RatingModel implements RatingModel {
       required final UserBasicModel user,
       required final MangaBasicModel manga,
       required final double rating,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$RatingModelImpl;
+      required final String createdAt,
+      required final String updatedAt}) = _$RatingModelImpl;
 
   factory _RatingModel.fromJson(Map<String, dynamic> json) =
       _$RatingModelImpl.fromJson;
@@ -2366,9 +2839,9 @@ abstract class _RatingModel implements RatingModel {
   @override
   double get rating;
   @override
-  DateTime get createdAt;
+  String get createdAt;
   @override
-  DateTime get updatedAt;
+  String get updatedAt;
 
   /// Create a copy of RatingModel
   /// with the given fields replaced by the non-null parameter values.

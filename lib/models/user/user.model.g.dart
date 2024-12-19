@@ -11,47 +11,48 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String,
       name: json['name'] as String,
       email: json['email'] as String,
-      isVerified: json['isVerified'] as bool? ?? false,
       avatarUrl: json['avatarUrl'] as String?,
+      role: json['role'] as String? ?? 'user',
+      isVerified: json['isVerified'] as bool,
       followers: (json['followers'] as List<dynamic>?)
               ?.map((e) => UserBasicModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
+          [],
       following: (json['following'] as List<dynamic>?)
               ?.map((e) => UserBasicModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
+          [],
       uploadedManga: (json['uploadedManga'] as List<dynamic>?)
               ?.map((e) => MangaBasicModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
+          [],
       favoritesManga: (json['favoritesManga'] as List<dynamic>?)
               ?.map((e) => MangaBasicModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
+          [],
       dislikedManga: (json['dislikedManga'] as List<dynamic>?)
               ?.map((e) => MangaBasicModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
+          [],
       followingManga: (json['followingManga'] as List<dynamic>?)
               ?.map((e) => MangaBasicModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
+          [],
       readingHistory: (json['readingHistory'] as List<dynamic>?)
               ?.map((e) =>
                   ReadingHistoryModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
+          [],
       comments: (json['comments'] as List<dynamic>?)
-              ?.map((e) => CommentModel.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => e as String)
               .toList() ??
-          const [],
+          [],
       ratings: (json['ratings'] as List<dynamic>?)
               ?.map((e) => RatingModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+          [],
+      createdAt: json['createdAt'] as String,
+      updatedAt: json['updatedAt'] as String,
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
@@ -59,8 +60,9 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       '_id': instance.id,
       'name': instance.name,
       'email': instance.email,
-      'isVerified': instance.isVerified,
       'avatarUrl': instance.avatarUrl,
+      'role': instance.role,
+      'isVerified': instance.isVerified,
       'followers': instance.followers,
       'following': instance.following,
       'uploadedManga': instance.uploadedManga,
@@ -70,15 +72,15 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'readingHistory': instance.readingHistory,
       'comments': instance.comments,
       'ratings': instance.ratings,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
     };
 
 _$UserBasicModelImpl _$$UserBasicModelImplFromJson(Map<String, dynamic> json) =>
     _$UserBasicModelImpl(
       id: json['_id'] as String,
       name: json['name'] as String,
-      email: json['email'] as String,
+      email: json['email'] as String?,
       avatarUrl: json['avatarUrl'] as String?,
     );
 
@@ -112,18 +114,55 @@ Map<String, dynamic> _$$MangaBasicModelImplToJson(
 _$ReadingHistoryModelImpl _$$ReadingHistoryModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ReadingHistoryModelImpl(
+      id: json['_id'] as String,
       manga: MangaBasicModel.fromJson(json['manga'] as Map<String, dynamic>),
-      chapter:
-          ChapterBasicModel.fromJson(json['chapter'] as Map<String, dynamic>),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      chapters: (json['chapters'] as List<dynamic>?)
+              ?.map((e) => ChapterReadModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      updatedAt: json['updatedAt'] as String,
     );
 
 Map<String, dynamic> _$$ReadingHistoryModelImplToJson(
         _$ReadingHistoryModelImpl instance) =>
     <String, dynamic>{
+      '_id': instance.id,
       'manga': instance.manga,
+      'chapters': instance.chapters,
+      'updatedAt': instance.updatedAt,
+    };
+
+_$ChapterReadModelImpl _$$ChapterReadModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ChapterReadModelImpl(
+      id: json['_id'] as String,
+      chapter:
+          ChapterInfoModel.fromJson(json['chapter'] as Map<String, dynamic>),
+      readAt: json['readAt'] as String,
+    );
+
+Map<String, dynamic> _$$ChapterReadModelImplToJson(
+        _$ChapterReadModelImpl instance) =>
+    <String, dynamic>{
+      '_id': instance.id,
       'chapter': instance.chapter,
-      'updatedAt': instance.updatedAt.toIso8601String(),
+      'readAt': instance.readAt,
+    };
+
+_$ChapterInfoModelImpl _$$ChapterInfoModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ChapterInfoModelImpl(
+      id: json['_id'] as String,
+      chapterName: json['chapterName'] as String,
+      createdAt: json['createdAt'] as String,
+    );
+
+Map<String, dynamic> _$$ChapterInfoModelImplToJson(
+        _$ChapterInfoModelImpl instance) =>
+    <String, dynamic>{
+      '_id': instance.id,
+      'chapterName': instance.chapterName,
+      'createdAt': instance.createdAt,
     };
 
 _$ChapterBasicModelImpl _$$ChapterBasicModelImplFromJson(
@@ -155,13 +194,13 @@ _$CommentModelImpl _$$CommentModelImplFromJson(Map<String, dynamic> json) =>
       replies: (json['replies'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [],
+          [],
       mentions: (json['mentions'] as List<dynamic>?)
               ?.map((e) => MentionModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
-          const [],
-      createdAt: dateTimeFromJson(json['createdAt']),
-      updatedAt: dateTimeFromJson(json['updatedAt']),
+          [],
+      createdAt: json['createdAt'] as String,
+      updatedAt: json['updatedAt'] as String,
       version: (json['__v'] as num?)?.toInt(),
     );
 
@@ -175,8 +214,8 @@ Map<String, dynamic> _$$CommentModelImplToJson(_$CommentModelImpl instance) =>
       'replyToUser': instance.replyToUser,
       'replies': instance.replies,
       'mentions': instance.mentions,
-      'createdAt': dateTimeToJson(instance.createdAt),
-      'updatedAt': dateTimeToJson(instance.updatedAt),
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
       '__v': instance.version,
     };
 
@@ -204,8 +243,8 @@ _$RatingModelImpl _$$RatingModelImplFromJson(Map<String, dynamic> json) =>
       user: UserBasicModel.fromJson(json['user'] as Map<String, dynamic>),
       manga: MangaBasicModel.fromJson(json['manga'] as Map<String, dynamic>),
       rating: (json['rating'] as num).toDouble(),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] as String,
+      updatedAt: json['updatedAt'] as String,
     );
 
 Map<String, dynamic> _$$RatingModelImplToJson(_$RatingModelImpl instance) =>
@@ -214,6 +253,6 @@ Map<String, dynamic> _$$RatingModelImplToJson(_$RatingModelImpl instance) =>
       'user': instance.user,
       'manga': instance.manga,
       'rating': instance.rating,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
     };

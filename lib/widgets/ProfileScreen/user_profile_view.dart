@@ -4,254 +4,241 @@ import 'package:webtoon_mobile/providers/auth/auth_state_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:webtoon_mobile/models/user/user.model.dart';
 
-class UserProfileView extends ConsumerWidget {
+class UserProfileView extends ConsumerStatefulWidget {
   const UserProfileView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<UserProfileView> createState() => _UserProfileViewState();
+}
+
+class _UserProfileViewState extends ConsumerState<UserProfileView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final user = ref.watch(authStateProvider).value!;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Avatar và thông tin cơ bản
-          Center(
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: user.avatarUrl != null
-                      ? NetworkImage(user.avatarUrl!)
-                      : null,
-                  child: user.avatarUrl == null
-                      ? const Icon(Icons.person, size: 50)
-                      : null,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  user.name,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                Text(
-                  user.email,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 8),
-                if (user.isVerified)
-                  const Chip(
-                    avatar: Icon(Icons.verified, color: Colors.blue, size: 20),
-                    label: Text('Đã xác thực'),
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Thống kê
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildStatItem('Người theo dõi', user.followers.length),
-              _buildStatItem('Đang theo dõi', user.following.length),
-              _buildStatItem('Truyện đã đăng', user.uploadedManga.length),
-            ],
-          ),
-          const SizedBox(height: 24),
-
-          // Danh sách truyện
-          if (user.uploadedManga.isNotEmpty) ...[
-            _buildSectionTitle('Truyện đã đăng'),
-            _buildMangaList(user.uploadedManga),
-          ],
-
-          if (user.favoritesManga.isNotEmpty) ...[
-            _buildSectionTitle('Truyện yêu thích'),
-            _buildMangaList(user.favoritesManga),
-          ],
-
-          if (user.followingManga.isNotEmpty) ...[
-            _buildSectionTitle('Truyện đang theo dõi'),
-            _buildMangaList(user.followingManga),
-          ],
-
-          // Lịch sử đọc
-          if (user.readingHistory.isNotEmpty) ...[
-            _buildSectionTitle('Lịch sử đọc'),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: user.readingHistory.length,
-              itemBuilder: (context, index) {
-                final history = user.readingHistory[index];
-                return ListTile(
-                  leading: history.manga.coverImg != null
-                      ? Image.network(
-                          history.manga.coverImg!,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(Icons.book),
-                  title: Text(history.manga.title),
-                  subtitle: Text(
-                    'Chapter ${history.chapter.number}${history.chapter.chapterTitle != null ? " - ${history.chapter.chapterTitle}" : ""}\n${_formatDate(history.updatedAt)}',
-                  ),
-                  isThreeLine: true,
-                );
-              },
-            ),
-          ],
-
-          // Bình luận
-          if (user.comments.isNotEmpty) ...[
-            _buildSectionTitle('Bình luận gần đây'),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: user.comments.length,
-              itemBuilder: (context, index) {
-                final comment = user.comments[index];
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(comment.content),
-                        const SizedBox(height: 4),
-                        Text(
-                          _formatDate(comment.createdAt),
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
-
-          // Đánh giá
-          if (user.ratings.isNotEmpty) ...[
-            _buildSectionTitle('Đánh giá gần đây'),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: user.ratings.length,
-              itemBuilder: (context, index) {
-                final rating = user.ratings[index];
-                return ListTile(
-                  leading: rating.manga.coverImg != null
-                      ? Image.network(
-                          rating.manga.coverImg!,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(Icons.book),
-                  title: Text(rating.manga.title),
-                  subtitle: Row(
-                    children: [
-                      ...List.generate(
-                        5,
-                        (index) => Icon(
-                          index < rating.rating.floor()
-                              ? Icons.star
-                              : Icons.star_border,
-                          size: 16,
-                          color: Colors.amber,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(_formatDate(rating.createdAt)),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
-
-          const SizedBox(height: 16),
-          Center(
-            child: Text(
-              'Tham gia từ: ${DateFormat('dd/MM/yyyy').format(user.createdAt)}',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatItem(String label, int value) {
-    return Column(
-      children: [
-        Text(
-          value.toString(),
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(label),
-      ],
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMangaList(List<MangaBasicModel> mangas) {
-    return SizedBox(
-      height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: mangas.length,
-        itemBuilder: (context, index) {
-          final manga = mangas[index];
-          return Card(
-            child: SizedBox(
-              width: 120,
-              child: Column(
+    return DefaultTabController(
+      length: 3,
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height -
+            200, // Trừ đi chiều cao của appbar và padding
+        child: Column(
+          children: [
+            // Header với avatar và thống kê
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
                 children: [
-                  if (manga.coverImg != null)
-                    Expanded(
-                      child: Image.network(
-                        manga.coverImg!,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      manga.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
+                  // Avatar
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundImage: user.avatarUrl != null
+                        ? NetworkImage(user.avatarUrl!)
+                        : null,
+                    child: user.avatarUrl == null
+                        ? const Icon(Icons.person, size: 40)
+                        : null,
+                  ),
+                  const SizedBox(width: 24),
+                  // Thống kê
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildStatColumn('Truyện', user.uploadedManga.length),
+                        _buildStatColumn(
+                            'Người theo dõi', user.followers.length),
+                        _buildStatColumn(
+                            'Đang theo dõi', user.following.length),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          );
-        },
+            const SizedBox(height: 16),
+
+            // Thông tin người dùng
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(user.email),
+                  if (user.isVerified)
+                    Row(
+                      children: const [
+                        Icon(Icons.verified, color: Colors.blue, size: 16),
+                        SizedBox(width: 4),
+                        Text(
+                          'Đã xác thực',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Tab Bar
+            TabBar(
+              controller: _tabController,
+              tabs: const [
+                Tab(icon: Icon(Icons.grid_on), text: 'Truyện'),
+                Tab(icon: Icon(Icons.history), text: 'Lịch sử'),
+                Tab(icon: Icon(Icons.favorite), text: 'Yêu thích'),
+              ],
+            ),
+
+            // Tab Bar View
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  // Tab Truyện đã đăng
+                  _buildMangaGrid(user.uploadedManga),
+
+                  // Tab Lịch sử đọc
+                  _buildReadingHistoryList(user.readingHistory),
+
+                  // Tab Truyện yêu thích
+                  _buildMangaGrid(user.favoritesManga),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  String _formatDate(DateTime date) {
+  Widget _buildStatColumn(String label, int count) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          count.toString(),
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMangaGrid(List<MangaBasicModel> mangas) {
+    if (mangas.isEmpty) {
+      return const Center(
+        child: Text('Chưa có truyện nào'),
+      );
+    }
+
+    return GridView.builder(
+      padding: const EdgeInsets.all(1),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 1,
+        crossAxisSpacing: 1,
+        mainAxisSpacing: 1,
+      ),
+      itemCount: mangas.length,
+      itemBuilder: (context, index) {
+        final manga = mangas[index];
+        return Container(
+          decoration: BoxDecoration(
+            image: manga.coverImg != null
+                ? DecorationImage(
+                    image: NetworkImage(manga.coverImg!),
+                    fit: BoxFit.cover,
+                  )
+                : null,
+            color: Colors.grey[300],
+          ),
+          child: manga.coverImg == null
+              ? Center(
+                  child: Text(
+                    manga.title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                )
+              : null,
+        );
+      },
+    );
+  }
+
+  Widget _buildReadingHistoryList(List<ReadingHistoryModel> history) {
+    if (history.isEmpty) {
+      return const Center(
+        child: Text('Chưa có lịch sử đọc'),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: history.length,
+      itemBuilder: (context, index) {
+        final item = history[index];
+        final lastChapter =
+            item.chapters.isNotEmpty ? item.chapters.last : null;
+        return ListTile(
+          leading: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              image: item.manga.coverImg != null
+                  ? DecorationImage(
+                      image: NetworkImage(item.manga.coverImg!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          title: Text(item.manga.title),
+          subtitle: Text(
+            lastChapter != null
+                ? '${lastChapter.chapter.chapterName}\n${_formatDate(lastChapter.readAt)}'
+                : _formatDate(item.updatedAt),
+          ),
+          isThreeLine: true,
+        );
+      },
+    );
+  }
+
+  String _formatDate(String dateString) {
+    final date = DateTime.parse(dateString);
     final now = DateTime.now();
     final difference = now.difference(date);
 
