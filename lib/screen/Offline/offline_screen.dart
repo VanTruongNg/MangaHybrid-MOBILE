@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class OfflineScreen extends StatelessWidget {
   const OfflineScreen({super.key});
@@ -8,6 +9,13 @@ class OfflineScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chế độ Offline'),
+        actions: [
+          TextButton.icon(
+            onPressed: () => context.push('/offline/library'),
+            icon: const Icon(Icons.library_books),
+            label: const Text('Thư viện'),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -27,6 +35,12 @@ class OfflineScreen extends StatelessWidget {
             const Text(
               'Chỉ có thể xem các nội dung đã tải',
               style: TextStyle(color: Colors.grey),
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton.icon(
+              onPressed: () => context.push('/offline/library'),
+              icon: const Icon(Icons.library_books),
+              label: const Text('Đi đến thư viện offline'),
             ),
           ],
         ),

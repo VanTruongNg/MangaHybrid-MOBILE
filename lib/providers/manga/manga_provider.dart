@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webtoon_mobile/models/manga/home/home.model.dart';
-import 'package:webtoon_mobile/models/manga/manga.model.dart';
 import 'package:webtoon_mobile/services/manga_service.dart';
 import 'package:webtoon_mobile/providers/dio_provider.dart';
 
@@ -10,13 +9,47 @@ final mangaServiceProvider = Provider<MangaService>((ref) {
 
 final homeDataProvider = FutureProvider<HomeResponse>((ref) async {
   final mangaService = ref.read(mangaServiceProvider);
-  return mangaService.getHomeData();
+  return mangaService.getMobileHomeData();
 });
 
-final mangaDetailProvider =
-    FutureProvider.family<Manga, String>((ref, id) async {
-  final mangaService = ref.read(mangaServiceProvider);
-  return mangaService.getMangaById(id);
+final dailyTopMangaProvider = Provider<List<MangaItem>>((ref) {
+  return ref.watch(homeDataProvider).when(
+        data: (home) => home.dailyTop,
+        loading: () => [],
+        error: (_, __) => [],
+      );
+});
+
+final weeklyTopMangaProvider = Provider<List<MangaItem>>((ref) {
+  return ref.watch(homeDataProvider).when(
+        data: (home) => home.weeklyTop,
+        loading: () => [],
+        error: (_, __) => [],
+      );
+});
+
+final recentUpdatedMangaProvider = Provider<List<MangaItem>>((ref) {
+  return ref.watch(homeDataProvider).when(
+        data: (home) => home.recentUpdated,
+        loading: () => [],
+        error: (_, __) => [],
+      );
+});
+
+final randomMangaProvider = Provider<List<MangaItem>>((ref) {
+  return ref.watch(homeDataProvider).when(
+        data: (home) => home.randomManga,
+        loading: () => [],
+        error: (_, __) => [],
+      );
+});
+
+final topAllTimeMangaProvider = Provider<List<MangaItem>>((ref) {
+  return ref.watch(homeDataProvider).when(
+        data: (home) => home.topAllTime,
+        loading: () => [],
+        error: (_, __) => [],
+      );
 });
 
 final refreshHomeDataProvider = FutureProvider<void>((ref) async {

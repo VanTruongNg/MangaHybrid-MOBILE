@@ -1,8 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:webtoon_mobile/models/manga/home/home.model.dart';
+import 'package:webtoon_mobile/providers/connectivity_provider.dart';
 import 'package:webtoon_mobile/providers/manga/manga_provider.dart';
+import 'package:webtoon_mobile/widgets/CustomAppbar.dart';
 import 'package:webtoon_mobile/widgets/HomeScreen/MangaCard.dart';
 import 'package:webtoon_mobile/widgets/HomeScreen/PopularManga.dart';
 
@@ -15,36 +17,79 @@ class MangaScreen extends ConsumerStatefulWidget {
 
 class _MangaScreenState extends ConsumerState<MangaScreen> {
   TimeFilter _selectedFilter = TimeFilter.today;
+  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(connectivityProvider, (previous, next) {
+      next.whenData((statusList) {
+        final wasOffline = previous?.value?.isEmpty ??
+            false ||
+                previous!.value!
+                    .every((status) => status == ConnectivityResult.none);
+
+        final isOnline = statusList.isNotEmpty &&
+            statusList.any((status) => status != ConnectivityResult.none);
+
+        if (wasOffline && isOnline) {
+          ref.refresh(homeDataProvider.future);
+        }
+      });
+    });
+
     final homeDataAsync = ref.watch(homeDataProvider);
 
     return Scaffold(
+      appBar: CustomAppBar(
+        title: 'Manga',
+      ),
       body: RefreshIndicator(
         onRefresh: () => ref.refresh(refreshHomeDataProvider.future),
         child: homeDataAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stack) {
             if (error.toString().contains('network_error')) {
-              return const SizedBox.shrink();
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.signal_wifi_off,
+                      size: 64,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Không có kết nối mạng',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Vui lòng kiểm tra kết nối và thử lại',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () => ref.refresh(homeDataProvider.future),
+                      child: const Text('Thử lại'),
+                    ),
+                  ],
+                ),
+              );
             }
             return Center(child: Text('Lỗi: $error'));
           },
           data: (homeData) => CustomScrollView(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
             slivers: [
-              const SliverAppBar(
-                title: Text('Manga'),
-                floating: true,
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  _buildPopularSection(homeData),
-                  _buildRecentUpdatesSection(homeData),
-                  _buildRandomSection(homeData),
-                  const SizedBox(height: 16),
-                ]),
-              ),
+              _buildPopularSection(homeData),
+              _buildRecentUpdatesSection(homeData),
+              _buildRandomSection(homeData),
+              const SliverPadding(padding: EdgeInsets.only(bottom: 16)),
             ],
           ),
         ),
@@ -52,82 +97,16 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
     );
   }
 
-  Widget _buildPopularSection(HomeResponse homeData) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            'Truyện nổi bật',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        _buildFilterToggle(),
-        _buildPopularMangaGrid(homeData),
-      ],
-    );
-  }
-
-  Widget _buildRecentUpdatesSection(HomeResponse homeData) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            'Mới cập nhật',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        _buildHorizontalMangaList(
-          homeData.recentUpdated,
-          (manga) => manga.latestUpdate != null
-              ? 'Cập nhật: ${_formatDate(manga.latestUpdate!)}'
-              : null,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRandomSection(HomeResponse homeData) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            'Có thể bạn thích',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        _buildHorizontalMangaList(
-          homeData.randomManga,
-          (manga) => '${_formatNumber(manga.view)} lượt xem',
-        ),
-      ],
-    );
-  }
-
   Widget _buildFilterToggle() {
     return Container(
-      height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      height: 40,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           _buildFilterButton(TimeFilter.today, 'Hôm nay'),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           _buildFilterButton(TimeFilter.week, 'Tuần này'),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           _buildFilterButton(TimeFilter.allTime, 'Tất cả'),
         ],
       ),
@@ -137,19 +116,90 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
   Widget _buildFilterButton(TimeFilter filter, String label) {
     final isSelected = _selectedFilter == filter;
     return Expanded(
-      child: TextButton(
-        onPressed: () => setState(() => _selectedFilter = filter),
-        style: TextButton.styleFrom(
-          backgroundColor: isSelected ? Theme.of(context).primaryColor : null,
-          foregroundColor: isSelected ? Colors.white : null,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: BorderSide(
-              color: isSelected ? Colors.transparent : Colors.grey,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        child: ElevatedButton(
+          onPressed: () => setState(() => _selectedFilter = filter),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.surface,
+            foregroundColor: isSelected
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.onSurface,
+            elevation: isSelected ? 2 : 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+              side: BorderSide(
+                color: isSelected
+                    ? Colors.transparent
+                    : Theme.of(context).colorScheme.outline,
+              ),
             ),
           ),
+          child: Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
         ),
-        child: Text(label),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+    );
+  }
+
+  Widget _buildPopularSection(HomeResponse homeData) {
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Truyện nổi bật'),
+          _buildFilterToggle(),
+          const SizedBox(height: 16),
+          _buildPopularMangaGrid(homeData),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecentUpdatesSection(HomeResponse homeData) {
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Mới cập nhật'),
+          _buildHorizontalMangaList(
+            homeData.recentUpdated,
+            (manga) => manga.latestUpdate != null
+                ? _formatDate(manga.latestUpdate!)
+                : null,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRandomSection(HomeResponse homeData) {
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Có thể bạn thích'),
+          _buildHorizontalMangaList(
+            homeData.randomManga,
+            (manga) => null,
+          ),
+        ],
       ),
     );
   }
@@ -161,42 +211,45 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
     switch (_selectedFilter) {
       case TimeFilter.today:
         mangas = List.from(homeData.dailyTop)
-          ..sort((a, b) => (b.viewToday ?? 0).compareTo(a.viewToday ?? 0));
+          ..sort((a, b) => (b.dailyView ?? 0).compareTo(a.dailyView ?? 0));
         extraInfoBuilder = (manga) =>
-            'Hôm nay: ${_formatNumber(manga.viewToday ?? 0)} lượt xem';
+            '${Icons.visibility} ${_formatNumber(manga.dailyView ?? 0)}';
         break;
       case TimeFilter.week:
         mangas = List.from(homeData.weeklyTop)
-          ..sort(
-              (a, b) => (b.viewThisWeek ?? 0).compareTo(a.viewThisWeek ?? 0));
+          ..sort((a, b) => (b.weeklyView ?? 0).compareTo(a.weeklyView ?? 0));
         extraInfoBuilder = (manga) =>
-            'Tuần này: ${_formatNumber(manga.viewThisWeek ?? 0)} lượt xem';
+            '${Icons.visibility} ${_formatNumber(manga.weeklyView ?? 0)}';
         break;
       case TimeFilter.allTime:
-        mangas = List.from(homeData.randomManga)
+        mangas = List.from(homeData.topAllTime)
           ..sort((a, b) => b.view.compareTo(a.view));
-        extraInfoBuilder = (manga) => '${_formatNumber(manga.view)} lượt xem';
+        extraInfoBuilder =
+            (manga) => '${Icons.visibility} ${_formatNumber(manga.view)}';
         break;
     }
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.7,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+    return SizedBox(
+      height: 320,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        physics: const BouncingScrollPhysics(),
+        itemCount: mangas.length,
+        itemBuilder: (context, index) {
+          final manga = mangas[index];
+          return Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: SizedBox(
+              width: 200,
+              child: PopularMangaCard(
+                manga: manga,
+                extraInfo: extraInfoBuilder(manga),
+              ),
+            ),
+          );
+        },
       ),
-      itemCount: mangas.length,
-      itemBuilder: (context, index) {
-        final manga = mangas[index];
-        return PopularMangaCard(
-          manga: manga,
-          extraInfo: extraInfoBuilder(manga),
-        );
-      },
     );
   }
 
@@ -209,14 +262,17 @@ class _MangaScreenState extends ConsumerState<MangaScreen> {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
+        physics: const BouncingScrollPhysics(),
         itemCount: mangas.length,
         itemBuilder: (context, index) {
           final manga = mangas[index];
+          String? extraInfo = extraInfoBuilder(manga);
+
           return Padding(
             padding: const EdgeInsets.only(right: 16),
             child: MangaCard(
               manga: manga,
-              extraInfo: extraInfoBuilder(manga),
+              extraInfo: extraInfo,
             ),
           );
         },

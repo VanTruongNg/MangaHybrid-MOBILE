@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:webtoon_mobile/providers/auth/auth_provider.dart';
+import 'package:webtoon_mobile/providers/auth/auth_state_provider.dart';
 import 'package:webtoon_mobile/providers/connectivity_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:webtoon_mobile/providers/websocket_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final Widget child;
@@ -18,6 +21,56 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _hasShownDialog = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref.read(connectivityControllerProvider);
+      
+      final isOnline = ref.read(isOnlineProvider);
+      if (isOnline) {
+        try {
+          await ref.read(authProvider.notifier).checkAuth();
+        } catch (error) {
+          if (mounted) {
+            _showLoginExpiredDialog();
+          }
+        }
+      }
+    });
+  }
+
+  void _showLoginExpiredDialog() {
+    if (!_hasShownDialog) {
+      _hasShownDialog = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          title: const Text('Phiên đăng nhập hết hạn'),
+          content: const Text('Vui lòng đăng nhập lại để tiếp tục sử dụng'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                context.pop();
+                _hasShownDialog = false;
+              },
+              child: const Text('Để sau'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                context.pop();
+                _hasShownDialog = false;
+                context.push('/login');
+              },
+              child: const Text('Đăng nhập'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   void _showOfflineDialog() {
     if (!_hasShownDialog) {
@@ -53,19 +106,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authStateProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, _) {
+          if (error.toString().contains('token_expired') && mounted) {
+            _showLoginExpiredDialog();
+          }
+        },
+      );
+    });
+
     ref.listen(connectivityProvider, (previous, next) {
       next.whenData((statusList) {
-        if (statusList.isEmpty ||
-            statusList.every((status) => status == ConnectivityResult.none)) {
-          _showOfflineDialog();
+        final isOnline = statusList.isNotEmpty &&
+            statusList.any((status) => status != ConnectivityResult.none);
+
+        if (isOnline) {
+          final authState = ref.read(authStateProvider);
+          if (authState.hasValue && authState.value != null) {
+            ref.read(socketControllerProvider.notifier).connect();
+          }
         } else {
-          _hasShownDialog = false;
+          ref.read(socketControllerProvider.notifier).disconnect();
+          _showOfflineDialog();
         }
       });
     });
 
     return Scaffold(
-      body: widget.child, // Sử dụng widget.child thay vì child
+      body: widget.child,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _calculateSelectedIndex(context),
         onDestinationSelected: (index) => _onItemTapped(index, context),

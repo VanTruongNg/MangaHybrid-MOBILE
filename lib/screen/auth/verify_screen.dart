@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:webtoon_mobile/providers/auth/auth_provider.dart';
+import 'package:webtoon_mobile/providers/auth/auth_state_provider.dart';
 
 class VerifyEmailScreen extends ConsumerStatefulWidget {
   final String email;
@@ -30,7 +31,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
 
       if (!mounted) return;
 
-      final authState = ref.read(authProvider);
+      final authState = ref.read(authStateProvider);
 
       authState.when(
         data: (_) {

@@ -8,11 +8,16 @@ import 'package:webtoon_mobile/screen/Auth/verify_screen.dart';
 import 'package:webtoon_mobile/screen/chat_screen.dart';
 import 'package:webtoon_mobile/screen/home_screen.dart';
 import 'package:webtoon_mobile/screen/MangaScreen/manga_screen.dart';
+import 'package:webtoon_mobile/screen/offline/offline_library_screen.dart';
 import 'package:webtoon_mobile/screen/profile_screen.dart';
 import 'package:webtoon_mobile/screen/search_screen.dart';
 import 'package:webtoon_mobile/screen/Auth/forgot_password_screen.dart';
 import 'package:webtoon_mobile/screen/Auth/signup_screen.dart';
-import 'package:webtoon_mobile/screen/offline_screen.dart';
+import 'package:webtoon_mobile/screen/offline/offline_screen.dart';
+import 'package:webtoon_mobile/screen/Offline/offline_manga_detail_screen.dart';
+import 'package:webtoon_mobile/screen/Offline/offline_chapter_screen.dart';
+import 'package:webtoon_mobile/screen/user/public_profile_screen.dart';
+import 'package:webtoon_mobile/screen/chat/public_chat_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey =
@@ -45,23 +50,53 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/profile',
             builder: (context, state) => const ProfileScreen(),
           ),
+        ],
+      ),
+      GoRoute(
+        path: '/chat/public',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const PublicChatScreen(),
+      ),
+      GoRoute(
+        path: '/offline',
+        builder: (context, state) => const OfflineScreen(),
+        routes: [
           GoRoute(
-            path: '/offline',
-            builder: (context, state) => const OfflineScreen(),
+            path: 'library',
+            builder: (context, state) => const OfflineLibraryScreen(),
           ),
           GoRoute(
-            path: '/manga/:id',
-            builder: (context, state) => MangaDetailScreen(
-              mangaId: state.pathParameters['id']!,
-            ),
-          ),
-          GoRoute(
-            path: '/chapter/:chapterId',
-            builder: (context, state) => ChapterScreen(
-              chapterId: state.pathParameters['chapterId']!,
+            path: 'manga/:mangaId',
+            builder: (context, state) => OfflineMangaDetailScreen(
+              mangaId: state.pathParameters['mangaId']!,
             ),
           ),
         ],
+      ),
+      GoRoute(
+        path: '/manga/:id',
+        builder: (context, state) => MangaDetailScreen(
+          mangaId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: '/user/:id',
+        builder: (context, state) => PublicProfileScreen(
+          userId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
+        path: '/chapter/:chapterId',
+        builder: (context, state) => ChapterScreen(
+          chapterId: state.pathParameters['chapterId']!,
+        ),
+      ),
+      GoRoute(
+        path: '/offline/chapter/:mangaId/:chapterId',
+        builder: (context, state) => OfflineChapterScreen(
+          mangaId: state.pathParameters['mangaId']!,
+          chapterId: state.pathParameters['chapterId']!,
+        ),
       ),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,

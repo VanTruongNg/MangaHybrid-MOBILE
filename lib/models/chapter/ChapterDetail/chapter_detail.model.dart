@@ -19,7 +19,6 @@ class ChapterInfo with _$ChapterInfo {
   const factory ChapterInfo({
     @JsonKey(name: '_id') required String id,
     required int number,
-    required String chapterName,
     String? chapterTitle,
     String? chapterType,
     @Default(0) int views,
@@ -43,20 +42,29 @@ class MangaInfo with _$MangaInfo {
 @freezed
 class ChapterDetail with _$ChapterDetail {
   const factory ChapterDetail({
-    required ChapterInfo chapterInfo,
-    required MangaInfo mangaInfo,
+    @JsonKey(name: '_id') required String id,
+    required int number,
+    String? chapterTitle,
+    String? chapterType,
+    @Default(0) int views,
+    required MangaInfo manga,
     required List<String> pagesUrl,
     ChapterNavigation? navigation,
   }) = _ChapterDetail;
 
   factory ChapterDetail.fromJson(Map<String, dynamic> json) {
     return _ChapterDetail(
-      chapterInfo: ChapterInfo.fromJson(json['chapterInfo']),
-      mangaInfo: MangaInfo.fromJson(json['mangaInfo']),
-      pagesUrl: List<String>.from(json['pagesUrl']),
+      id: json['_id'] as String,
+      number: json['number'] as int,
+      chapterTitle: json['chapterTitle'] as String?,
+      chapterType: json['chapterType'] as String?,
+      views: (json['views'] as num?)?.toInt() ?? 0,
+      manga: MangaInfo.fromJson(json['manga'] as Map<String, dynamic>),
+      pagesUrl: List<String>.from(json['pagesUrl'] as List),
       navigation: json['navigation'] == null
           ? null
-          : ChapterNavigation.fromJson(json['navigation']),
+          : ChapterNavigation.fromJson(
+              json['navigation'] as Map<String, dynamic>),
     );
   }
 }

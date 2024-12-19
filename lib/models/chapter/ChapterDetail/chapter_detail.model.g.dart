@@ -28,7 +28,6 @@ _$ChapterInfoImpl _$$ChapterInfoImplFromJson(Map<String, dynamic> json) =>
     _$ChapterInfoImpl(
       id: json['_id'] as String,
       number: (json['number'] as num).toInt(),
-      chapterName: json['chapterName'] as String,
       chapterTitle: json['chapterTitle'] as String?,
       chapterType: json['chapterType'] as String?,
       views: (json['views'] as num?)?.toInt() ?? 0,
@@ -38,7 +37,6 @@ Map<String, dynamic> _$$ChapterInfoImplToJson(_$ChapterInfoImpl instance) =>
     <String, dynamic>{
       '_id': instance.id,
       'number': instance.number,
-      'chapterName': instance.chapterName,
       'chapterTitle': instance.chapterTitle,
       'chapterType': instance.chapterType,
       'views': instance.views,

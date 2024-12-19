@@ -54,7 +54,7 @@ class MangaCard extends StatelessWidget {
             Flexible(
               child: Text(
                 manga.title,
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
@@ -78,16 +78,29 @@ class MangaCard extends StatelessWidget {
             ),
             if (extraInfo != null) ...[
               const SizedBox(height: 4),
-              Flexible(
-                child: Text(
-                  extraInfo!,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 12,
+              extraInfo!.contains('${Icons.visibility}') 
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.visibility, size: 16),
+                      const SizedBox(width: 4),
+                      Text(
+                        extraInfo!.replaceAll('${Icons.visibility} ', ''),
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  )
+                : Text(
+                    extraInfo!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
                   ),
-                ),
-              ),
             ],
           ],
         ),
