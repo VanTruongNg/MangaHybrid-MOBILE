@@ -121,53 +121,43 @@ class SocketController extends StateNotifier<IO.Socket?> {
               final messageData = data['message'] as Map<String, dynamic>;
               final roomData = data['room'] as Map<String, dynamic>;
 
-              if (messageData['roomId'] is Map) {
-                // Private message
-                final roomId = (messageData['roomId']
+              if (messageData['sender'] is Map) {
+                final senderId = (messageData['sender']
                     as Map<String, dynamic>)['_id'] as String;
-                messageData['roomId'] = roomId;
+                final senderName = (messageData['sender']
+                    as Map<String, dynamic>)['name'] as String;
+                final senderAvatarUrl = (messageData['sender']
+                    as Map<String, dynamic>)['avatarUrl'] as String?;
+                messageData['sender'] = {
+                  'id': senderId,
+                  'name': senderName,
+                  'avatarUrl': senderAvatarUrl,
+                };
+              }
 
-                if (messageData['readBy'] is List) {
-                  final readByData = messageData['readBy'] as List;
-                  messageData['readBy'] = readByData
-                      .map((user) =>
-                          (user as Map<String, dynamic>)['_id'] as String)
-                      .toList();
-                }
+              if (messageData['readBy'] is List) {
+                final readByData = messageData['readBy'] as List;
+                messageData['readBy'] = readByData
+                    .map((user) =>
+                        (user as Map<String, dynamic>)['_id'] as String)
+                    .toList();
+              }
 
-                final message = PrivateChatMessage.fromJson(messageData);
+              final message = PrivateChatMessage.fromJson(messageData);
 
-                // Cập nhật tin nhắn tạm thời thành tin nhắn chính thức
-                ref
-                    .read(privateChatProvider.notifier)
-                    .updateMessage(tempId, message);
+              ref
+                  .read(privateChatProvider.notifier)
+                  .updateMessage(tempId, message);
 
-                // Cập nhật room nếu có thay đổi
-                if (roomData != null) {
-                  final room = chat_room.ChatRoom.fromJson(roomData);
-                  ref.read(chatRoomProvider.notifier).updateRoomData(room);
+              if (roomData != null) {
+                final room = chat_room.ChatRoom.fromJson(roomData);
+                ref.read(chatRoomProvider.notifier).updateRoomData(room);
 
-                  // Cập nhật latestMessage cho room
-                  ref.read(chatRoomProvider.notifier).updateLatestMessage(
-                        message.roomId,
-                        message.content,
-                        message.sender,
-                        message.createdAt,
-                      );
-                }
-
-                // Broadcast tin nhắn cho tất cả người dùng trong room
-                state?.emit('broadcastPrivateMessage', {
-                  'roomId': message.roomId,
-                  'message': messageData,
-                  'room': roomData,
-                });
-              } else {
-                // Public message
-                final message = ChatMessage.fromJson(messageData);
-                ref.read(chatProvider.notifier).removeMessage(tempId);
-                ref.read(chatProvider.notifier).addMessage(
-                      ChatMessageUI(message: message),
+                ref.read(chatRoomProvider.notifier).updateLatestMessage(
+                      message.roomId,
+                      message.content,
+                      message.sender,
+                      message.createdAt,
                     );
               }
             } catch (e) {
@@ -210,6 +200,17 @@ class SocketController extends StateNotifier<IO.Socket?> {
           }
         });
 
+        socket.on('roomUpdated', (data) {
+          if (data != null) {
+            try {
+              final room = chat_room.ChatRoom.fromJson(data);
+              ref.read(chatRoomProvider.notifier).updateRoomData(room);
+            } catch (e) {
+              print('Error handling roomUpdated: $e');
+            }
+          }
+        });
+
         socket.on('openedPrivateRoom', (data) {
           if (data != null && data['messages'] is List) {
             final messages = (data['messages'] as List)
@@ -234,7 +235,6 @@ class SocketController extends StateNotifier<IO.Socket?> {
               final roomData = data['room'] as Map<String, dynamic>;
               final currentUser = ref.read(authStateProvider).value;
 
-              // Nếu là tin nhắn của người dùng hiện tại, bỏ qua vì đã được thêm khi gửi
               if (currentUser != null &&
                   messageData['sender'] is Map &&
                   (messageData['sender'] as Map<String, dynamic>)['_id'] ==
@@ -258,7 +258,6 @@ class SocketController extends StateNotifier<IO.Socket?> {
 
               final message = PrivateChatMessage.fromJson(messageData);
 
-              // Thêm tin nhắn vào state ngay lập tức
               ref.read(privateChatProvider.notifier).addMessage(
                     PrivateChatMessageUI(
                       message: message,
@@ -354,12 +353,13 @@ class SocketController extends StateNotifier<IO.Socket?> {
     final room = ref.read(roomByIdProvider(roomId));
     if (room == null) return null;
 
-    final receiverId = room.participants.firstWhere(
-      (id) => id != currentUser.id,
-      orElse: () => room.participants.first,
-    );
+    final receiverId = room.participants
+        .firstWhere(
+          (participant) => participant.id != currentUser.id,
+          orElse: () => room.participants.first,
+        )
+        .id;
 
-    // Thêm tin nhắn tạm thời vào state trước
     final tempMessage = PrivateChatMessageUI(
       message: PrivateChatMessage(
         id: tempId,
@@ -381,12 +381,10 @@ class SocketController extends StateNotifier<IO.Socket?> {
 
     ref.read(privateChatProvider.notifier).addMessage(tempMessage);
 
-    // Gửi tin nhắn với format giống web
     state?.emit('sendPrivateMessage', {
       'tempId': tempId,
       'content': content.trim(),
       'receiverId': receiverId,
-      'roomId': roomId, // Thêm roomId để server có thể xử lý
     });
 
     return tempId;

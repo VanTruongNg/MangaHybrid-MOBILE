@@ -157,10 +157,8 @@ class PrivateChatNotifier extends StateNotifier<List<PrivateChatMessageUI>> {
     );
 
     if (existingMessageIndex != -1) {
-      // Nếu tin nhắn đã tồn tại, xóa tin nhắn tạm thời
       state = state.where((msg) => msg.tempId != tempId).toList();
     } else {
-      // Nếu tin nhắn chưa tồn tại, cập nhật tin nhắn tạm thời
       state = [
         ...state.where((msg) => msg.tempId != tempId),
         PrivateChatMessageUI(

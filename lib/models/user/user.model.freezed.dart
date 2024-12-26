@@ -2572,11 +2572,13 @@ RatingModel _$RatingModelFromJson(Map<String, dynamic> json) {
 mixin _$RatingModel {
   @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
-  UserBasicModel get user => throw _privateConstructorUsedError;
+  String get user => throw _privateConstructorUsedError;
   MangaBasicModel get manga => throw _privateConstructorUsedError;
-  double get rating => throw _privateConstructorUsedError;
+  int get score => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
   String get updatedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: '__v')
+  int? get version => throw _privateConstructorUsedError;
 
   /// Serializes this RatingModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2596,13 +2598,13 @@ abstract class $RatingModelCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: '_id') String id,
-      UserBasicModel user,
+      String user,
       MangaBasicModel manga,
-      double rating,
+      int score,
       String createdAt,
-      String updatedAt});
+      String updatedAt,
+      @JsonKey(name: '__v') int? version});
 
-  $UserBasicModelCopyWith<$Res> get user;
   $MangaBasicModelCopyWith<$Res> get manga;
 }
 
@@ -2624,9 +2626,10 @@ class _$RatingModelCopyWithImpl<$Res, $Val extends RatingModel>
     Object? id = null,
     Object? user = null,
     Object? manga = null,
-    Object? rating = null,
+    Object? score = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? version = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -2636,15 +2639,15 @@ class _$RatingModelCopyWithImpl<$Res, $Val extends RatingModel>
       user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as UserBasicModel,
+              as String,
       manga: null == manga
           ? _value.manga
           : manga // ignore: cast_nullable_to_non_nullable
               as MangaBasicModel,
-      rating: null == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as double,
+      score: null == score
+          ? _value.score
+          : score // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -2653,17 +2656,11 @@ class _$RatingModelCopyWithImpl<$Res, $Val extends RatingModel>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as String,
+      version: freezed == version
+          ? _value.version
+          : version // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
-  }
-
-  /// Create a copy of RatingModel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserBasicModelCopyWith<$Res> get user {
-    return $UserBasicModelCopyWith<$Res>(_value.user, (value) {
-      return _then(_value.copyWith(user: value) as $Val);
-    });
   }
 
   /// Create a copy of RatingModel
@@ -2687,14 +2684,13 @@ abstract class _$$RatingModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: '_id') String id,
-      UserBasicModel user,
+      String user,
       MangaBasicModel manga,
-      double rating,
+      int score,
       String createdAt,
-      String updatedAt});
+      String updatedAt,
+      @JsonKey(name: '__v') int? version});
 
-  @override
-  $UserBasicModelCopyWith<$Res> get user;
   @override
   $MangaBasicModelCopyWith<$Res> get manga;
 }
@@ -2715,9 +2711,10 @@ class __$$RatingModelImplCopyWithImpl<$Res>
     Object? id = null,
     Object? user = null,
     Object? manga = null,
-    Object? rating = null,
+    Object? score = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? version = freezed,
   }) {
     return _then(_$RatingModelImpl(
       id: null == id
@@ -2727,15 +2724,15 @@ class __$$RatingModelImplCopyWithImpl<$Res>
       user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as UserBasicModel,
+              as String,
       manga: null == manga
           ? _value.manga
           : manga // ignore: cast_nullable_to_non_nullable
               as MangaBasicModel,
-      rating: null == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as double,
+      score: null == score
+          ? _value.score
+          : score // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -2744,6 +2741,10 @@ class __$$RatingModelImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as String,
+      version: freezed == version
+          ? _value.version
+          : version // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -2755,9 +2756,10 @@ class _$RatingModelImpl implements _RatingModel {
       {@JsonKey(name: '_id') required this.id,
       required this.user,
       required this.manga,
-      required this.rating,
+      required this.score,
       required this.createdAt,
-      required this.updatedAt});
+      required this.updatedAt,
+      @JsonKey(name: '__v') this.version});
 
   factory _$RatingModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$RatingModelImplFromJson(json);
@@ -2766,19 +2768,22 @@ class _$RatingModelImpl implements _RatingModel {
   @JsonKey(name: '_id')
   final String id;
   @override
-  final UserBasicModel user;
+  final String user;
   @override
   final MangaBasicModel manga;
   @override
-  final double rating;
+  final int score;
   @override
   final String createdAt;
   @override
   final String updatedAt;
+  @override
+  @JsonKey(name: '__v')
+  final int? version;
 
   @override
   String toString() {
-    return 'RatingModel(id: $id, user: $user, manga: $manga, rating: $rating, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'RatingModel(id: $id, user: $user, manga: $manga, score: $score, createdAt: $createdAt, updatedAt: $updatedAt, version: $version)';
   }
 
   @override
@@ -2789,17 +2794,18 @@ class _$RatingModelImpl implements _RatingModel {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.user, user) || other.user == user) &&
             (identical(other.manga, manga) || other.manga == manga) &&
-            (identical(other.rating, rating) || other.rating == rating) &&
+            (identical(other.score, score) || other.score == score) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.version, version) || other.version == version));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, user, manga, rating, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+      runtimeType, id, user, manga, score, createdAt, updatedAt, version);
 
   /// Create a copy of RatingModel
   /// with the given fields replaced by the non-null parameter values.
@@ -2820,11 +2826,12 @@ class _$RatingModelImpl implements _RatingModel {
 abstract class _RatingModel implements RatingModel {
   factory _RatingModel(
       {@JsonKey(name: '_id') required final String id,
-      required final UserBasicModel user,
+      required final String user,
       required final MangaBasicModel manga,
-      required final double rating,
+      required final int score,
       required final String createdAt,
-      required final String updatedAt}) = _$RatingModelImpl;
+      required final String updatedAt,
+      @JsonKey(name: '__v') final int? version}) = _$RatingModelImpl;
 
   factory _RatingModel.fromJson(Map<String, dynamic> json) =
       _$RatingModelImpl.fromJson;
@@ -2833,15 +2840,18 @@ abstract class _RatingModel implements RatingModel {
   @JsonKey(name: '_id')
   String get id;
   @override
-  UserBasicModel get user;
+  String get user;
   @override
   MangaBasicModel get manga;
   @override
-  double get rating;
+  int get score;
   @override
   String get createdAt;
   @override
   String get updatedAt;
+  @override
+  @JsonKey(name: '__v')
+  int? get version;
 
   /// Create a copy of RatingModel
   /// with the given fields replaced by the non-null parameter values.

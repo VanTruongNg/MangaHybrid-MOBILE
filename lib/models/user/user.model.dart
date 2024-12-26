@@ -163,11 +163,12 @@ class MentionModel with _$MentionModel {
 class RatingModel with _$RatingModel {
   factory RatingModel({
     @JsonKey(name: '_id') required String id,
-    required UserBasicModel user,
+    required String user,
     required MangaBasicModel manga,
-    required double rating,
+    required int score,
     required String createdAt,
     required String updatedAt,
+    @JsonKey(name: '__v') int? version,
   }) = _RatingModel;
 
   factory RatingModel.fromJson(Map<String, dynamic> json) =>

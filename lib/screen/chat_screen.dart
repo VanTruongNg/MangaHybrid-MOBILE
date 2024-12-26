@@ -57,23 +57,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
           // Private chat rooms
           ...privateRooms.map((room) {
-            final otherUser = room.participants.firstWhere(
-              (user) => user.id != currentUser?.id,
-              orElse: () => room.participants.first,
-            );
+            final otherUser = currentUser != null
+                ? room.participants.firstWhere(
+                    (user) => user.id != currentUser.id,
+                  )
+                : room.participants.first;
 
             return ListTile(
               leading: CircleAvatar(
+                backgroundColor: Colors.grey[300],
                 backgroundImage: otherUser.avatarUrl != null
                     ? NetworkImage(otherUser.avatarUrl!)
                     : null,
-                onBackgroundImageError: (_, __) => Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.person),
-                ),
                 child: otherUser.avatarUrl == null
                     ? const Icon(Icons.person)
                     : null,
@@ -107,8 +102,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          timeago.format(room.lastMessageAt!,
-                              locale: 'vi'),
+                          timeago.format(room.lastMessageAt!, locale: 'vi'),
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[600],
@@ -119,7 +113,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     )
                   : null,
               onTap: () {
-                ref.read(socketControllerProvider.notifier).openPrivateRoom(room.id);
+                ref
+                    .read(socketControllerProvider.notifier)
+                    .openPrivateRoom(room.id);
                 context.push('/chat/${room.id}');
               },
             );

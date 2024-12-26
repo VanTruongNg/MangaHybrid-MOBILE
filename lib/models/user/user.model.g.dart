@@ -240,11 +240,12 @@ Map<String, dynamic> _$$MentionModelImplToJson(_$MentionModelImpl instance) =>
 _$RatingModelImpl _$$RatingModelImplFromJson(Map<String, dynamic> json) =>
     _$RatingModelImpl(
       id: json['_id'] as String,
-      user: UserBasicModel.fromJson(json['user'] as Map<String, dynamic>),
+      user: json['user'] as String,
       manga: MangaBasicModel.fromJson(json['manga'] as Map<String, dynamic>),
-      rating: (json['rating'] as num).toDouble(),
+      score: (json['score'] as num).toInt(),
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,
+      version: (json['__v'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$RatingModelImplToJson(_$RatingModelImpl instance) =>
@@ -252,7 +253,8 @@ Map<String, dynamic> _$$RatingModelImplToJson(_$RatingModelImpl instance) =>
       '_id': instance.id,
       'user': instance.user,
       'manga': instance.manga,
-      'rating': instance.rating,
+      'score': instance.score,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
+      '__v': instance.version,
     };
